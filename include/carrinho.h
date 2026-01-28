@@ -8,3 +8,7 @@ typedef struct Carrinho{
     Produto* produto;
 
 }Carrinho;
+
+void adicionar_ao_carrinho(Carrinho* carrinho, Produto** produto);
+Produto* procura_produto(Carrinho* carrinho, Produto* produto);
+
