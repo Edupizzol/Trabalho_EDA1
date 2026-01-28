@@ -67,6 +67,20 @@ int ordem_alfabetica(char* string1, char* string2){
 
 }
 
+int compara_strings(char* string1, char* string2){
+
+    int i=0;
+    while(string1[i]!='\0' && string2[i]!='\0'){
+        if(string1[i]!=string2[i]){
+            return 1;
+        }
+        i++;
+    }
+
+    return 0;
+
+}
+
 Cliente* criar_cliente(char* nome, char* cpf, char* telefone){
 
     Cliente* new_cliente = malloc(sizeof(Cliente));
@@ -128,15 +142,40 @@ void listar_clientes(NodeCliente *root){
 
     while(root!=NULL){
 
-        printf("---------------------------------------");
+        printf("---------------------------------------\n");
         printf("Nome do Cliente: %s\n", root->dados.nome);
         printf("CPF do Cliente: %s\n", root->dados.cpf);
         printf("Telefone do Cliente: %s\n", root->dados.telefone);
+        printf("---------------------------------------\n");
         root=root->prox;
 
     }
 
     return;
+
+}
+
+Cliente* busca_cliente(NodeCliente *root, char* cpf){
+
+    if(root==NULL){
+        printf("Não há clientes cadastrados!\n");
+        return NULL;
+    }
+
+    while(root!=NULL){
+        if(compara_strings(root->dados.cpf,cpf)==0){
+            printf("-------Dados do Cliente-------\n");
+            printf("Nome: %s\n", root->dados.nome);
+            printf("CPF: %s\n", root->dados.cpf);
+            printf("Telefone: %s\n", root->dados.telefone);
+            printf("-----------------------------\n");
+            return root;
+        }
+        root=root->prox;
+    }
+
+    printf("O cliente não está cadastrado\n");
+    return NULL;
 
 }
 
