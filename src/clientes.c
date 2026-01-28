@@ -133,6 +133,23 @@ void cadastrar_cliente(NodeCliente** lista, char* nome, char* cpf, char* telefon
     
 }
 
+void salvar_clientes(NodeCliente *root, const char *filename){
+
+    FILE *fp = fopen(filename,"w");
+    if(!fp){
+        printf("Erro ao abrir o arquivo!\n");
+        return;
+    }
+
+    while(root!=NULL){
+        fprintf(fp,"%s;%s;%s\n", root->dados.nome,root->dados.cpf,root->dados.telefone);
+        root=root->prox;
+    }
+
+    fclose(fp);
+
+}
+
 void listar_clientes(NodeCliente *root){
 
     if(root==NULL){
