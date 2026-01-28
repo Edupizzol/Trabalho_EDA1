@@ -21,6 +21,7 @@ int main(){
     NodeCliente* Cliente = NULL;
     Produto* Produto = NULL;
     int n;
+    char cpf[11];
     
     while(1){
 
@@ -33,7 +34,6 @@ int main(){
         case 1:
 
             char nome[100];
-            char cpf[11];
             char telefone[11];
             char senha[20];
 
@@ -52,6 +52,14 @@ int main(){
         case 2:
 
             listar_clientes(Cliente);
+
+            break;
+
+        case 3:
+
+            printf("Digite o CPF do Cliente:\n");
+            scanf("%s", cpf);
+            remover_cliente(&Cliente,cpf);
 
             break;
 
