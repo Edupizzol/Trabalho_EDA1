@@ -90,31 +90,31 @@ Produto* procura_produto_no_carrinho(Carrinho* carrinho, char* codigo){
 
 Produto* remove_produto_do_carrinho(Carrinho* carrinho, Produto* produto){
 
-    if(carrinho == NULL || produto == NULL){
+    if(carrinho==NULL || produto==NULL){
         printf("Carrinho ou produto inválido!\n");
         return NULL;
     }
 
-    Produto* atual = carrinho->produto;
-    Produto* anterior = NULL;
+    Produto* atual=carrinho->produto;
+    Produto* anterior=NULL;
 
-    if(atual != NULL && compara_strings(atual->codigo, produto->codigo) == 0){
-        carrinho->produto = atual->next;
-        atual->next = NULL; 
+    if(atual!=NULL && compara_strings(atual->codigo, produto->codigo)==0){
+        carrinho->produto=atual->next;
+        atual->next=NULL; 
         return atual;
     }
-    while(atual != NULL && compara_strings(atual->codigo, produto->codigo) != 0){
-        anterior = atual;
-        atual = atual->next;
+    while(atual!=NULL && compara_strings(atual->codigo, produto->codigo)!=0){
+        anterior=atual;
+        atual=atual->next;
     }
 
-    if(atual == NULL){
+    if(atual==NULL){
         printf("Produto não encontrado no carrinho!\n");
         return NULL;
     }
 
-    anterior->next = atual->next;
-    atual->next = NULL;
+    anterior->next=atual->next;
+    atual->next=NULL;
 
     return atual;
 
