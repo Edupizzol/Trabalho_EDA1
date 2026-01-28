@@ -85,6 +85,58 @@ Cliente* criar_cliente(char* nome, char* cpf, char* telefone){
 
 void cadastrar_cliente(NodeCliente** lista, char* nome, char* cpf, char* telefone){
 
+    Cliente* new_cliente = criar_cliente(nome,cpf,telefone);
+    NodeCliente* new_node = malloc(sizeof(NodeCliente));
 
+    if(new_node==NULL){
+        printf("Erro ao alocar memória para o nó do Cliente!\n");
+        exit(EXIT_FAILURE);
+    }
+
+    new_node->dados = *new_cliente;
+
+    free(new_cliente);
+
+    if(*lista==NULL){
+        *lista = new_node;
+        return;
+    }
+
+    if(ordem_alfabetica(new_node->dados.nome,(*lista)->dados.nome)==1){
+        new_node->prox = *lista;
+        *lista = new_node;
+        return;
+    }
+
+    //percorre a lista pra encontrar posicao correta
+    NodeCliente* atual = *lista;
+    while(atual->prox != NULL && ordem_alfabetica(new_node->dados.nome, atual->prox->dados.nome) != 1){
+        atual = atual->prox;
+    }
+
+    new_node->prox = atual->prox;
+    atual->prox = new_node;
+    
+}
+
+void listar_clientes(NodeCliente *root){
+
+    if(root==NULL){
+        printf("Não há clientes cadastrados!\n");
+        return;
+    }
+
+    while(root!=NULL){
+
+        printf("---------------------------------------");
+        printf("Nome do Cliente: %s\n", root->dados.nome);
+        printf("CPF do Cliente: %s\n", root->dados.cpf);
+        printf("Telefone do Cliente: %s\n", root->dados.telefone);
+        root=root->prox;
+
+    }
+
+    return;
 
 }
+
