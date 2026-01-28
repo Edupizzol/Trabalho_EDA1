@@ -10,7 +10,7 @@ void exibir_menu(){
     printf("3 : Deletar Cliente\n");
     printf("4 : Cadastrar Novo Produto\n");
     printf("5 : Listar Produtos\n");
-    printf("6 : Listar Clientes\n");
+    printf("6 : Remover Produto\n");
     printf("7: Editar Produto\n");
     printf("8 : Começar as Compras\n");
 
@@ -63,6 +63,8 @@ int main(){
             scanf("%s", cpf);
             remover_cliente(&Cliente,cpf);
 
+            printf("Cliente Eliminado!\n");
+
             break;
 
         case 4:
@@ -78,6 +80,22 @@ int main(){
             Produto = cadastrarProduto(Produto,senha,nome,preco);
 
             printf("Produto Cadastrado!\n");
+
+            break;
+
+        case 5:
+
+            listarProdutos(Produto);
+
+            break;
+
+        case 6:
+
+            printf("Digite o Código do Produto:\n");
+            scanf("%s", senha);
+            removerProduto(&Produto,senha);
+
+            printf("Produto Removido!\n");
 
             break;
 
