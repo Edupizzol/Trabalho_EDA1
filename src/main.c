@@ -21,7 +21,7 @@ void exibir_menu(){
 int main(){
 
     NodeCliente* cliente = NULL;
-    Produto* Produto = NULL;
+    Produto* produto = NULL;
 
     int n;
     char cpf[12];
@@ -85,7 +85,7 @@ int main(){
             scanf("%[^\n]", nome);
             printf("Digite o Preco do Produto:\n");
             scanf("%f", &preco);
-            Produto = cadastrarProduto(Produto,senha,nome,preco);
+            produto = cadastrarProduto(produto,senha,nome,preco);
 
             printf("Produto Cadastrado!\n");
 
@@ -93,7 +93,7 @@ int main(){
 
         case 5:
 
-            listarProdutos(Produto);
+            listarProdutos(produto);
 
             break;
 
@@ -101,7 +101,7 @@ int main(){
 
             printf("Digite o Código do Produto:\n");
             scanf("%s", senha);
-            removerProduto(&Produto,senha);
+            removerProduto(&produto,senha);
 
             printf("Produto Removido!\n");
 
@@ -118,7 +118,7 @@ int main(){
             getchar();
             scanf("%s", nome);
 
-            editarDadosProduto(Produto,senha,nome,preco);
+            editarDadosProduto(produto,senha,nome,preco);
 
             printf("Produto Editado com Sucesso!\n");
 
@@ -153,6 +153,27 @@ int main(){
                 printf("Cliente Nao Existe!");
                 free(carrinho); 
                 continue;
+            }
+
+            while(2==2){
+
+                printf("Insira o Código do Produto que Voce Deseja Adicionar ao Carrinho ou 0 Para Fechar esse Menu\n");
+                listarProdutos(produto);
+                scanf("%s", senha);
+
+                if(senha[0]=='0' && senha[1]=='\0'){
+                    break;
+                }
+
+                Produto* new_produto = buscarProduto(produto,senha);
+                if(new_produto!=NULL){
+                    adicionar_produto_ao_carrinho(carrinho, new_produto);
+                    printf("Produto %s adicionado!\n", new_produto->nome);
+                } 
+                else{
+                    printf("Código inválido! Tente novamente.\n");
+                }
+
             }
 
         }
