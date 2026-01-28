@@ -49,7 +49,12 @@ int main(){
             cadastrar_cliente(&Cliente,nome,cpf,telefone,senha);
 
             break;
-        
+        case 2:
+
+            listar_clientes(Cliente);
+
+            break;
+
         default:
             break;
         }
