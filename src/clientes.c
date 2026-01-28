@@ -179,3 +179,32 @@ Cliente* busca_cliente(NodeCliente *root, char* cpf){
 
 }
 
+void remover_cliente(NodeCliente **root, char* cpf){
+
+    NodeCliente *temp = *root;
+    NodeCliente *previous = NULL;
+
+    if(temp!=NULL && compara_strings(temp->dados.cpf,cpf)==0){
+        *root=temp->prox;
+        free(temp);
+        return;
+    }
+
+    while(temp!=NULL && compara_strings(temp->dados.cpf,cpf)!=0){
+
+        previous=temp;
+        temp=temp->prox;
+
+    }
+
+    if(temp==NULL){
+        printf("Cliente nao encontrado!\n");
+        return;
+    }
+
+    //desconectar o no que vai ser removido
+    previous->prox = temp->prox;
+
+    free(temp);
+
+}
