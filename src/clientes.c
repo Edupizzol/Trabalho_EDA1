@@ -81,7 +81,7 @@ int compara_strings(char* string1, char* string2){
 
 }
 
-Cliente* criar_cliente(char* nome, char* cpf, char* telefone){
+Cliente* criar_cliente(char* nome, char* cpf, char* telefone, char* senha){
 
     Cliente* new_cliente = malloc(sizeof(Cliente));
     if(new_cliente==NULL){
@@ -92,14 +92,15 @@ Cliente* criar_cliente(char* nome, char* cpf, char* telefone){
     new_cliente->cpf = copy_string(cpf);
     new_cliente->nome = copy_string(nome);
     new_cliente->telefone = copy_string(telefone);
+    new_cliente->senha = copy_string(senha);
 
     return new_cliente;
     
 }
 
-void cadastrar_cliente(NodeCliente** lista, char* nome, char* cpf, char* telefone){
+void cadastrar_cliente(NodeCliente** lista, char* nome, char* cpf, char* telefone, char* senha){
 
-    Cliente* new_cliente = criar_cliente(nome,cpf,telefone);
+    Cliente* new_cliente = criar_cliente(nome,cpf,telefone,senha);
     NodeCliente* new_node = malloc(sizeof(NodeCliente));
 
     if(new_node==NULL){
@@ -131,6 +132,27 @@ void cadastrar_cliente(NodeCliente** lista, char* nome, char* cpf, char* telefon
     new_node->prox = atual->prox;
     atual->prox = new_node;
     
+}
+
+int login(NodeCliente* root, char* cpf, char* senha){
+
+    while(root!=NULL){
+        if(compara_strings(cpf,root->dados.cpf)==0){
+            if(compara_strings(senha,root->dados.senha)==0){
+                printf("Logado!\n");
+                return 0;
+            }
+            else{
+                printf("Senha incorreta!\n");
+                return 1;
+            }
+        }
+        root=root->prox;
+    }
+
+    printf("Cliente nao encontrado!\n");
+    return 0;
+
 }
 
 void salvar_clientes(NodeCliente *root, const char *filename){

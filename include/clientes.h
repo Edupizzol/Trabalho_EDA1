@@ -5,6 +5,7 @@ typedef struct Cliente{
     char* nome;
     char* cpf;
     char* telefone;
+    char* senha;
 }Cliente;
 
 typedef struct NodeCliente{
@@ -12,10 +13,11 @@ typedef struct NodeCliente{
     struct NodeCliente* prox;
 }NodeCliente;
 
-Cliente* criar_cliente(char* nome, char* cpf, char* telefone);
+Cliente* criar_cliente(char* nome, char* cpf, char* telefone, char* senha);
+int login(NodeCliente* root, char* nome, char* senha);
 char* copy_string(char* string);
 int ordem_alfabetica(char* string1, char* string2);
-void cadastrar_cliente(NodeCliente** lista, char* nome, char* cpf, char* telefone);
+void cadastrar_cliente(NodeCliente** lista, char* nome, char* cpf, char* telefone, char* senha);
 void listar_clientes(NodeCliente *root);
 Cliente* busca_cliente(NodeCliente *root, char* cpf);
 void remover_cliente(NodeCliente **root, char* cpf);
