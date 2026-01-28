@@ -20,6 +20,7 @@ int main(){
 
     NodeCliente* Cliente = NULL;
     Produto* Produto = NULL;
+
     int n;
     char cpf[11];
     char nome[100];
@@ -113,6 +114,12 @@ int main(){
             editarDadosProduto(Produto,senha,nome,preco);
 
             printf("Produto Editado com Sucesso!\n");
+
+        case 8:
+
+            printf("Adicionado em Breve");
+
+            break;
 
         default:
             break;
