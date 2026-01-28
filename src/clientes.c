@@ -151,7 +151,7 @@ int login(NodeCliente* root, char* cpf, char* senha){
     }
 
     printf("Cliente nao encontrado!\n");
-    return 0;
+    return 1;
 
 }
 
