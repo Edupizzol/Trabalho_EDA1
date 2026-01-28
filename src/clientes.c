@@ -41,6 +41,32 @@ char* copy_string(char* string){
 
 }
 
+int ordem_alfabetica(char* string1, char* string2){
+
+    int i=0;
+
+    while(string1[i]!='\0' && string2[i]!='\0'){
+
+        if(string1[i]!=string2[i]){
+            if(string1[i]<string2[i]){
+                return 1;
+            }
+            else if(string1[i]>string2[i]){
+                return 2;
+            }
+        }
+
+        i++;
+
+    }
+
+    if(string1[i] == '\0' && string2[i] != '\0') return 1;
+    if(string2[i] == '\0' && string1[i] != '\0') return 2;
+
+    return 0;
+
+}
+
 Cliente* criar_cliente(char* nome, char* cpf, char* telefone){
 
     Cliente* new_cliente = malloc(sizeof(Cliente));
@@ -55,4 +81,10 @@ Cliente* criar_cliente(char* nome, char* cpf, char* telefone){
 
     return new_cliente;
     
+}
+
+void cadastrar_cliente(NodeCliente** lista, char* nome, char* cpf, char* telefone){
+
+
+
 }
