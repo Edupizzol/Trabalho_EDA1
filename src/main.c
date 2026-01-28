@@ -5,6 +5,7 @@
 
 void exibir_menu(){
 
+    printf("0 : Terminar Execução\n");
     printf("1 : Cadastrar Novo Cliente\n");
     printf("2 : Listar Clientes\n");
     printf("3 : Deletar Cliente\n");
@@ -31,6 +32,11 @@ int main(){
         exibir_menu();
         scanf("%d", &n);
         getchar();
+
+        if(n==0){
+            printf("Execução Finalizada!\n");
+            return 0;
+        }
 
         switch (n)
         {
@@ -117,7 +123,7 @@ int main(){
 
         case 8:
 
-            printf("Adicionado em Breve");
+            printf("Adicionado em Breve\n");
 
             break;
 
