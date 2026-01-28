@@ -17,6 +17,6 @@ void cadastrar_cliente(NodeCliente** lista, char* nome, char* cpf, char* telefon
 void listar_cliente(NodeCliente *root);
 Cliente* busca_cliente(NodeCliente *root, char* cpf);
 void editar_cliente(NodeCliente *root, char* cpf);
-void removercliente(NodeCliente *root, char* cpf);
+void remover_cliente(NodeCliente **root, char* cpf);
 
 #endif
