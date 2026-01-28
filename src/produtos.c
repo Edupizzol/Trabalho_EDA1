@@ -21,9 +21,10 @@ Produto* cadastrarProduto(Produto* head, char* codigo, char* nome, float preco) 
     novoProduto->codigo = alocarTexto(codigo);
     novoProduto->nome = alocarTexto(nome);
     novoProduto->preco = preco;
+    novoProduto->next = NULL;
 
-    if (head == NULL) {
-        novoProduto->next = NULL;
+    if (head == NULL || strcmp(codigo, head->codigo) < 0) {
+        novoProduto->next = head;
         return novoProduto;
     }
 
