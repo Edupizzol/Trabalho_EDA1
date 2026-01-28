@@ -22,6 +22,8 @@ int main(){
     Produto* Produto = NULL;
     int n;
     char cpf[11];
+    char nome[100];
+    char senha[20];
     
     while(1){
 
@@ -33,9 +35,7 @@ int main(){
         {
         case 1:
 
-            char nome[100];
             char telefone[11];
-            char senha[20];
 
             printf("Digite o Nome:\n");
             scanf("%[^\n]", nome);
@@ -47,6 +47,8 @@ int main(){
             scanf("%s", senha);
 
             cadastrar_cliente(&Cliente,nome,cpf,telefone,senha);
+
+            printf("Cliente Cadastrado!\n");
 
             break;
         case 2:
@@ -63,6 +65,22 @@ int main(){
 
             break;
 
+        case 4:
+
+            float preco;
+            
+            printf("Digite o Código do Produto:\n");
+            scanf("%s", senha);
+            printf("Digite o Nome do Produto:\n");
+            scanf("%s", nome);
+            printf("Digite o Preco do Produto:\n");
+            scanf("%f", &preco);
+            Produto = cadastrarProduto(Produto,senha,nome,preco);
+
+            printf("Produto Cadastrado!\n");
+
+            break;
+
         default:
             break;
         }
@@ -71,3 +89,4 @@ int main(){
 
     return 0;
 }
+
