@@ -1,4 +1,3 @@
-
 # Trabalho EDA1 
 
 ## Descrição
@@ -45,5 +44,7 @@ O sistema oferece funcionalidades básicas de **CRUD** (Criar, Ler, Atualizar e 
     ├── main.c
     └── produtos.c
 </pre>
+
+
 
 
