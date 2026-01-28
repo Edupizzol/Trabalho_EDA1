@@ -119,3 +119,4 @@ Produto* remove_produto_do_carrinho(Carrinho* carrinho, Produto* produto){
     return atual;
 
 }
+
