@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include <stdlib.h>
 #include "../include/clientes.h"
 #include "../include/produtos.h"
 #include "../include/carrinho.h"
@@ -19,11 +20,11 @@ void exibir_menu(){
 
 int main(){
 
-    NodeCliente* Cliente = NULL;
+    NodeCliente* cliente = NULL;
     Produto* Produto = NULL;
 
     int n;
-    char cpf[11];
+    char cpf[12];
     char nome[100];
     char senha[20];
     
@@ -42,7 +43,7 @@ int main(){
         {
         case 1:
 
-            char telefone[11];
+            char telefone[15];
 
             printf("Digite o Nome:\n");
             scanf("%[^\n]", nome);
@@ -53,14 +54,14 @@ int main(){
             printf("Digite a Senha:\n");
             scanf("%s", senha);
 
-            cadastrar_cliente(&Cliente,nome,cpf,telefone,senha);
+            cadastrar_cliente(&cliente,nome,cpf,telefone,senha);
 
             printf("Cliente Cadastrado!\n");
 
             break;
         case 2:
 
-            listar_clientes(Cliente);
+            listar_clientes(cliente);
 
             break;
 
@@ -68,7 +69,7 @@ int main(){
 
             printf("Digite o CPF do Cliente:\n");
             scanf("%s", cpf);
-            remover_cliente(&Cliente,cpf);
+            remover_cliente(&cliente,cpf);
 
             printf("Cliente Eliminado!\n");
 
@@ -121,14 +122,39 @@ int main(){
 
             printf("Produto Editado com Sucesso!\n");
 
-        case 8:
-
-            printf("Adicionado em Breve\n");
-
-            break;
-
         default:
             break;
+        }
+
+        if(n==8){
+
+            printf("Digite o Nome do seu Usuário\n");
+            scanf("%[^\n]", nome);
+            printf("Digite o CPF do seu Usuário!\n");
+            scanf("%s", cpf);
+            printf("Digite a Senha do seu Usuário:\n");
+            scanf("%s", senha);
+
+            if(login(cliente,cpf,senha)==1){
+                //volta pro inicio do loop
+                continue;
+            }
+
+            printf("Login Realizado!\n");
+
+            Carrinho *carrinho = criar_carrinho();
+
+            NodeCliente* novo_cliente = busca_cliente(cliente,cpf);
+
+            if(novo_cliente!=NULL){
+                adicionar_dono_do_carrinho(carrinho, &(novo_cliente->dados));
+            } 
+            else{
+                printf("Cliente Nao Existe!");
+                free(carrinho); 
+                continue;
+            }
+
         }
 
     }
