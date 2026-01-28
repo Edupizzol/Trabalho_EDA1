@@ -67,3 +67,55 @@ void adicionar_produto_ao_carrinho(Carrinho* carrinho, Produto* produto){
     atual->next = novo;
 
 }
+
+Produto* procura_produto_no_carrinho(Carrinho* carrinho, char* codigo){
+
+    if(carrinho==NULL){
+        printf("Carrinho não existe!\n");
+        return NULL;
+    }
+
+    Produto* dummy = carrinho->produto;
+    while(dummy!=NULL){
+        if(compara_strings(dummy->codigo,codigo)==0){
+            printf("Produto encontrado!\n");
+            return dummy;
+        }
+        dummy=dummy->next;
+    }
+    printf("Produto nao encontrado!\n");
+    return NULL;
+
+}
+
+Produto* remove_produto_do_carrinho(Carrinho* carrinho, Produto* produto){
+
+    if(carrinho == NULL || produto == NULL){
+        printf("Carrinho ou produto inválido!\n");
+        return NULL;
+    }
+
+    Produto* atual = carrinho->produto;
+    Produto* anterior = NULL;
+
+    if(atual != NULL && compara_strings(atual->codigo, produto->codigo) == 0){
+        carrinho->produto = atual->next;
+        atual->next = NULL; 
+        return atual;
+    }
+    while(atual != NULL && compara_strings(atual->codigo, produto->codigo) != 0){
+        anterior = atual;
+        atual = atual->next;
+    }
+
+    if(atual == NULL){
+        printf("Produto não encontrado no carrinho!\n");
+        return NULL;
+    }
+
+    anterior->next = atual->next;
+    atual->next = NULL;
+
+    return atual;
+
+}

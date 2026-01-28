@@ -9,7 +9,7 @@ typedef struct Carrinho{
 
 }Carrinho;
 
-Carrinho* criar_carrinho(Carrinho* carrinho);
+Carrinho* criar_carrinho();
 void adicionar_dono_do_carrinho(Carrinho* carrinho, Cliente* cliente);
 void adicionar_ao_carrinho(Carrinho* carrinho, Produto* produto);
 Produto* procura_produto_no_carrinho(Carrinho* carrinho, Produto* produto);
