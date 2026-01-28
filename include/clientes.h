@@ -20,7 +20,7 @@ int ordem_alfabetica(char* string1, char* string2);
 int compara_strings(char* string1, char* string2);
 void cadastrar_cliente(NodeCliente** lista, char* nome, char* cpf, char* telefone, char* senha);
 void listar_clientes(NodeCliente *root);
-Cliente* busca_cliente(NodeCliente *root, char* cpf);
+NodeCliente* busca_cliente(NodeCliente *root, char* cpf);
 void remover_cliente(NodeCliente **root, char* cpf);
 void salvar_clientes(NodeCliente *root, const char *filename);
 

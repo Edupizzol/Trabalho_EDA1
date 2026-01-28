@@ -1,7 +1,7 @@
 #include <stdio.h>
-#include "../include/carrinho.h"
 #include "../include/clientes.h"
 #include "../include/produtos.h"
+#include "../include/carrinho.h"
 
 void exibir_menu(){
 
@@ -31,7 +31,23 @@ int main(){
         switch (n)
         {
         case 1:
-            
+
+            char nome[100];
+            char cpf[11];
+            char telefone[11];
+            char senha[20];
+
+            printf("Digite o Nome:\n");
+            scanf("%[^\n]", nome);
+            printf("Digite o CPF:\n");
+            scanf("%s", cpf);
+            printf("Digite o Telefone:\n");
+            scanf("%s", telefone);
+            printf("Digite a Senha:\n");
+            scanf("%s", senha);
+
+            cadastrar_cliente(&Cliente,nome,cpf,telefone,senha);
+
             break;
         
         default:

@@ -194,7 +194,7 @@ void listar_clientes(NodeCliente *root){
 
 }
 
-Cliente* busca_cliente(NodeCliente *root, char* cpf){
+NodeCliente* busca_cliente(NodeCliente *root, char* cpf){
 
     if(root==NULL){
         printf("Não há clientes cadastrados!\n");
