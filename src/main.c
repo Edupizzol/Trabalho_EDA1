@@ -1,4 +1,7 @@
 #include <stdio.h>
+#include "../include/carrinho.h"
+#include "../include/clientes.h"
+#include "../include/produtos.h"
 
 void exibir_menu(){
 
@@ -15,6 +18,8 @@ void exibir_menu(){
 
 int main(){
 
+    NodeCliente* Cliente = NULL;
+    Produto* Produto = NULL;
     int n;
     
     while(1){
@@ -22,6 +27,16 @@ int main(){
         exibir_menu();
         scanf("%d", &n);
         getchar();
+
+        switch (n)
+        {
+        case 1:
+            
+            break;
+        
+        default:
+            break;
+        }
 
     }
 
