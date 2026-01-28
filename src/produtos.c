@@ -67,15 +67,27 @@ Produto* buscarProduto(Produto* head, char* codigo) {
     return NULL;
 }
 
-void editarDadosProduto(Produto* produto, char* nome, float preco) {
-    if (produto != NULL) {
-        free(produto->nome);
-        produto->nome = alocarTexto(nome);
-        produto->preco = preco;
+void editarDadosProduto(Produto* head, char* codigo, char* novoNome, float novoPreco){
+
+    Produto* atual=head;
+    while(atual!=NULL) {
+
+        if(strcmp(atual->codigo, codigo)==0){
+            
+            free(atual->nome);
+            atual->nome = alocarTexto(novoNome);
+            atual->preco = novoPreco;
+
+            printf("Produto %s atualizado com sucesso!\n", codigo);
+            return; 
+        }
+
+        atual=atual->next;
     }
-    else {
-        printf("Produto nao encontrado.\n");
-    }
+
+    printf("Erro: Produto com codigo %s nao encontrado.\n", codigo);
+    return;
+
 }
 
 void removerProduto(Produto** head, char* codigo) {

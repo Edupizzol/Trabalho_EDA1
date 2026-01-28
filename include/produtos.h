@@ -11,7 +11,7 @@ typedef struct Produto{
 Produto* cadastrarProduto(Produto*head, char* codigo, char* nome, float preco);
 void listarProdutos(Produto* head);
 Produto* buscarProduto(Produto* head, char* codigo);
-void editarDadosProduto(Produto* produto, char* nome, float preco);
+void editarDadosProduto(Produto* head, char* codigo, char* novoNome, float novoPreco);
 void removerProduto(Produto** head, char* codigo);
 
 #endif

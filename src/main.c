@@ -11,7 +11,7 @@ void exibir_menu(){
     printf("4 : Cadastrar Novo Produto\n");
     printf("5 : Listar Produtos\n");
     printf("6 : Remover Produto\n");
-    printf("7: Editar Produto\n");
+    printf("7 : Editar Produto\n");
     printf("8 : Começar as Compras\n");
 
 }
@@ -98,6 +98,21 @@ int main(){
             printf("Produto Removido!\n");
 
             break;
+
+        case 7:
+
+            printf("Digite o Código do Produto!\n");
+            scanf("%s", senha);
+
+            printf("Digite o Novo Preco e o Novo Nome:\n");
+            
+            scanf("%f", &preco);
+            getchar();
+            scanf("%s", nome);
+
+            editarDadosProduto(Produto,senha,nome,preco);
+
+            printf("Produto Editado com Sucesso!\n");
 
         default:
             break;
