@@ -81,7 +81,7 @@ int main(){
             printf("Digite o Código do Produto:\n");
             scanf("%s", senha);
             printf("Digite o Nome do Produto:\n");
-            scanf("%s", nome);
+            scanf("%[^\n]", nome);
             printf("Digite o Preco do Produto:\n");
             scanf("%f", &preco);
             Produto = cadastrarProduto(Produto,senha,nome,preco);
