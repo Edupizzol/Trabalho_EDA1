@@ -176,6 +176,9 @@ int main(){
 
             }
 
+            printf("Dados do Carrinho:\n");
+            ver_produtos_no_carrinho(carrinho);
+
         }
 
     }

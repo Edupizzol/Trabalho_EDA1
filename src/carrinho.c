@@ -68,6 +68,32 @@ void adicionar_produto_ao_carrinho(Carrinho* carrinho, Produto* produto){
 
 }
 
+void ver_produtos_no_carrinho(Carrinho* carrinho){
+
+    if(carrinho == NULL || carrinho->produto == NULL){
+        printf("\nO seu carrinho está vazio!\n");
+        return;
+    }
+
+    printf("\n========== SEU CARRINHO ==========\n");
+    printf("Cliente: %s\n", carrinho->cliente->nome);
+    printf("----------------------------------\n");
+
+    float total = 0;
+    Produto* atual = carrinho->produto;
+
+    while(atual!=NULL){
+        printf("Cód: %-5s | %-15s | R$ %7.2f\n", atual->codigo, atual->nome, atual->preco);
+        
+        total += atual->preco;
+        atual = atual->next;  
+    }
+
+    printf("----------------------------------\n");
+    printf("VALOR TOTAL:             R$ %7.2f\n", total);
+    printf("==================================\n\n");
+}
+
 Produto* procura_produto_no_carrinho(Carrinho* carrinho, char* codigo){
 
     if(carrinho==NULL){
