@@ -49,9 +49,9 @@ void listarProdutos(Produto* head) {
         return;
     }
     while (atual != NULL) {
-        printf("-------Produtos-------");
+        printf("-------Produtos-------\n");
         printf("Codigo: %s\nNome: %s\nPreco: %.2f\n", atual->codigo, atual->nome, atual->preco);
-        printf("----------------------");
+        printf("----------------------\n");
         atual = atual->next;
     }
 }
