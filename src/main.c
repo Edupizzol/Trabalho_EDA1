@@ -341,7 +341,6 @@ int main(){
             ver_produtos_no_carrinho(carrinho);
             printf("=======================================\n");
             free(carrinho);
-            printf("\n✓ Obrigado por comprar conosco!\n");
 
         }
 
