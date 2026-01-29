@@ -6,10 +6,12 @@
 
 void exibir_menu(){
 
+    printf("\n");
+    printf("========== MENU PRINCIPAL ==========\n");
     printf("00 : Terminar Execução\n");
     printf("01 : Cadastrar Novo Cliente\n");
     printf("02 : Buscar Cliente\n");
-    printf("03 : Editar Dados do Cliente:\n");
+    printf("03 : Editar Dados do Cliente\n");
     printf("04 : Listar Clientes\n");
     printf("05 : Deletar Cliente\n");
     printf("06 : Cadastrar Novo Produto\n");
@@ -17,6 +19,8 @@ void exibir_menu(){
     printf("08 : Remover Produto\n");
     printf("09 : Editar Produto\n");
     printf("10 : Começar as Compras\n");
+    printf("===================================\n");
+    printf("Escolha uma opção: ");
 
 }
 
@@ -225,10 +229,11 @@ int main(){
 
         if(n==10){
 
-            printf("Digite o CPF do seu Usuário!\n");
+            printf("\n========== LOGIN ==========\n");
+            printf("Digite o CPF do seu Usuário: ");
             scanf("%s", cpf);
             getchar();
-            printf("Digite a Senha do seu Usuário:\n");
+            printf("Digite a Senha do seu Usuário: ");
             scanf("%s", senha);
 
             if(login(cliente,cpf,senha)==1){
@@ -236,7 +241,7 @@ int main(){
                 continue;
             }
 
-            printf("Login Realizado!\n");
+            printf("\n✓ Login Realizado com Sucesso!\n");
 
             Carrinho *carrinho = criar_carrinho();
 
@@ -246,47 +251,52 @@ int main(){
                 adicionar_dono_do_carrinho(carrinho, &(novo_cliente->dados));
             } 
             else{
-                printf("Cliente Nao Existe!");
+                printf("✗ Cliente Não Existe!\n");
                 free(carrinho); 
                 continue;
             }
 
             while(3==3){
 
-                printf("O que Deseja Fazer:\n");
-                printf("0 : Fechar Aba\n");
-                printf("1 : Adicionar Produtos no Carrinho:\n");
-                printf("2 : Procurar Produto no Carrinho:\n");
-                printf("3 : Remover Produtos no Carrinho:\n");
+                printf("\n========== CARRINHO DE COMPRAS ==========\n");
+                printf("1 : Adicionar Produtos\n");
+                printf("2 : Procurar Produto\n");
+                printf("3 : Remover Produtos\n");
+                printf("0 : Finalizar Compras\n");
+                printf("========================================\n");
+                printf("Escolha uma opção: ");
                 int escolha;
 
                 scanf("%d", &escolha);
                 getchar();
 
                 if(escolha==0){
-                    printf("Fechando\n");
+                    printf("\n✓ Finalizando compras...\n");
                     break;
                 }
 
                 if(escolha==1){
 
+                    printf("\n--- Adicionar ao Carrinho ---\n");
                     while(2==2){
 
-                        printf("Insira o Código do Produto que Voce Deseja Adicionar ao Carrinho ou 0 Para Fechar esse Menu\n");
+                        printf("Produtos Disponíveis:\n");
                         listarProdutos(produto);
+                        printf("Digite o Código (ou '0' para voltar): ");
                         scanf("%s", senha);
 
                         if(senha[0]=='0' && senha[1]=='\0'){
+                            printf("✓ Voltando...\n");
                             break;
                         }
 
                         Produto* new_produto = buscarProduto(produto,senha);
                         if(new_produto!=NULL){
                             adicionar_produto_ao_carrinho(carrinho, new_produto);
-                            printf("Produto %s adicionado!\n", new_produto->nome);
+                            printf("✓ Produto '%s' adicionado ao carrinho!\n\n", new_produto->nome);
                         } 
                         else{
-                            printf("Código inválido! Tente novamente.\n");
+                            printf("✗ Código inválido! Tente novamente.\n\n");
                         }
 
                     }
@@ -294,29 +304,32 @@ int main(){
                 }
                 else if(escolha==2){
 
-                    printf("Insira o Código do Produto que Voce Deseja Buscar no Carrinho\n");
+                    printf("\n--- Procurar Produto no Carrinho ---\n");
+                    printf("Digite o Código do Produto: ");
                     scanf("%s", senha);
                     procura_produto_no_carrinho(carrinho,senha);
 
                 }
                 else if(escolha==3){
 
+                    printf("\n--- Remover do Carrinho ---\n");
                     while(2==2){
 
-                        printf("Insira o Código do Produto que Voce Deseja Remover do Carrinho ou 0 Para Fechar esse Menu\n");
+                        printf("Digite o Código (ou '0' para voltar): ");
                         scanf("%s", senha);
 
                         if(senha[0]=='0' && senha[1]=='\0'){
+                            printf("✓ Voltando...\n");
                             break;
                         }
 
                         Produto* new_produto = buscarProduto(produto,senha);
                         if(new_produto!=NULL){
                             remove_produto_do_carrinho(carrinho, new_produto);
-                            printf("Produto %s removido!\n", new_produto->nome);
+                            printf("✓ Produto '%s' removido do carrinho!\n\n", new_produto->nome);
                         } 
                         else{
-                            printf("Código inválido! Tente novamente.\n");
+                            printf("✗ Código inválido! Tente novamente.\n\n");
                         }
 
                     }
@@ -324,9 +337,11 @@ int main(){
                 }
             }
 
-            printf("Dados do Carrinho:\n");
+            printf("\n========== RESUMO DO CARRINHO ==========\n");
             ver_produtos_no_carrinho(carrinho);
+            printf("=======================================\n");
             free(carrinho);
+            printf("\n✓ Obrigado por comprar conosco!\n");
 
         }
 
