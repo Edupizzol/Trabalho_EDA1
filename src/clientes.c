@@ -44,6 +44,8 @@ char* copy_string(char* string){
 int ordem_alfabetica(char* string1, char* string2){
 
     int i=0;
+    if(string1[0]>='a' && string1[0]<='z'){string1[0]-=32;};
+    if(string2[0]>='a' && string2[0]<='z'){string2[0]-=32;};
 
     while(string1[i]!='\0' && string2[i]!='\0'){
 
