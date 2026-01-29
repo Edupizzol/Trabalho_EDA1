@@ -52,7 +52,7 @@ int main(){
         switch (n)
         {
         case 1:
-
+        {
             char* telefone =  malloc(15*sizeof(char));
             if(telefone==NULL){printf("Erro de alocação de memória\n");free(cpf);free(nome);free(senha);return 1;}
             char* dataDeNascimento = malloc(15*sizeof(char));
@@ -80,7 +80,7 @@ int main(){
             free(telefone);free(dataDeNascimento);free(email);
 
             break;
-
+        }
         case 2:
 
             printf("Digite o CPF do Cliente:\n");
@@ -176,8 +176,9 @@ int main(){
             break;
 
         case 6:
-
+        {
             float preco;
+            int quantidade;
             
             printf("Digite o Código do Produto:\n");
             scanf("%s", senha);
@@ -185,13 +186,17 @@ int main(){
             scanf(" %[^\n]", nome);
             printf("Digite o Preco do Produto:\n");
             scanf("%f", &preco);
+            printf("Digite a Quantidade do Produto:\n");
+            scanf("%d", &quantidade);
             getchar();
-            produto = cadastrarProduto(produto,senha,nome,preco);
+            produto = cadastrarProduto(produto,senha,nome,preco,quantidade);
 
             printf("Produto Cadastrado!\n");
 
+            free(nome);
+            free(senha);
             break;
-
+        }
         case 7:
 
             listarProdutos(produto);
@@ -209,6 +214,9 @@ int main(){
             break;
 
         case 9:
+        {
+            float preco;
+            int quantidade;
 
             printf("Digite o Código do Produto!\n");
             scanf("%s", senha);
@@ -218,11 +226,16 @@ int main(){
             scanf("%f", &preco);
             getchar();
             scanf("%s", nome);
+            printf("Digite a Nova Quantidade:\n");
+            scanf("%d", &quantidade);
 
-            editarDadosProduto(produto,senha,nome,preco);
+            editarDadosProduto(produto,senha,nome,preco,quantidade);
 
             printf("Produto Editado com Sucesso!\n");
-
+            free(nome);
+            free(senha);
+            break;
+        }
         default:
             break;
         }
@@ -292,8 +305,12 @@ int main(){
 
                         Produto* new_produto = buscarProduto(produto,senha);
                         if(new_produto!=NULL){
-                            adicionar_produto_ao_carrinho(carrinho, new_produto);
-                            printf("Produto '%s' adicionado ao carrinho!\n\n", new_produto->nome);
+                            int qtd;
+                            printf("Digite a Quantidade Desejada: ");
+                            scanf("%d", &qtd);
+                            getchar();
+                            adicionar_produto_ao_carrinho(carrinho, new_produto, qtd);
+                            printf("%dx Produto '%s' adicionado ao carrinho!\n\n", qtd, new_produto->nome);
                         } 
                         else{
                             printf("Código inválido! Tente novamente.\n\n");

@@ -33,7 +33,7 @@ void adicionar_dono_do_carrinho(Carrinho* carrinho, Cliente* cliente){
 
 }
 
-void adicionar_produto_ao_carrinho(Carrinho* carrinho, Produto* produto){
+void adicionar_produto_ao_carrinho(Carrinho* carrinho, Produto* produto, int quantidade){
 
     if(produto==NULL){
         printf("Produto não existe!\n");
@@ -41,6 +41,10 @@ void adicionar_produto_ao_carrinho(Carrinho* carrinho, Produto* produto){
     }
     if(carrinho==NULL){
         printf("Carrinho não existe!\n");
+        return;
+    }
+    if(quantidade <= 0){
+        printf("Quantidade invalida!\n");
         return;
     }
 
@@ -53,7 +57,10 @@ void adicionar_produto_ao_carrinho(Carrinho* carrinho, Produto* produto){
     novo->nome = copy_string(produto->nome);
     novo->codigo = copy_string(produto->codigo);
     novo->preco = produto->preco;
+    novo->quantidade = quantidade;
     novo->next = NULL;
+
+    decrementarEstoque(produto, quantidade);
 
     if(carrinho->produto == NULL){
         carrinho->produto = novo;
@@ -84,9 +91,9 @@ void ver_produtos_no_carrinho(Carrinho* carrinho){
     Produto* atual = carrinho->produto;
 
     while(atual!=NULL){
-        printf("Codigo: %-5s | %-15s | R$ %7.2f\n", atual->codigo, atual->nome, atual->preco);
+        printf("Codigo: %-5s | %-15s | R$ %7.2f | Quantidade: %d\n", atual->codigo, atual->nome, atual->preco, atual->quantidade);
         
-        total += atual->preco;
+        total += atual->preco * atual->quantidade;
         atual = atual->next;  
     }
 
@@ -143,6 +150,8 @@ Produto* remove_produto_do_carrinho(Carrinho* carrinho, Produto* produto){
 
     anterior->next=atual->next;
     atual->next=NULL;
+
+    incrementarEstoque(produto, atual->quantidade);
 
     return atual;
 
