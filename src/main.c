@@ -80,6 +80,59 @@ int main(){
 
         case 3:
 
+            printf("Qual Dado Deseja Editar:\n");
+            printf("1: Nome\n");
+            printf("2: CPF\n");
+            printf("3: Telefone\n");
+            printf("4: Senha\n");
+            printf("5: Data de Nascimento\n");
+            printf("6: email\n");
+
+            int numero;
+            scanf("%d", &numero);
+            getchar();
+
+            printf("Digite o CPF Original do Cliente:\n");
+            scanf("%s", cpf);
+
+            int verifica = verifica_cpf(cliente,cpf);
+            if(verifica == 1){
+                continue;
+            }
+
+            if(numero==1){
+                printf("Digite o Novo Nome:\n");
+                scanf("%s", nome);
+                edita_nome(cliente,nome,cpf);
+            }
+            else if(numero==2){
+                printf("Digite o Novo CPF:\n");
+                char cpfNovo[12];
+                scanf("%s", cpfNovo);
+                edita_cpf(cliente,cpfNovo,cpf);
+            }
+            else if(numero==3){
+                printf("Digite o Novo Telefone:\n");
+                scanf("%s", telefone);
+                edita_cpf(cliente,telefone,cpf);
+            }
+            else if(numero==4){
+                printf("Digite a Nova Senha:\n");
+                scanf("%s", senha);
+                edita_cpf(cliente,senha,cpf);
+            }
+            else if(numero==5){
+                printf("Digite a Nova Data de Nascimento:\n");
+                scanf("%s", dataDeNascimento);
+                edita_cpf(cliente,dataDeNascimento,cpf);
+            }
+            else if(numero==6){
+                printf("Digite o Novo email:\n");
+                scanf("%s", email);
+                edita_cpf(cliente,email,cpf);
+            }
+            printf("Dados Atualizados com Sucesso\n");
+
             break;
 
         case 4:

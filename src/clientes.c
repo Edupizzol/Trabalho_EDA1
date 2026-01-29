@@ -255,3 +255,84 @@ void remover_cliente(NodeCliente **root, char* cpf){
     free(temp);
 
 }
+
+
+//funcoes de edicao
+void edita_nome(NodeCliente* root,char* nome, char* cpf){
+
+    NodeCliente* cliente = busca_cliente(root,cpf);
+
+    if(cliente != NULL){
+        free(cliente->dados.nome);
+        cliente->dados.nome = copy_string(nome);
+    }
+
+}
+
+void edita_cpf(NodeCliente* root, char* cpfnovo, char* cpfantigo){
+
+    NodeCliente* cliente = busca_cliente(root,cpfantigo);
+
+    if(cliente != NULL){
+        free(cliente->dados.cpf);
+        cliente->dados.cpf = copy_string(cpfnovo);
+    }
+
+}
+
+void edita_telefone(NodeCliente* root, char* telefone, char* cpf){
+
+    NodeCliente* cliente = busca_cliente(root,cpf);
+
+    if(cliente != NULL){
+        free(cliente->dados.telefone);
+        cliente->dados.telefone = copy_string(telefone);
+    }
+
+}   
+
+void edita_senha(NodeCliente* root, char* senha, char* cpf){
+
+    NodeCliente* cliente = busca_cliente(root,cpf);
+
+    if(cliente != NULL){
+        free(cliente->dados.senha);
+        cliente->dados.senha = copy_string(senha);
+    }
+
+}
+
+void edita_data_de_nascimento(NodeCliente* root, char* dataDeNascimento, char* cpf){
+
+    NodeCliente* cliente = busca_cliente(root,cpf);
+
+    if(cliente != NULL){
+        free(cliente->dados.dataDeNascimento);
+        cliente->dados.dataDeNascimento = copy_string(dataDeNascimento);
+    }
+
+}
+
+void edita_email(NodeCliente* root, char* email, char* cpf){
+
+    NodeCliente* cliente = busca_cliente(root,cpf);
+
+    if(cliente != NULL){
+        free(cliente->dados.email);
+        cliente->dados.email = copy_string(email);
+    }
+
+}
+
+int verifica_cpf(NodeCliente* root, char* string){
+
+    while(root!=NULL){
+        if(compara_strings(root->dados.cpf, string)==0){
+            return 0;
+        }
+        root=root->prox;
+    }
+    printf("Cliente com esse CPF não Está Cadastrado!\n");
+    return 1;
+
+}
