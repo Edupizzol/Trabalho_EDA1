@@ -227,6 +227,7 @@ int main(){
 
             printf("Digite o CPF do seu Usuário!\n");
             scanf("%s", cpf);
+            getchar();
             printf("Digite a Senha do seu Usuário:\n");
             scanf("%s", senha);
 
@@ -250,29 +251,82 @@ int main(){
                 continue;
             }
 
-            while(2==2){
+            while(3==3){
 
-                printf("Insira o Código do Produto que Voce Deseja Adicionar ao Carrinho ou 0 Para Fechar esse Menu\n");
-                listarProdutos(produto);
-                scanf("%s", senha);
+                printf("O que Deseja Fazer:\n");
+                printf("0 : Fechar Aba\n");
+                printf("1 : Adicionar Produtos no Carrinho:\n");
+                printf("2 : Procurar Produto no Carrinho:\n");
+                printf("3 : Remover Produtos no Carrinho:\n");
+                int escolha;
 
-                if(senha[0]=='0' && senha[1]=='\0'){
+                scanf("%d", &escolha);
+                getchar();
+
+                if(escolha==0){
+                    printf("Fechando\n");
                     break;
                 }
 
-                Produto* new_produto = buscarProduto(produto,senha);
-                if(new_produto!=NULL){
-                    adicionar_produto_ao_carrinho(carrinho, new_produto);
-                    printf("Produto %s adicionado!\n", new_produto->nome);
-                } 
-                else{
-                    printf("Código inválido! Tente novamente.\n");
-                }
+                if(escolha==1){
 
+                    while(2==2){
+
+                        printf("Insira o Código do Produto que Voce Deseja Adicionar ao Carrinho ou 0 Para Fechar esse Menu\n");
+                        listarProdutos(produto);
+                        scanf("%s", senha);
+
+                        if(senha[0]=='0' && senha[1]=='\0'){
+                            break;
+                        }
+
+                        Produto* new_produto = buscarProduto(produto,senha);
+                        if(new_produto!=NULL){
+                            adicionar_produto_ao_carrinho(carrinho, new_produto);
+                            printf("Produto %s adicionado!\n", new_produto->nome);
+                        } 
+                        else{
+                            printf("Código inválido! Tente novamente.\n");
+                        }
+
+                    }
+
+                }
+                else if(escolha==2){
+
+                    printf("Insira o Código do Produto que Voce Deseja Buscar no Carrinho\n");
+                    scanf("%s", senha);
+                    procura_produto_no_carrinho(carrinho,senha);
+
+                }
+                else if(escolha==3){
+
+                    while(2==2){
+
+                        printf("Insira o Código do Produto que Voce Deseja Remover do Carrinho ou 0 Para Fechar esse Menu\n");
+                        scanf("%s", senha);
+
+                        if(senha[0]=='0' && senha[1]=='\0'){
+                            break;
+                        }
+
+                        Produto* new_produto = buscarProduto(produto,senha);
+                        if(new_produto!=NULL){
+                            remove_produto_do_carrinho(carrinho, new_produto);
+                            printf("Produto %s removido!\n", new_produto->nome);
+                        } 
+                        else{
+                            printf("Código inválido! Tente novamente.\n");
+                        }
+
+                    }
+
+                }
             }
 
             printf("Dados do Carrinho:\n");
             ver_produtos_no_carrinho(carrinho);
+            free(carrinho);
 
         }
 

@@ -105,6 +105,7 @@ Produto* procura_produto_no_carrinho(Carrinho* carrinho, char* codigo){
     while(dummy!=NULL){
         if(compara_strings(dummy->codigo,codigo)==0){
             printf("Produto encontrado!\n");
+            printf("Codigo: %s\nNome: %s\nPreco: %.2f\n", dummy->codigo, dummy->nome, dummy->preco);
             return dummy;
         }
         dummy=dummy->next;
