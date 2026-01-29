@@ -225,8 +225,6 @@ int main(){
 
         if(n==10){
 
-            printf("Digite o Nome do seu Usuário\n");
-            scanf("%[^\n]", nome);
             printf("Digite o CPF do seu Usuário!\n");
             scanf("%s", cpf);
             printf("Digite a Senha do seu Usuário:\n");
