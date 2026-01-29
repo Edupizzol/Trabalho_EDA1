@@ -26,9 +26,12 @@ int main(){
     Produto* produto = NULL;
 
     int n;
-    char cpf[12];
-    char nome[100];
-    char senha[20];
+    char* cpf = malloc(12*sizeof(char));
+    if(cpf==NULL){printf("Erro de alocação de memória\n");return 1;}
+    char* nome = malloc(100*sizeof(char));
+    if(nome==NULL){printf("Erro de alocação de memória\n");return 1;}
+    char* senha = malloc(20*sizeof(char));
+    if(senha==NULL){printf("Erro de alocação de memória\n");return 1;}
     
     while(1){
 
@@ -38,6 +41,7 @@ int main(){
 
         if(n==0){
             printf("Execução Finalizada!\n");
+            free(cpf);free(nome);free(senha);
             return 0;
         }
 
@@ -45,9 +49,12 @@ int main(){
         {
         case 1:
 
-            char telefone[15];
-            char dataDeNascimento[15];
-            char email[100];
+            char* telefone =  malloc(15*sizeof(char));
+            if(telefone==NULL){printf("Erro de alocação de memória\n");free(cpf);free(nome);free(senha);return 1;}
+            char* dataDeNascimento = malloc(15*sizeof(char));
+            if(dataDeNascimento==NULL){printf("Erro de alocação de memória\n");free(telefone);free(cpf);free(nome);free(senha);return 1;}
+            char* email = malloc(100*sizeof(char));
+            if(email==NULL){printf("Erro de alocação de memória\n");free(telefone);free(dataDeNascimento);free(cpf);free(nome);free(senha);return 1;}
 
             printf("Digite o Nome:\n");
             scanf("%[^\n]", nome);
@@ -65,6 +72,8 @@ int main(){
             cadastrar_cliente(&cliente,nome,cpf,telefone,senha,dataDeNascimento,email);
 
             printf("Cliente Cadastrado!\n");
+
+            free(telefone);free(dataDeNascimento);free(email);
 
             break;
 
@@ -107,29 +116,40 @@ int main(){
             }
             else if(numero==2){
                 printf("Digite o Novo CPF:\n");
-                char cpfNovo[12];
+                char* cpfNovo = malloc(12*sizeof(char));
+                if(cpfNovo==NULL){printf("Erro de alocação de memória\n");break;}
                 scanf("%s", cpfNovo);
                 edita_cpf(cliente,cpfNovo,cpf);
+                free(cpfNovo);
             }
             else if(numero==3){
+                char* telefone = malloc(15*sizeof(char));
+                if(telefone==NULL){printf("Erro de alocação de memória\n");break;}
                 printf("Digite o Novo Telefone:\n");
                 scanf("%s", telefone);
-                edita_cpf(cliente,telefone,cpf);
+                edita_telefone(cliente,telefone,cpf);
+                free(telefone);
             }
             else if(numero==4){
                 printf("Digite a Nova Senha:\n");
                 scanf("%s", senha);
-                edita_cpf(cliente,senha,cpf);
+                edita_senha(cliente,senha,cpf);
             }
             else if(numero==5){
+                char* dataDeNascimento = malloc(15*sizeof(char));
+                if(dataDeNascimento==NULL){printf("Erro de alocação de memória\n");break;}
                 printf("Digite a Nova Data de Nascimento:\n");
                 scanf("%s", dataDeNascimento);
-                edita_cpf(cliente,dataDeNascimento,cpf);
+                edita_data_de_nascimento(cliente,dataDeNascimento,cpf);
+                free(dataDeNascimento);
             }
             else if(numero==6){
+                char* email = malloc(100*sizeof(char));
+                if(email==NULL){printf("Erro de alocação de memória\n");break;}
                 printf("Digite o Novo email:\n");
                 scanf("%s", email);
-                edita_cpf(cliente,email,cpf);
+                edita_email(cliente,email,cpf);
+                free(email);
             }
             printf("Dados Atualizados com Sucesso\n");
 
