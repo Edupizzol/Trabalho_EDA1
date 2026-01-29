@@ -83,7 +83,7 @@ int compara_strings(char* string1, char* string2){
 
 }
 
-Cliente* criar_cliente(char* nome, char* cpf, char* telefone, char* senha){
+Cliente* criar_cliente(char* nome, char* cpf, char* telefone, char* senha, char* dataDeNascimento, char* email){
 
     Cliente* new_cliente = malloc(sizeof(Cliente));
     if(new_cliente==NULL){
@@ -95,14 +95,16 @@ Cliente* criar_cliente(char* nome, char* cpf, char* telefone, char* senha){
     new_cliente->nome = copy_string(nome);
     new_cliente->telefone = copy_string(telefone);
     new_cliente->senha = copy_string(senha);
+    new_cliente->dataDeNascimento = copy_string(dataDeNascimento);
+    new_cliente->email = copy_string(email);
 
     return new_cliente;
     
 }
 
-void cadastrar_cliente(NodeCliente** lista, char* nome, char* cpf, char* telefone, char* senha){
+void cadastrar_cliente(NodeCliente** lista, char* nome, char* cpf, char* telefone, char* senha, char* dataDeNascimento, char* email){
 
-    Cliente* new_cliente = criar_cliente(nome,cpf,telefone,senha);
+    Cliente* new_cliente = criar_cliente(nome,cpf,telefone,senha,dataDeNascimento,email);
     NodeCliente* new_node = malloc(sizeof(NodeCliente));
 
     if(new_node==NULL){
@@ -184,9 +186,11 @@ void listar_clientes(NodeCliente *root){
     while(root!=NULL){
 
         printf("---------------------------------------\n");
-        printf("Nome do Cliente: %s\n", root->dados.nome);
-        printf("CPF do Cliente: %s\n", root->dados.cpf);
-        printf("Telefone do Cliente: %s\n", root->dados.telefone);
+        printf("Nome: %s\n", root->dados.nome);
+        printf("CPF: %s\n", root->dados.cpf);
+        printf("Telefone: %s\n", root->dados.telefone);
+        printf("Data de Nascimento: %s\n", root->dados.dataDeNascimento);
+        printf("Email: %s\n", root->dados.email);
         printf("---------------------------------------\n");
         root=root->prox;
 

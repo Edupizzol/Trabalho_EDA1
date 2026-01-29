@@ -44,6 +44,8 @@ int main(){
         case 1:
 
             char telefone[15];
+            char dataDeNascimento[15];
+            char email[100];
 
             printf("Digite o Nome:\n");
             scanf("%[^\n]", nome);
@@ -53,8 +55,12 @@ int main(){
             scanf("%s", telefone);
             printf("Digite a Senha:\n");
             scanf("%s", senha);
+            printf("Digite a Data de Nascimento:\n");
+            scanf(" %[^\n]", dataDeNascimento);
+            printf("Digite o seu Email:\n");
+            scanf(" %s", email);
 
-            cadastrar_cliente(&cliente,nome,cpf,telefone,senha);
+            cadastrar_cliente(&cliente,nome,cpf,telefone,senha,dataDeNascimento,email);
 
             printf("Cliente Cadastrado!\n");
 
