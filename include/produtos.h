@@ -5,13 +5,14 @@ typedef struct Produto{
     char* codigo;
     char* nome;
     float preco;
+    int quantidade;
     struct Produto* next;
 }Produto;
 
-Produto* cadastrarProduto(Produto*head, char* codigo, char* nome, float preco);
+Produto* cadastrarProduto(Produto*head, char* codigo, char* nome, float preco, int quantidade);
 void listarProdutos(Produto* head);
 Produto* buscarProduto(Produto* head, char* codigo);
-void editarDadosProduto(Produto* head, char* codigo, char* novoNome, float novoPreco);
+void editarDadosProduto(Produto* head, char* codigo, char* novoNome, float novoPreco, int novaQuantidade);
 void removerProduto(Produto** head, char* codigo);
 
 #endif

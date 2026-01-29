@@ -11,7 +11,7 @@ char* alocarTexto(char* textoOriginal){
     return copia;
 }
 
-Produto* cadastrarProduto(Produto* head, char* codigo, char* nome, float preco) {
+Produto* cadastrarProduto(Produto* head, char* codigo, char* nome, float preco, int quantidade) {
     if(buscarProduto(head, codigo) != NULL) {
         printf("Erro: Produto com esse codigo %s ja esta cadastrado.\n", codigo);
         return head;
@@ -21,6 +21,7 @@ Produto* cadastrarProduto(Produto* head, char* codigo, char* nome, float preco) 
     novoProduto->codigo = alocarTexto(codigo);
     novoProduto->nome = alocarTexto(nome);
     novoProduto->preco = preco;
+    novoProduto->quantidade = quantidade;
     novoProduto->next = NULL;
 
     if (head == NULL || strcmp(codigo, head->codigo) < 0) {
@@ -50,7 +51,7 @@ void listarProdutos(Produto* head) {
     }
     while (atual != NULL) {
         printf("-------Produtos-------\n");
-        printf("Codigo: %s\nNome: %s\nPreco: %.2f\n", atual->codigo, atual->nome, atual->preco);
+        printf("Codigo: %s\nNome: %s\nPreco: %.2f\nQuantidade: %d\n", atual->codigo, atual->nome, atual->preco, atual->quantidade);
         printf("----------------------\n");
         atual = atual->next;
     }
@@ -67,7 +68,7 @@ Produto* buscarProduto(Produto* head, char* codigo) {
     return NULL;
 }
 
-void editarDadosProduto(Produto* head, char* codigo, char* novoNome, float novoPreco){
+void editarDadosProduto(Produto* head, char* codigo, char* novoNome, float novoPreco, int novaQuantidade) {
 
     Produto* atual=head;
     while(atual!=NULL) {
@@ -77,7 +78,7 @@ void editarDadosProduto(Produto* head, char* codigo, char* novoNome, float novoP
             free(atual->nome);
             atual->nome = alocarTexto(novoNome);
             atual->preco = novoPreco;
-
+            atual->quantidade = novaQuantidade;
             printf("Produto %s atualizado com sucesso!\n", codigo);
             return; 
         }
