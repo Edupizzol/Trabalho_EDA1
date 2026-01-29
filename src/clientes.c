@@ -213,6 +213,8 @@ NodeCliente* busca_cliente(NodeCliente *root, char* cpf){
             printf("Nome: %s\n", root->dados.nome);
             printf("CPF: %s\n", root->dados.cpf);
             printf("Telefone: %s\n", root->dados.telefone);
+            printf("Data de Nascimento: %s\n", root->dados.dataDeNascimento);
+            printf("Email: %s\n", root->dados.email);
             printf("-----------------------------\n");
             return root;
         }

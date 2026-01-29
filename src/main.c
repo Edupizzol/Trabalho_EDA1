@@ -6,15 +6,17 @@
 
 void exibir_menu(){
 
-    printf("0 : Terminar Execução\n");
-    printf("1 : Cadastrar Novo Cliente\n");
-    printf("2 : Listar Clientes\n");
-    printf("3 : Deletar Cliente\n");
-    printf("4 : Cadastrar Novo Produto\n");
-    printf("5 : Listar Produtos\n");
-    printf("6 : Remover Produto\n");
-    printf("7 : Editar Produto\n");
-    printf("8 : Começar as Compras\n");
+    printf("00 : Terminar Execução\n");
+    printf("01 : Cadastrar Novo Cliente\n");
+    printf("02 : Buscar Cliente\n");
+    printf("03 : Editar Dados do Cliente:\n");
+    printf("04 : Listar Clientes\n");
+    printf("05 : Deletar Cliente\n");
+    printf("06 : Cadastrar Novo Produto\n");
+    printf("07 : Listar Produtos\n");
+    printf("08 : Remover Produto\n");
+    printf("09 : Editar Produto\n");
+    printf("10 : Começar as Compras\n");
 
 }
 
@@ -65,13 +67,28 @@ int main(){
             printf("Cliente Cadastrado!\n");
 
             break;
+
         case 2:
+
+            printf("Digite o CPF do Cliente:\n");
+            scanf("%s", cpf);
+
+            busca_cliente(cliente,cpf);
+
+            break;
+
+
+        case 3:
+
+            break;
+
+        case 4:
 
             listar_clientes(cliente);
 
             break;
 
-        case 3:
+        case 5:
 
             printf("Digite o CPF do Cliente:\n");
             scanf("%s", cpf);
@@ -81,7 +98,7 @@ int main(){
 
             break;
 
-        case 4:
+        case 6:
 
             float preco;
             
@@ -98,13 +115,13 @@ int main(){
 
             break;
 
-        case 5:
+        case 7:
 
             listarProdutos(produto);
 
             break;
 
-        case 6:
+        case 8:
 
             printf("Digite o Código do Produto:\n");
             scanf("%s", senha);
@@ -114,7 +131,7 @@ int main(){
 
             break;
 
-        case 7:
+        case 9:
 
             printf("Digite o Código do Produto!\n");
             scanf("%s", senha);
@@ -133,7 +150,7 @@ int main(){
             break;
         }
 
-        if(n==8){
+        if(n==10){
 
             printf("Digite o Nome do seu Usuário\n");
             scanf("%[^\n]", nome);
