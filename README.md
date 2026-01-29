@@ -47,7 +47,7 @@ O sistema oferece funcionalidades básicas de **CRUD** (Criar, Ler, Atualizar e 
 
 ## Como Rodar
 <pre>
--gcc main.c clientes.c produtos.c carrinho.c -o programa
--./programa
+gcc main.c clientes.c produtos.c carrinho.c -o programa
+./programa
 </pre>
 
