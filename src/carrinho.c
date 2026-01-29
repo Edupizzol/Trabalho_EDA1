@@ -1,4 +1,5 @@
 #include "../include/carrinho.h"
+#include "../include/produtos.h"
 #include <stdio.h>
 #include <stdlib.h>
 

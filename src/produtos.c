@@ -4,6 +4,9 @@
 #include <string.h>
 
 char* alocarTexto(char* textoOriginal){
+    if(textoOriginal == NULL){
+        return NULL;
+    }
     char* copia = malloc(strlen(textoOriginal) + 1);
     if (copia != NULL) {
         strcpy(copia, textoOriginal);
@@ -12,14 +15,31 @@ char* alocarTexto(char* textoOriginal){
 }
 
 Produto* cadastrarProduto(Produto* head, char* codigo, char* nome, float preco, int quantidade) {
+    if (codigo == NULL || nome == NULL || preco < 0 || quantidade < 0){
+        printf("Erro: Dados invalidos para cadastro do produto.\n");
+        return head;
+    }    
     if(buscarProduto(head, codigo) != NULL) {
         printf("Erro: Produto com esse codigo %s ja esta cadastrado.\n", codigo);
         return head;
     }
 
     Produto* novoProduto = (Produto*)malloc(sizeof(Produto));
+    if(novoProduto == NULL) {
+        printf("Erro: Falha na alocacao de memoria para novo produto.\n");
+        return head;
+    }
+
     novoProduto->codigo = alocarTexto(codigo);
     novoProduto->nome = alocarTexto(nome);
+
+    if(novoProduto->codigo == NULL || novoProduto->nome == NULL) {
+        printf("Erro: Falha na alocacao de memoria para dados do produto.\n");
+        free(novoProduto->codigo);
+        free(novoProduto->nome);
+        free(novoProduto);
+        return head;
+    }
     novoProduto->preco = preco;
     novoProduto->quantidade = quantidade;
     novoProduto->next = NULL;
@@ -115,4 +135,26 @@ void removerProduto(Produto** head, char* codigo) {
     free(atual->nome);
     free(atual); // libera o espaco q o produto ocupava
     printf("Produto com codigo %s removido.\n", codigo);
+}
+
+void incrementarEstoque(Produto* produto, int quantidade) { // n precisa do codigo como parametro
+    if (produto == NULL || quantidade < 0) {
+        printf("Erro: Produto invalido ou quantidade negativa para incremento.\n");
+        return;
+    }
+    produto->quantidade += quantidade;
+    printf("Estoque do produto %s incrementado em %d. Novo estoque: %d\n", produto->codigo, quantidade, produto->quantidade);
+}
+
+void decrementarEstoque(Produto* produto, int quantidade) {
+    if (produto == NULL || quantidade < 0) {
+        printf("Erro: Produto invalido ou quantidade negativa para decremento.\n");
+        return;
+    }
+    if (produto->quantidade < quantidade) {
+        printf("Erro: Estoque insuficiente para o produto %s. Estoque atual: %d, Tentativa de decremento: %d\n", produto->codigo, produto->quantidade, quantidade);
+        return;
+    }
+    produto->quantidade -= quantidade;
+    printf("Estoque do produto %s decrementado em %d. Novo estoque: %d\n", produto->codigo, quantidade, produto->quantidade);
 }
