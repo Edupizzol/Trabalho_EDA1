@@ -241,7 +241,7 @@ int main(){
                 continue;
             }
 
-            printf("\n✓ Login Realizado com Sucesso!\n");
+            printf("\nLogin Realizado com Sucesso!\n");
 
             Carrinho *carrinho = criar_carrinho();
 
@@ -251,7 +251,7 @@ int main(){
                 adicionar_dono_do_carrinho(carrinho, &(novo_cliente->dados));
             } 
             else{
-                printf("✗ Cliente Não Existe!\n");
+                printf("Cliente Não Existe!\n");
                 free(carrinho); 
                 continue;
             }
@@ -271,7 +271,7 @@ int main(){
                 getchar();
 
                 if(escolha==0){
-                    printf("\n✓ Finalizando compras...\n");
+                    printf("\nFinalizando compras...\n");
                     break;
                 }
 
@@ -286,17 +286,17 @@ int main(){
                         scanf("%s", senha);
 
                         if(senha[0]=='0' && senha[1]=='\0'){
-                            printf("✓ Voltando...\n");
+                            printf("Voltando...\n");
                             break;
                         }
 
                         Produto* new_produto = buscarProduto(produto,senha);
                         if(new_produto!=NULL){
                             adicionar_produto_ao_carrinho(carrinho, new_produto);
-                            printf("✓ Produto '%s' adicionado ao carrinho!\n\n", new_produto->nome);
+                            printf("Produto '%s' adicionado ao carrinho!\n\n", new_produto->nome);
                         } 
                         else{
-                            printf("✗ Código inválido! Tente novamente.\n\n");
+                            printf("Código inválido! Tente novamente.\n\n");
                         }
 
                     }
@@ -319,17 +319,17 @@ int main(){
                         scanf("%s", senha);
 
                         if(senha[0]=='0' && senha[1]=='\0'){
-                            printf("✓ Voltando...\n");
+                            printf("Voltando...\n");
                             break;
                         }
 
                         Produto* new_produto = buscarProduto(produto,senha);
                         if(new_produto!=NULL){
                             remove_produto_do_carrinho(carrinho, new_produto);
-                            printf("✓ Produto '%s' removido do carrinho!\n\n", new_produto->nome);
+                            printf("Produto '%s' removido do carrinho!\n\n", new_produto->nome);
                         } 
                         else{
-                            printf("✗ Código inválido! Tente novamente.\n\n");
+                            printf("Código inválido! Tente novamente.\n\n");
                         }
 
                     }
