@@ -1,7 +1,7 @@
 # Trabalho EDA1 
 
 ## Descrição
-Este projeto implementa um sistema de gerenciamento de clientes e produtos utilizando **listas simplesmente encadeadas** em C.  
+Este projeto implementa um sistema de gerenciamento de clientes e produtos utilizando **listas encadeadas** em C.  
 O sistema oferece funcionalidades básicas de **CRUD** (Criar, Ler, Atualizar e Deletar) para clientes, produtos e carrinhos de compra, operando diretamente no terminal.
 
 ---
@@ -45,6 +45,8 @@ O sistema oferece funcionalidades básicas de **CRUD** (Criar, Ler, Atualizar e 
     └── produtos.c
 </pre>
 
-
+## Como Rodar
+gcc main.c clientes.c produtos.c carrinho.c -o programa
+./programa
 
 
