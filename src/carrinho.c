@@ -83,7 +83,7 @@ void ver_produtos_no_carrinho(Carrinho* carrinho){
     Produto* atual = carrinho->produto;
 
     while(atual!=NULL){
-        printf("Cód: %-5s | %-15s | R$ %7.2f\n", atual->codigo, atual->nome, atual->preco);
+        printf("Codigo: %-5s | %-15s | R$ %7.2f\n", atual->codigo, atual->nome, atual->preco);
         
         total += atual->preco;
         atual = atual->next;  
