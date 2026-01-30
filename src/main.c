@@ -207,8 +207,6 @@ int main(){
             scanf("%s", senha);
             removerProduto(&produto,senha);
 
-            printf("Produto Removido!\n");
-
             break;
 
         case 9:
