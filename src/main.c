@@ -193,8 +193,6 @@ int main(){
 
             printf("Produto Cadastrado!\n");
 
-            free(nome);
-            free(senha);
             break;
         }
         case 7:
