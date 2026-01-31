@@ -36,10 +36,12 @@ O sistema oferece funcionalidades básicas de **CRUD** (Criar, Ler, Atualizar e 
 ├── include
 │   ├── carrinho.h
 │   ├── clientes.h
+│   ├── historico.h
 │   └── produtos.h
 └── src
     ├── carrinho.c
     ├── clientes.c
+    ├── historico.c
     ├── main
     ├── main.c
     └── produtos.c
@@ -47,7 +49,7 @@ O sistema oferece funcionalidades básicas de **CRUD** (Criar, Ler, Atualizar e 
 
 ## Como Rodar
 <pre>
-gcc main.c clientes.c produtos.c carrinho.c -o programa
+gcc main.c clientes.c produtos.c carrinho.c historico.c -o programa
 ./programa
 </pre>
 
