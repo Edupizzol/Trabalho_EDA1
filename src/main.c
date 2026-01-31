@@ -199,8 +199,7 @@ int main(){
             }
 
             adicionar_registro(historico, "Lista de clientes exibida.");
-            printf("\nPressione Enter para continuar...");
-            getchar();
+            SLEEP(1.5);
             limpar_tela();
             break;
 
@@ -254,7 +253,6 @@ int main(){
             printf("Digite o Codigo do Produto:\n");
             scanf("%s", senha);
             removerProduto(&produto,senha);
-            printf("Produto Removido!\n");
             adicionar_registro(historico, "Produto removido.");
 
             SLEEP(1.5);
