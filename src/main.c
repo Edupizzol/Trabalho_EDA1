@@ -15,6 +15,7 @@
 
 // printf("\033[H\033[2J");
 void limpar_tela() {
+    fflush(stdout);
     #ifdef _WIN32
         system("cls");
     #else
@@ -189,7 +190,8 @@ int main(){
             
             if(cliente==NULL){
                 printf("Nao ha clientes cadastrados!\n");
-                SLEEP(1.5);
+                printf("\nPressione Enter para continuar...");
+                getchar();
                 limpar_tela();
                 break;
             } else {
@@ -197,7 +199,8 @@ int main(){
             }
 
             adicionar_registro(historico, "Lista de clientes exibida.");
-            SLEEP(2.5);
+            printf("\nPressione Enter para continuar...");
+            getchar();
             limpar_tela();
             break;
 

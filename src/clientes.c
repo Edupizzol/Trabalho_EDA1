@@ -113,6 +113,7 @@ void cadastrar_cliente(NodeCliente** lista, char* nome, char* cpf, char* telefon
     }
 
     new_node->dados = *new_cliente;
+    new_node->prox = NULL;
 
     free(new_cliente);
 
@@ -182,17 +183,22 @@ void listar_clientes(NodeCliente *root){
         printf("Nao ha clientes cadastrados!\n");
         return;
     }
+    NodeCliente* atual = root;
 
-    while(root!=NULL){
+    while(atual!=NULL){
 
+        if(atual->dados.nome == NULL || atual->dados.cpf == NULL){
+            printf("ERRO: Dados do cliente incompletos.\n");
+            break;
+        }
         printf("---------------------------------------\n");
-        printf("Nome: %s\n", root->dados.nome);
-        printf("CPF: %s\n", root->dados.cpf);
-        printf("Telefone: %s\n", root->dados.telefone);
-        printf("Data de Nascimento: %s\n", root->dados.dataDeNascimento);
-        printf("Email: %s\n", root->dados.email);
+        printf("Nome: %s\n", atual->dados.nome);
+        printf("CPF: %s\n", atual->dados.cpf);
+        printf("Telefone: %s\n", atual->dados.telefone);
+        printf("Data de Nascimento: %s\n", atual->dados.dataDeNascimento);
+        printf("Email: %s\n", atual->dados.email);
         printf("---------------------------------------\n");
-        root=root->prox;
+        atual=atual->prox;
 
     }
 
@@ -207,18 +213,20 @@ NodeCliente* busca_cliente(NodeCliente *root, char* cpf){
         return NULL;
     }
 
-    while(root!=NULL){
-        if(compara_strings(root->dados.cpf,cpf)==0){
+    NodeCliente* atual = root;
+
+    while(atual!=NULL){
+        if(compara_strings(atual->dados.cpf,cpf)==0){
             printf("-------Dados do Cliente-------\n");
-            printf("Nome: %s\n", root->dados.nome);
-            printf("CPF: %s\n", root->dados.cpf);
-            printf("Telefone: %s\n", root->dados.telefone);
-            printf("Data de Nascimento: %s\n", root->dados.dataDeNascimento);
-            printf("Email: %s\n", root->dados.email);
+            printf("Nome: %s\n", atual->dados.nome);
+            printf("CPF: %s\n", atual->dados.cpf);
+            printf("Telefone: %s\n", atual->dados.telefone);
+            printf("Data de Nascimento: %s\n", atual->dados.dataDeNascimento);
+            printf("Email: %s\n", atual->dados.email);
             printf("-----------------------------\n");
-            return root;
+            return atual;
         }
-        root=root->prox;
+        atual=atual->prox;
     }
 
     printf("O cliente nao esta cadastrado\n");
