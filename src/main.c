@@ -3,6 +3,7 @@
 #include "../include/clientes.h"
 #include "../include/produtos.h"
 #include "../include/carrinho.h"
+#include "../include/historico.h"
 #ifdef _WIN32
     #include <windows.h>
     #define SLEEP(s) Sleep(s * 1000)
@@ -36,6 +37,7 @@ void exibir_menu(){
     printf("08 : Remover Produto\n");
     printf("09 : Editar Produto\n");
     printf("10 : Comecar as Compras\n");
+    printf("11 : Ver Historico de Operacoes\n");
     printf("===================================\n");
     printf("Escolha uma opcao: ");
 
@@ -45,7 +47,8 @@ int main(){
 
     NodeCliente* cliente = NULL;
     Produto* produto = NULL;
-
+    Historico* historico = criar_historico();
+    
     int n;
     char* cpf = malloc(12*sizeof(char));
     if(cpf==NULL){printf("Erro de alocacao de memoria\n");return 1;}
@@ -92,6 +95,7 @@ int main(){
             cadastrar_cliente(&cliente,nome,cpf,telefone,senha,dataDeNascimento,email);
 
             printf("Cliente Cadastrado!\n");
+            adicionar_registro(historico, "Novo cliente cadastrado.");
 
             free(telefone);free(dataDeNascimento);free(email);
             SLEEP(1.5);
@@ -104,6 +108,7 @@ int main(){
             scanf("%s", cpf);
 
             busca_cliente(cliente,cpf);
+            adicionar_registro(historico, "Cliente buscado.");
             SLEEP(1.5);
             limpar_tela();
             break;
@@ -174,16 +179,25 @@ int main(){
                 free(email);
             }
             printf("Dados Atualizados com Sucesso\n");
+            adicionar_registro(historico, "Dados do cliente editados.");
 
             SLEEP(1.5);
             limpar_tela();
             break;
 
         case 4:
+            
+            if(cliente==NULL){
+                printf("Nao ha clientes cadastrados!\n");
+                SLEEP(1.5);
+                limpar_tela();
+                break;
+            } else {
+                listar_clientes(cliente);
+            }
 
-            listar_clientes(cliente);
-
-            SLEEP(1.5);
+            adicionar_registro(historico, "Lista de clientes exibida.");
+            SLEEP(2.5);
             limpar_tela();
             break;
 
@@ -194,6 +208,7 @@ int main(){
             remover_cliente(&cliente,cpf);
 
             printf("Cliente Eliminado!\n");
+            adicionar_registro(historico, "Cliente removido.");
 
             SLEEP(1.5);
             limpar_tela();
@@ -216,6 +231,7 @@ int main(){
             produto = cadastrarProduto(produto,senha,nome,preco,quantidade);
 
             printf("Produto Cadastrado!\n");
+            adicionar_registro(historico, "Produto cadastrado.");
 
             SLEEP(1.5);
             limpar_tela();
@@ -224,8 +240,9 @@ int main(){
         case 7:
 
             listarProdutos(produto);
+            adicionar_registro(historico, "Lista de produtos exibida.");
 
-            SLEEP(1.5);
+            SLEEP(2.5);
             limpar_tela();
             break;
 
@@ -234,6 +251,8 @@ int main(){
             printf("Digite o Codigo do Produto:\n");
             scanf("%s", senha);
             removerProduto(&produto,senha);
+            printf("Produto Removido!\n");
+            adicionar_registro(historico, "Produto removido.");
 
             SLEEP(1.5);
             limpar_tela();
@@ -258,6 +277,7 @@ int main(){
             editarDadosProduto(produto,senha,nome,preco,quantidade);
 
             printf("Produto Editado com Sucesso!\n");
+            adicionar_registro(historico, "Dados do produto editados.");
 
             SLEEP(1.5);
             limpar_tela();
@@ -265,12 +285,9 @@ int main(){
             free(senha);
             break;
         }
-        default:
-            break;
-        }
 
-        if(n==10){
-
+        case 10:
+        {
             printf("\n========== LOGIN ==========\n");
             printf("Digite o CPF do seu Usuario: ");
             scanf("%s", cpf);
@@ -412,9 +429,25 @@ int main(){
             SLEEP(1.5);
             limpar_tela();
 
+            break;
+        }
+
+        case 11:
+        {
+            exibir_historico(historico);
+            SLEEP(3);
+            limpar_tela();
+            break;
+        }
+
+
+        default:
+            break;
         }
 
     }
+    limpar_historico(historico);
+    free(historico);
 
     return 0;
 }

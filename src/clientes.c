@@ -179,7 +179,7 @@ void salvar_clientes(NodeCliente *root, const char *filename){
 void listar_clientes(NodeCliente *root){
 
     if(root==NULL){
-        printf("Não há clientes cadastrados!\n");
+        printf("Nao ha clientes cadastrados!\n");
         return;
     }
 
@@ -203,7 +203,7 @@ void listar_clientes(NodeCliente *root){
 NodeCliente* busca_cliente(NodeCliente *root, char* cpf){
 
     if(root==NULL){
-        printf("Não há clientes cadastrados!\n");
+        printf("Nao ha clientes cadastrados!\n");
         return NULL;
     }
 
@@ -221,7 +221,7 @@ NodeCliente* busca_cliente(NodeCliente *root, char* cpf){
         root=root->prox;
     }
 
-    printf("O cliente não está cadastrado\n");
+    printf("O cliente nao esta cadastrado\n");
     return NULL;
 
 }
@@ -332,7 +332,7 @@ int verifica_cpf(NodeCliente* root, char* string){
         }
         root=root->prox;
     }
-    printf("Cliente com esse CPF não Está Cadastrado!\n");
+    printf("Cliente com esse CPF nao Esta Cadastrado!\n");
     return 1;
 
 }

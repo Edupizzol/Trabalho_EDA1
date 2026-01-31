@@ -20,11 +20,11 @@ Carrinho* criar_carrinho(){
 void adicionar_dono_do_carrinho(Carrinho* carrinho, Cliente* cliente){
 
     if(cliente==NULL){
-        printf("Cliente não existe!\n");
+        printf("Cliente nao existe!\n");
         return;
     }
     if(carrinho==NULL){
-        printf("Carrinho não existe!\n");
+        printf("Carrinho nao existe!\n");
         return;
     }
 
@@ -36,11 +36,11 @@ void adicionar_dono_do_carrinho(Carrinho* carrinho, Cliente* cliente){
 void adicionar_produto_ao_carrinho(Carrinho* carrinho, Produto* produto, int quantidade){
 
     if(produto==NULL){
-        printf("Produto não existe!\n");
+        printf("Produto nao existe!\n");
         return;
     }
     if(carrinho==NULL){
-        printf("Carrinho não existe!\n");
+        printf("Carrinho nao existe!\n");
         return;
     }
     if(quantidade <= 0){
@@ -79,7 +79,7 @@ void adicionar_produto_ao_carrinho(Carrinho* carrinho, Produto* produto, int qua
 void ver_produtos_no_carrinho(Carrinho* carrinho){
 
     if(carrinho == NULL || carrinho->produto == NULL){
-        printf("\nO seu carrinho está vazio!\n");
+        printf("\nO seu carrinho esta vazio!\n");
         return;
     }
 
@@ -105,7 +105,7 @@ void ver_produtos_no_carrinho(Carrinho* carrinho){
 Produto* procura_produto_no_carrinho(Carrinho* carrinho, char* codigo){
 
     if(carrinho==NULL){
-        printf("Carrinho não existe!\n");
+        printf("Carrinho nao existe!\n");
         return NULL;
     }
 
@@ -126,7 +126,7 @@ Produto* procura_produto_no_carrinho(Carrinho* carrinho, char* codigo){
 Produto* remove_produto_do_carrinho(Carrinho* carrinho, Produto* produto){
 
     if(carrinho==NULL || produto==NULL){
-        printf("Carrinho ou produto inválido!\n");
+        printf("Carrinho ou produto invalido!\n");
         return NULL;
     }
 
@@ -144,7 +144,7 @@ Produto* remove_produto_do_carrinho(Carrinho* carrinho, Produto* produto){
     }
 
     if(atual==NULL){
-        printf("Produto não encontrado no carrinho!\n");
+        printf("Produto nao encontrado no carrinho!\n");
         return NULL;
     }
 
