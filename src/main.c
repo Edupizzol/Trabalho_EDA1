@@ -209,7 +209,6 @@ int main(){
             scanf("%s", cpf);
             remover_cliente(&cliente,cpf);
 
-            printf("Cliente Eliminado!\n");
             adicionar_registro(historico, "Cliente removido.");
 
             SLEEP(1.5);
@@ -423,9 +422,9 @@ int main(){
                 }
             }
 
-            printf("\n========== RESUMO DO CARRINHO ==========\n");
+            printf("\n============= RESUMO DO CARRINHO =============\n");
             ver_produtos_no_carrinho(carrinho);
-            printf("=======================================\n");
+            printf("===============================================\n");
             free(carrinho);
             SLEEP(1.5);
             limpar_tela();

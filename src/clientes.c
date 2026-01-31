@@ -255,6 +255,8 @@ void remover_cliente(NodeCliente **root, char* cpf){
     if(temp==NULL){
         printf("Cliente nao encontrado!\n");
         return;
+    } else {
+        printf("Cliente removido!\n");
     }
 
     //desconectar o no que vai ser removido
