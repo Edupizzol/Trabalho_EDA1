@@ -3,12 +3,29 @@
 #include "../include/clientes.h"
 #include "../include/produtos.h"
 #include "../include/carrinho.h"
+#ifdef _WIN32
+    #include <windows.h>
+    #define SLEEP(s) Sleep(s * 1000)
+#else
+    #include <unistd.h>
+    #define SLEEP(s) sleep(s)
+#endif
+
+
+// printf("\033[H\033[2J");
+void limpar_tela() {
+    #ifdef _WIN32
+        system("cls");
+    #else
+        system("clear");
+    #endif
+}
 
 void exibir_menu(){
 
     printf("\n");
     printf("========== MENU PRINCIPAL ==========\n");
-    printf("00 : Terminar Execução\n");
+    printf("00 : Terminar Execucao\n");
     printf("01 : Cadastrar Novo Cliente\n");
     printf("02 : Buscar Cliente\n");
     printf("03 : Editar Dados do Cliente\n");
@@ -18,9 +35,9 @@ void exibir_menu(){
     printf("07 : Listar Produtos\n");
     printf("08 : Remover Produto\n");
     printf("09 : Editar Produto\n");
-    printf("10 : Começar as Compras\n");
+    printf("10 : Comecar as Compras\n");
     printf("===================================\n");
-    printf("Escolha uma opção: ");
+    printf("Escolha uma opcao: ");
 
 }
 
@@ -31,11 +48,11 @@ int main(){
 
     int n;
     char* cpf = malloc(12*sizeof(char));
-    if(cpf==NULL){printf("Erro de alocação de memória\n");return 1;}
+    if(cpf==NULL){printf("Erro de alocacao de memoria\n");return 1;}
     char* nome = malloc(100*sizeof(char));
-    if(nome==NULL){printf("Erro de alocação de memória\n");return 1;}
+    if(nome==NULL){printf("Erro de alocacao de memoria\n");return 1;}
     char* senha = malloc(20*sizeof(char));
-    if(senha==NULL){printf("Erro de alocação de memória\n");return 1;}
+    if(senha==NULL){printf("Erro de alocacao de memoria\n");return 1;}
     
     while(1){
 
@@ -44,7 +61,7 @@ int main(){
         getchar();
 
         if(n==0){
-            printf("Execução Finalizada!\n");
+            printf("Execucao Finalizada!\n");
             free(cpf);free(nome);free(senha);
             return 0;
         }
@@ -54,12 +71,11 @@ int main(){
         case 1:
         {
             char* telefone =  malloc(15*sizeof(char));
-            if(telefone==NULL){printf("Erro de alocação de memória\n");free(cpf);free(nome);free(senha);return 1;}
+            if(telefone==NULL){printf("Erro de alocacao de memoria\n");free(cpf);free(nome);free(senha);return 1;}
             char* dataDeNascimento = malloc(15*sizeof(char));
-            if(dataDeNascimento==NULL){printf("Erro de alocação de memória\n");free(telefone);free(cpf);free(nome);free(senha);return 1;}
+            if(dataDeNascimento==NULL){printf("Erro de alocacao de memoria\n");free(telefone);free(cpf);free(nome);free(senha);return 1;}
             char* email = malloc(100*sizeof(char));
-            if(email==NULL){printf("Erro de alocação de memória\n");free(telefone);free(dataDeNascimento);free(cpf);free(nome);free(senha);return 1;}
-
+            if(email==NULL){printf("Erro de alocacao de memoria\n");free(telefone);free(dataDeNascimento);free(cpf);free(nome);free(senha);return 1;}
             printf("Digite o Nome:\n");
             scanf("%[^\n]", nome);
             printf("Digite o CPF:\n");
@@ -78,7 +94,8 @@ int main(){
             printf("Cliente Cadastrado!\n");
 
             free(telefone);free(dataDeNascimento);free(email);
-
+            SLEEP(1.5);
+            limpar_tela();
             break;
         }
         case 2:
@@ -87,7 +104,8 @@ int main(){
             scanf("%s", cpf);
 
             busca_cliente(cliente,cpf);
-
+            SLEEP(1.5);
+            limpar_tela();
             break;
 
 
@@ -121,14 +139,14 @@ int main(){
             else if(numero==2){
                 printf("Digite o Novo CPF:\n");
                 char* cpfNovo = malloc(12*sizeof(char));
-                if(cpfNovo==NULL){printf("Erro de alocação de memória\n");break;}
+                if(cpfNovo==NULL){printf("Erro de alocacao de memoria\n");break;}
                 scanf("%s", cpfNovo);
                 edita_cpf(cliente,cpfNovo,cpf);
                 free(cpfNovo);
             }
             else if(numero==3){
                 char* telefone = malloc(15*sizeof(char));
-                if(telefone==NULL){printf("Erro de alocação de memória\n");break;}
+                if(telefone==NULL){printf("Erro de alocacao de memoria\n");break;}
                 printf("Digite o Novo Telefone:\n");
                 scanf("%s", telefone);
                 edita_telefone(cliente,telefone,cpf);
@@ -141,7 +159,7 @@ int main(){
             }
             else if(numero==5){
                 char* dataDeNascimento = malloc(15*sizeof(char));
-                if(dataDeNascimento==NULL){printf("Erro de alocação de memória\n");break;}
+                if(dataDeNascimento==NULL){printf("Erro de alocacao de memoria\n");break;}
                 printf("Digite a Nova Data de Nascimento:\n");
                 scanf("%s", dataDeNascimento);
                 edita_data_de_nascimento(cliente,dataDeNascimento,cpf);
@@ -149,7 +167,7 @@ int main(){
             }
             else if(numero==6){
                 char* email = malloc(100*sizeof(char));
-                if(email==NULL){printf("Erro de alocação de memória\n");break;}
+                if(email==NULL){printf("Erro de alocacao de memoria\n");break;}
                 printf("Digite o Novo email:\n");
                 scanf("%s", email);
                 edita_email(cliente,email,cpf);
@@ -157,12 +175,16 @@ int main(){
             }
             printf("Dados Atualizados com Sucesso\n");
 
+            SLEEP(1.5);
+            limpar_tela();
             break;
 
         case 4:
 
             listar_clientes(cliente);
 
+            SLEEP(1.5);
+            limpar_tela();
             break;
 
         case 5:
@@ -173,6 +195,8 @@ int main(){
 
             printf("Cliente Eliminado!\n");
 
+            SLEEP(1.5);
+            limpar_tela();
             break;
 
         case 6:
@@ -180,7 +204,7 @@ int main(){
             float preco;
             int quantidade;
             
-            printf("Digite o Código do Produto:\n");
+            printf("Digite o Codigo do Produto:\n");
             scanf("%s", senha);
             printf("Digite o Nome do Produto:\n");
             scanf(" %[^\n]", nome);
@@ -193,20 +217,26 @@ int main(){
 
             printf("Produto Cadastrado!\n");
 
+            SLEEP(1.5);
+            limpar_tela();
             break;
         }
         case 7:
 
             listarProdutos(produto);
 
+            SLEEP(1.5);
+            limpar_tela();
             break;
 
         case 8:
 
-            printf("Digite o Código do Produto:\n");
+            printf("Digite o Codigo do Produto:\n");
             scanf("%s", senha);
             removerProduto(&produto,senha);
 
+            SLEEP(1.5);
+            limpar_tela();
             break;
 
         case 9:
@@ -214,7 +244,7 @@ int main(){
             float preco;
             int quantidade;
 
-            printf("Digite o Código do Produto!\n");
+            printf("Digite o Codigo do Produto!\n");
             scanf("%s", senha);
 
             printf("Digite o Novo Preco e o Novo Nome:\n");
@@ -228,6 +258,9 @@ int main(){
             editarDadosProduto(produto,senha,nome,preco,quantidade);
 
             printf("Produto Editado com Sucesso!\n");
+
+            SLEEP(1.5);
+            limpar_tela();
             free(nome);
             free(senha);
             break;
@@ -239,10 +272,10 @@ int main(){
         if(n==10){
 
             printf("\n========== LOGIN ==========\n");
-            printf("Digite o CPF do seu Usuário: ");
+            printf("Digite o CPF do seu Usuario: ");
             scanf("%s", cpf);
             getchar();
-            printf("Digite a Senha do seu Usuário: ");
+            printf("Digite a Senha do seu Usuario: ");
             scanf("%s", senha);
 
             if(login(cliente,cpf,senha)==1){
@@ -252,6 +285,9 @@ int main(){
 
             printf("\nLogin Realizado com Sucesso!\n");
 
+            SLEEP(1.5);
+            limpar_tela();
+
             Carrinho *carrinho = criar_carrinho();
 
             NodeCliente* novo_cliente = busca_cliente(cliente,cpf);
@@ -260,7 +296,7 @@ int main(){
                 adicionar_dono_do_carrinho(carrinho, &(novo_cliente->dados));
             } 
             else{
-                printf("Cliente Não Existe!\n");
+                printf("Cliente Nao Existe!\n");
                 free(carrinho); 
                 continue;
             }
@@ -273,7 +309,7 @@ int main(){
                 printf("3 : Remover Produtos\n");
                 printf("0 : Finalizar Compras\n");
                 printf("========================================\n");
-                printf("Escolha uma opção: ");
+                printf("Escolha uma opcao: ");
                 int escolha;
 
                 scanf("%d", &escolha);
@@ -281,6 +317,9 @@ int main(){
 
                 if(escolha==0){
                     printf("\nFinalizando compras...\n");
+
+                    SLEEP(1.5);
+                    limpar_tela();
                     break;
                 }
 
@@ -289,13 +328,15 @@ int main(){
                     printf("\n--- Adicionar ao Carrinho ---\n");
                     while(2==2){
 
-                        printf("Produtos Disponíveis:\n");
+                        printf("Produtos Disponiveis:\n");
                         listarProdutos(produto);
-                        printf("Digite o Código (ou '0' para voltar): ");
+                        printf("Digite o Codigo (ou '0' para voltar): ");
                         scanf("%s", senha);
 
                         if(senha[0]=='0' && senha[1]=='\0'){
                             printf("Voltando...\n");
+                            SLEEP(1.5);
+                            limpar_tela();
                             break;
                         }
 
@@ -307,9 +348,14 @@ int main(){
                             getchar();
                             adicionar_produto_ao_carrinho(carrinho, new_produto, qtd);
                             printf("%dx Produto '%s' adicionado ao carrinho!\n\n", qtd, new_produto->nome);
+                            
+                            SLEEP(1.5);
+                            limpar_tela();
                         } 
                         else{
-                            printf("Código inválido! Tente novamente.\n\n");
+                            printf("Codigo invalido! Tente novamente.\n\n");
+                            SLEEP(1.5);
+                            limpar_tela();
                         }
 
                     }
@@ -318,21 +364,26 @@ int main(){
                 else if(escolha==2){
 
                     printf("\n--- Procurar Produto no Carrinho ---\n");
-                    printf("Digite o Código do Produto: ");
+                    printf("Digite o Codigo do Produto: ");
                     scanf("%s", senha);
                     procura_produto_no_carrinho(carrinho,senha);
 
+                    SLEEP(1.5);
+                    limpar_tela();
                 }
                 else if(escolha==3){
 
                     printf("\n--- Remover do Carrinho ---\n");
                     while(2==2){
 
-                        printf("Digite o Código (ou '0' para voltar): ");
+                        printf("Digite o Codigo (ou '0' para voltar): ");
                         scanf("%s", senha);
 
                         if(senha[0]=='0' && senha[1]=='\0'){
                             printf("Voltando...\n");
+
+                            SLEEP(1.5);
+                            limpar_tela();
                             break;
                         }
 
@@ -340,9 +391,13 @@ int main(){
                         if(new_produto!=NULL){
                             remove_produto_do_carrinho(carrinho, new_produto);
                             printf("Produto '%s' removido do carrinho!\n\n", new_produto->nome);
+                            SLEEP(1.5);
+                            limpar_tela();
                         } 
                         else{
-                            printf("Código inválido! Tente novamente.\n\n");
+                            printf("Codigo invalido! Tente novamente.\n\n");
+                            SLEEP(1.5);
+                            limpar_tela();
                         }
 
                     }
@@ -354,6 +409,8 @@ int main(){
             ver_produtos_no_carrinho(carrinho);
             printf("=======================================\n");
             free(carrinho);
+            SLEEP(1.5);
+            limpar_tela();
 
         }
 
