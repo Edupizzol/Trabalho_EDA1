@@ -17,7 +17,7 @@ O sistema oferece funcionalidades básicas de **CRUD** (Criar, Ler, Atualizar e 
 - Mantém os clientes **ordenados alfabeticamente pelo nome**
 
 ### Gerenciamento de Produtos
-- Cadastrar produto (código único, nome e preço)
+- Cadastrar produto (código único, nome, preço e quantidade)
 - Listar todos os produtos
 - Buscar produto pelo código
 - Editar dados do produto
@@ -28,6 +28,9 @@ O sistema oferece funcionalidades básicas de **CRUD** (Criar, Ler, Atualizar e 
 - Listar produtos no carrinho
 - Remover produtos do carrinho
 
+### Histórico de Operações
+- Lista e atualiza todas as opções escolhidas até o término do programa
+- Os registros são acompanhados de "TimeStamps" e um contador de operações realizadas
 ---
 
 ## Estrutura do Projeto
