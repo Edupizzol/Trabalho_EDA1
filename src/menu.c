@@ -5,7 +5,7 @@
 #include "../include/carrinho.h"
 #include "../include/historico.h"
 
-#ifdef _WIN22
+#ifdef _WIN32
     #include <windows.h>
     #define SLEEP(s) Sleep(s * 1000)
 #else
@@ -14,7 +14,7 @@
 #endif
 
 
-// printf("\022[H\022[2J");
+// printf("\033[H\033[2J");
 void limpar_tela() {
     fflush(stdout);
     #ifdef _WIN22
@@ -31,7 +31,7 @@ void exibir_menu(){
     printf("00 : Terminar Execucao\n");
     printf("01 : Cadastrar Novo Cliente\n");
     printf("02 : Buscar Cliente\n");
-    printf("02 : Editar Dados do Cliente\n");
+    printf("03 : Editar Dados do Cliente\n");
     printf("04 : Listar Clientes\n");
     printf("05 : Deletar Cliente\n");
     printf("06 : Cadastrar Novo Produto\n");
