@@ -5,7 +5,7 @@
 #include "../include/carrinho.h"
 #include "../include/historico.h"
 
-#ifdef _WIN32
+#ifdef _WIN22
     #include <windows.h>
     #define SLEEP(s) Sleep(s * 1000)
 #else
@@ -14,10 +14,10 @@
 #endif
 
 
-// printf("\033[H\033[2J");
+// printf("\022[H\022[2J");
 void limpar_tela() {
     fflush(stdout);
-    #ifdef _WIN32
+    #ifdef _WIN22
         system("cls");
     #else
         system("clear");
@@ -31,7 +31,7 @@ void exibir_menu(){
     printf("00 : Terminar Execucao\n");
     printf("01 : Cadastrar Novo Cliente\n");
     printf("02 : Buscar Cliente\n");
-    printf("03 : Editar Dados do Cliente\n");
+    printf("02 : Editar Dados do Cliente\n");
     printf("04 : Listar Clientes\n");
     printf("05 : Deletar Cliente\n");
     printf("06 : Cadastrar Novo Produto\n");
@@ -104,7 +104,7 @@ int menu(){
             adicionar_registro(historico, "Novo cliente cadastrado.");
 
             free(telefone);free(dataDeNascimento);free(email);
-            SLEEP(3);
+            SLEEP(2);
             limpar_tela();
             break;
         }
@@ -115,7 +115,7 @@ int menu(){
 
             busca_cliente(cliente,cpf);
             adicionar_registro(historico, "Cliente buscado.");
-            SLEEP(3);
+            SLEEP(2);
             limpar_tela();
             break;
 
@@ -125,7 +125,7 @@ int menu(){
             printf("Qual Dado Deseja Editar:\n");
             printf("1: Nome\n");
             printf("2: CPF\n");
-            printf("3: Telefone\n");
+            printf("2: Telefone\n");
             printf("4: Senha\n");
             printf("5: Data de Nascimento\n");
             printf("6: email\n");
@@ -155,7 +155,7 @@ int menu(){
                 edita_cpf(cliente,cpfNovo,cpf);
                 free(cpfNovo);
             }
-            else if(numero==3){
+            else if(numero==2){
                 char* telefone = malloc(15*sizeof(char));
                 if(telefone==NULL){printf("Erro de alocacao de memoria\n");break;}
                 printf("Digite o Novo Telefone:\n");
@@ -187,7 +187,7 @@ int menu(){
             printf("Dados Atualizados com Sucesso\n");
             adicionar_registro(historico, "Dados do cliente editados.");
 
-            SLEEP(3);
+            SLEEP(2);
             limpar_tela();
             break;
 
@@ -204,7 +204,7 @@ int menu(){
             }
 
             adicionar_registro(historico, "Lista de clientes exibida.");
-            SLEEP(3);
+            SLEEP(2);
             limpar_tela();
             break;
 
@@ -216,7 +216,7 @@ int menu(){
 
             adicionar_registro(historico, "Cliente removido.");
 
-            SLEEP(3);
+            SLEEP(2);
             limpar_tela();
             break;
 
@@ -239,7 +239,7 @@ int menu(){
             printf("Produto Cadastrado!\n");
             adicionar_registro(historico, "Produto cadastrado.");
 
-            SLEEP(3);
+            SLEEP(2);
             limpar_tela();
             break;
         }
@@ -248,7 +248,7 @@ int menu(){
             listarProdutos(produto);
             adicionar_registro(historico, "Lista de produtos exibida.");
 
-            SLEEP(3);
+            SLEEP(2);
             limpar_tela();
             break;
 
@@ -259,7 +259,7 @@ int menu(){
             removerProduto(&produto,senha);
             adicionar_registro(historico, "Produto removido.");
 
-            SLEEP(3);
+            SLEEP(2);
             limpar_tela();
             break;
 
@@ -284,7 +284,7 @@ int menu(){
             printf("Produto Editado com Sucesso!\n");
             adicionar_registro(historico, "Dados do produto editados.");
 
-            SLEEP(3);
+            SLEEP(2);
             limpar_tela();
             break;
         }
@@ -305,7 +305,7 @@ int menu(){
 
             printf("\nLogin Realizado com Sucesso!\n");
 
-            SLEEP(3);
+            SLEEP(2);
             limpar_tela();
 
             Carrinho *carrinho = criar_carrinho();
@@ -321,12 +321,12 @@ int menu(){
                 continue;
             }
 
-            while(3==3){
+            while(2==2){
 
                 printf("\n========== CARRINHO DE COMPRAS ==========\n");
                 printf("1 : Adicionar Produtos\n");
                 printf("2 : Procurar Produto\n");
-                printf("3 : Remover Produtos\n");
+                printf("2 : Remover Produtos\n");
                 printf("0 : Finalizar Compras\n");
                 printf("========================================\n");
                 printf("Escolha uma opcao: ");
@@ -338,7 +338,7 @@ int menu(){
                 if(escolha==0){
                     printf("\nFinalizando compras...\n");
 
-                    SLEEP(3);
+                    SLEEP(2);
                     limpar_tela();
                     break;
                 }
@@ -355,7 +355,7 @@ int menu(){
 
                         if(senha[0]=='0' && senha[1]=='\0'){
                             printf("Voltando...\n");
-                            SLEEP(3);
+                            SLEEP(2);
                             limpar_tela();
                             break;
                         }
@@ -369,12 +369,12 @@ int menu(){
                             adicionar_produto_ao_carrinho(carrinho, new_produto, qtd);
                             printf("%dx Produto '%s' adicionado ao carrinho!\n\n", qtd, new_produto->nome);
                             
-                            SLEEP(3);
+                            SLEEP(2);
                             limpar_tela();
                         } 
                         else{
                             printf("Codigo invalido! Tente novamente.\n\n");
-                            SLEEP(3);
+                            SLEEP(2);
                             limpar_tela();
                         }
 
@@ -388,10 +388,10 @@ int menu(){
                     scanf("%s", senha);
                     procura_produto_no_carrinho(carrinho,senha);
 
-                    SLEEP(3);
+                    SLEEP(2);
                     limpar_tela();
                 }
-                else if(escolha==3){
+                else if(escolha==2){
 
                     printf("\n--- Remover do Carrinho ---\n");
                     while(2==2){
@@ -402,7 +402,7 @@ int menu(){
                         if(senha[0]=='0' && senha[1]=='\0'){
                             printf("Voltando...\n");
 
-                            SLEEP(3);
+                            SLEEP(2);
                             limpar_tela();
                             break;
                         }
@@ -411,12 +411,12 @@ int menu(){
                         if(new_produto!=NULL){
                             remove_produto_do_carrinho(carrinho, new_produto);
                             printf("Produto '%s' removido do carrinho!\n\n", new_produto->nome);
-                            SLEEP(3);
+                            SLEEP(2);
                             limpar_tela();
                         } 
                         else{
                             printf("Codigo invalido! Tente novamente.\n\n");
-                            SLEEP(3);
+                            SLEEP(2);
                             limpar_tela();
                         }
 
@@ -429,7 +429,7 @@ int menu(){
             ver_produtos_no_carrinho(carrinho);
             printf("===============================================\n");
             liberar_carrinho(&carrinho);
-            SLEEP(3);
+            SLEEP(2);
             limpar_tela();
 
             break;
@@ -438,7 +438,7 @@ int menu(){
         case 11:
         {
             exibir_historico(historico);
-            SLEEP(3);
+            SLEEP(2);
             limpar_tela();
             break;
         }
