@@ -41,19 +41,37 @@ char* copy_string(char* string){
 
 }
 
+void vira_maiuscula(char* string){
+    
+    if(string == NULL) return;
+    
+    int i = 0;
+    while(string[i] != '\0'){
+        if(string[i] >= 'a' && string[i] <= 'z'){
+            string[i] -= 32;
+        }
+        i++;
+    }
+}
+
 int ordem_alfabetica(char* string1, char* string2){
 
     int i=0;
-    if(string1[0]>='a' && string1[0]<='z'){string1[0]-=32;};
-    if(string2[0]>='a' && string2[0]<='z'){string2[0]-=32;};
-
+    
     while(string1[i]!='\0' && string2[i]!='\0'){
 
-        if(string1[i]!=string2[i]){
-            if(string1[i]<string2[i]){
+        char c1 = string1[i];
+        char c2 = string2[i];
+        
+        // Convert to uppercase for comparison only
+        if(c1 >= 'a' && c1 <= 'z') c1 -= 32;
+        if(c2 >= 'a' && c2 <= 'z') c2 -= 32;
+
+        if(c1 != c2){
+            if(c1 < c2){
                 return 1;
             }
-            else if(string1[i]>string2[i]){
+            else if(c1 > c2){
                 return 2;
             }
         }
@@ -93,6 +111,7 @@ Cliente* criar_cliente(char* nome, char* cpf, char* telefone, char* senha, char*
 
     new_cliente->cpf = copy_string(cpf);
     new_cliente->nome = copy_string(nome);
+    vira_maiuscula(new_cliente->nome); 
     new_cliente->telefone = copy_string(telefone);
     new_cliente->senha = copy_string(senha);
     new_cliente->dataDeNascimento = copy_string(dataDeNascimento);
@@ -283,11 +302,28 @@ void remover_cliente(NodeCliente **root, char* cpf){
 //funcoes de edicao
 void edita_nome(NodeCliente* root,char* nome, char* cpf){
 
-    NodeCliente* cliente = busca_cliente(root,cpf);
+    NodeCliente* cliente = root;
+    while(cliente != NULL){
+        if(compara_strings(cliente->dados.cpf, cpf) == 0){
+            break;
+        }
+        cliente = cliente->prox;
+    }
 
     if(cliente != NULL){
         free(cliente->dados.nome);
         cliente->dados.nome = copy_string(nome);
+        vira_maiuscula(cliente->dados.nome);  
+
+        printf("-------Dados do Cliente (Atualizado)-------\n");
+        printf("Nome: %s\n", cliente->dados.nome);
+        printf("CPF: %s\n", cliente->dados.cpf);
+        printf("Telefone: %s\n", cliente->dados.telefone);
+        printf("Data de Nascimento: %s\n", cliente->dados.dataDeNascimento);
+        printf("Email: %s\n", cliente->dados.email);
+        printf("------------------------------------------\n");
+    } else {
+        printf("Cliente nao encontrado!\n");
     }
 
 }
