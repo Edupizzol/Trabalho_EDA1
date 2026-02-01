@@ -157,3 +157,30 @@ Produto* remove_produto_do_carrinho(Carrinho* carrinho, Produto* produto){
 
 }
 
+void liberar_carrinho(Carrinho** carrinho){
+    
+    if(carrinho == NULL || *carrinho == NULL){
+        return;
+    }
+
+    // Liberar a lista de produtos do carrinho
+    Produto* atual = (*carrinho)->produto;
+    Produto* proximo = NULL;
+
+    while(atual != NULL){
+        proximo = atual->next;
+        
+        // Liberar as strings do produto
+        free(atual->codigo);
+        free(atual->nome);
+        
+        // Liberar o produto
+        free(atual);
+        
+        atual = proximo;
+    }
+
+    // Liberar o carrinho
+    free(*carrinho);
+    *carrinho = NULL;
+}

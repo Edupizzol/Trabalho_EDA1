@@ -145,7 +145,28 @@ void incrementarEstoque(Produto* produto, int quantidade) { // n precisa do codi
     produto->quantidade += quantidade;
     printf("Estoque do produto %s incrementado em %d. Novo estoque: %d\n", produto->codigo, quantidade, produto->quantidade);
 }
+void liberar_todos_produtos(Produto** head){
+    
+    if(head == NULL || *head == NULL){
+        return;
+    }
 
+    Produto* atual = *head;
+    Produto* proximo = NULL;
+
+    while(atual != NULL){
+        proximo = atual->next;
+        
+        free(atual->codigo);
+        free(atual->nome);
+        
+        free(atual);
+        
+        atual = proximo;
+    }
+
+    *head = NULL;
+}
 void decrementarEstoque(Produto* produto, int quantidade) {
     if (produto == NULL || quantidade < 0) {
         printf("Erro: Produto invalido ou quantidade negativa para decremento.\n");
