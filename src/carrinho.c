@@ -123,21 +123,21 @@ Produto* procura_produto_no_carrinho(Carrinho* carrinho, char* codigo){
 
 }
 
-Produto* remove_produto_do_carrinho(Carrinho* carrinho, Produto* produto){
+Produto* remove_produto_do_carrinho(Carrinho* carrinho, Produto* produto, int quantidade){
 
     if(carrinho==NULL || produto==NULL){
         printf("Carrinho ou produto invalido!\n");
         return NULL;
     }
 
+    if(quantidade <= 0){
+        printf("Quantidade invalida!\n");
+        return NULL;
+    }
+
     Produto* atual=carrinho->produto;
     Produto* anterior=NULL;
 
-    if(atual!=NULL && compara_strings(atual->codigo, produto->codigo)==0){
-        carrinho->produto=atual->next;
-        atual->next=NULL; 
-        return atual;
-    }
     while(atual!=NULL && compara_strings(atual->codigo, produto->codigo)!=0){
         anterior=atual;
         atual=atual->next;
@@ -148,11 +148,26 @@ Produto* remove_produto_do_carrinho(Carrinho* carrinho, Produto* produto){
         return NULL;
     }
 
-    anterior->next=atual->next;
-    atual->next=NULL;
+    if(quantidade > atual->quantidade){
+        printf("Quantidade superior ao carrinho! Max: %d\n", atual->quantidade);
+        return NULL;
+    }
 
-    incrementarEstoque(produto, atual->quantidade);
+    incrementarEstoque(produto, quantidade);
+    atual->quantidade -= quantidade;
 
+    //caso remova completamente o produto, desliga o nó
+    if(atual->quantidade == 0){
+        if(anterior==NULL){
+            carrinho->produto = atual->next;
+        } else {
+            anterior->next = atual->next;
+        }
+        printf("Produto '%s' removido completamente do carrinho!\n", atual->nome);
+        return atual;
+    }
+
+    printf("%d unidades de '%s' removidas do carrinho!\n", quantidade, atual->nome);
     return atual;
 
 }

@@ -391,7 +391,7 @@ int menu(){
                     SLEEP(2);
                     limpar_tela();
                 }
-                else if(escolha==2){
+                else if(escolha==3){
 
                     printf("\n--- Remover do Carrinho ---\n");
                     while(2==2){
@@ -407,10 +407,19 @@ int menu(){
                             break;
                         }
 
-                        Produto* new_produto = buscarProduto(produto,senha);
-                        if(new_produto!=NULL){
-                            remove_produto_do_carrinho(carrinho, new_produto);
-                            printf("Produto '%s' removido do carrinho!\n\n", new_produto->nome);
+                        Produto* produto_carrinho = procura_produto_no_carrinho(carrinho, senha);
+                        if(produto_carrinho!=NULL){
+                            int qtd_remover;
+                            printf("Quantidade no carrinho: %d\n", produto_carrinho->quantidade);
+                            printf("Digite a Quantidade a Remover: ");
+                            scanf("%d", &qtd_remover);
+                            getchar();
+
+                            Produto* new_produto = buscarProduto(produto, senha);
+                            if(remove_produto_do_carrinho(carrinho, new_produto, qtd_remover) != NULL){
+                                printf("\n");
+                            }
+
                             SLEEP(2);
                             limpar_tela();
                         } 
