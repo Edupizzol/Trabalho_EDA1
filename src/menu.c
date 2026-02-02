@@ -445,6 +445,9 @@ int menu(){
 
 
         default:
+            printf("Opcao Invalida! Tente Novamente.\n");
+            SLEEP(2);
+            limpar_tela();
             break;
         }
 
