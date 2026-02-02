@@ -17,5 +17,6 @@ int adicionar_produto_ao_carrinho(Carrinho* carrinho, Produto* produto, int quan
 Produto* procura_produto_no_carrinho(Carrinho* carrinho, char* codigo);
 Produto* remove_produto_do_carrinho(Carrinho* carrinho, Produto* produto, int quantidade);
 void ver_produtos_no_carrinho(Carrinho* carrinho);
+void liberar_carrinho(Carrinho** carrinho);
 
 #endif

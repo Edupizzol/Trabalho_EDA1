@@ -32,5 +32,6 @@ void edita_senha(NodeCliente* root, char* senha, char* cpf);
 void edita_data_de_nascimento(NodeCliente* root, char* dataDeNascimento, char* cpf);
 void edita_email(NodeCliente* root, char* email, char* cpf);
 int verifica_cpf(NodeCliente* root, char* string);
+void liberar_todos_clientes(NodeCliente** root);
 
 #endif
