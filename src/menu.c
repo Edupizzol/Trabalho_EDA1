@@ -326,7 +326,7 @@ int menu(){
                 printf("\n========== CARRINHO DE COMPRAS ==========\n");
                 printf("1 : Adicionar Produtos\n");
                 printf("2 : Procurar Produto\n");
-                printf("2 : Remover Produtos\n");
+                printf("3 : Remover Produtos\n");
                 printf("0 : Finalizar Compras\n");
                 printf("========================================\n");
                 printf("Escolha uma opcao: ");
