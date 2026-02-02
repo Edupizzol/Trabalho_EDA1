@@ -62,10 +62,6 @@ int ordem_alfabetica(char* string1, char* string2){
 
         char c1 = string1[i];
         char c2 = string2[i];
-        
-        // Convert to uppercase for comparison only
-        if(c1 >= 'a' && c1 <= 'z') c1 -= 32;
-        if(c2 >= 'a' && c2 <= 'z') c2 -= 32;
 
         if(c1 != c2){
             if(c1 < c2){
@@ -95,6 +91,10 @@ int compara_strings(char* string1, char* string2){
             return 1;
         }
         i++;
+    }
+
+    if(string1[i] != string2[i]){
+        return 1;
     }
 
     return 0;
