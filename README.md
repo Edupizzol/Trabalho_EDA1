@@ -37,16 +37,17 @@ O sistema oferece funcionalidades básicas de **CRUD** (Criar, Ler, Atualizar e 
 <pre>
 ├── README.md
 ├── include
-│   ├── carrinho.h
-│   ├── clientes.h
-│   ├── historico.h
-│   └── produtos.h
+│   ├── carrinho.h
+│   ├── clientes.h
+│   ├── historico.h
+│   ├── menu.h
+│   └── produtos.h
 └── src
     ├── carrinho.c
     ├── clientes.c
     ├── historico.c
-    ├── main
     ├── main.c
+    ├── menu.c
     └── produtos.c
 </pre>
 
