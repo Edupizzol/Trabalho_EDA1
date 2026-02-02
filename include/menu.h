@@ -1,3 +1,6 @@
+#ifndef MENU_H
+#define MENU_H
+
 #include "../include/clientes.h"
 #include "../include/produtos.h"
 #include "../include/carrinho.h"
@@ -14,3 +17,4 @@ void listar_produtos_menu(Produto* produto, Historico* historico);
 void remover_produto_menu(Produto** produto, Historico* historico, char* senha);
 void editar_produto_menu(Produto* produto, Historico* historico, char* senha, char* nome);
 int iniciar_compras_menu(NodeCliente* cliente, Historico* historico, Produto* produto, char* cpf, char* senha);
+#endif

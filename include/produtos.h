@@ -16,4 +16,5 @@ void editarDadosProduto(Produto* head, char* codigo, char* novoNome, float novoP
 void removerProduto(Produto** head, char* codigo);
 void incrementarEstoque(Produto* produto, int quantidade);
 int decrementarEstoque(Produto* produto, int quantidade);
+void liberar_todos_produtos(Produto** head);
 #endif

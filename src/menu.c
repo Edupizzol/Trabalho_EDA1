@@ -13,7 +13,7 @@
 // printf("\033[H\033[2J");
 void limpar_tela() {
     fflush(stdout);
-    #ifdef _WIN22
+    #ifdef _WIN32
         system("cls");
     #else
         system("clear");

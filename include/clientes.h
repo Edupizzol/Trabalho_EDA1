@@ -16,7 +16,7 @@ typedef struct NodeCliente{
 }NodeCliente;
 
 Cliente* criar_cliente(char* nome, char* cpf, char* telefone, char* senha, char* dataDeNascimento, char* email);
-int login(NodeCliente* root, char* nome, char* senha);
+int login(NodeCliente* root, char* cpf, char* senha);
 char* copy_string(char* string);
 int ordem_alfabetica(char* string1, char* string2);
 int compara_strings(char* string1, char* string2);
