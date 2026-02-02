@@ -1,9 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include "../include/clientes.h"
-#include "../include/produtos.h"
-#include "../include/carrinho.h"
-#include "../include/historico.h"
+#include "../include/menu.h"
 
 #ifdef _WIN32
     #include <windows.h>
@@ -12,19 +9,6 @@
     #include <unistd.h>
     #define SLEEP(s) sleep(s)
 #endif
-
-void finalizar(NodeCliente* cliente, Produto* produto, Historico* historico, char* cpf, char* nome, char* senha);
-void cadastra_cliente_menu(NodeCliente** cliente, Historico* historico, char* nome, char* cpf, char* senha, char* telefone, char* dataDeNascimento, char* email);
-void busca_cliente_menu(NodeCliente* cliente, Historico* historico, char* cpf);
-int edita_cliente_menu(NodeCliente* cliente, Historico* historico, char* nome, char* cpf, char* senha, char* dataDeNascimento, char* email);
-void listar_clientes_menu(NodeCliente* cliente, Historico* historico);
-void deletar_clientes_menu(NodeCliente** cliente, Historico* historico, char* cpf);
-void cadastrar_produto_menu(Produto** produto, Historico* historico, char* senha, char* nome, float preco, int quantidade);
-void listar_produtos_menu(Produto* produto, Historico* historico);
-void remover_produto_menu(Produto** produto, Historico* historico, char* senha);
-void editar_produto_menu(Produto* produto, Historico* historico, char* senha, char* nome);
-int iniciar_compras_menu(NodeCliente* cliente, Historico* historico, Produto* produto, char* cpf, char* senha);
-
 
 // printf("\033[H\033[2J");
 void limpar_tela() {
