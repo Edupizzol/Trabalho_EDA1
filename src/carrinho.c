@@ -33,19 +33,24 @@ void adicionar_dono_do_carrinho(Carrinho* carrinho, Cliente* cliente){
 
 }
 
-void adicionar_produto_ao_carrinho(Carrinho* carrinho, Produto* produto, int quantidade){
+int adicionar_produto_ao_carrinho(Carrinho* carrinho, Produto* produto, int quantidade){
 
     if(produto==NULL){
         printf("Produto nao existe!\n");
-        return;
+        return 0;
     }
     if(carrinho==NULL){
         printf("Carrinho nao existe!\n");
-        return;
+        return 0;
     }
     if(quantidade <= 0){
         printf("Quantidade invalida!\n");
-        return;
+        return 0;
+    }
+
+    // Check if stock decrement is possible before allocating memory
+    if(!decrementarEstoque(produto, quantidade)){
+        return 0;
     }
 
     Produto* novo = malloc(sizeof(Produto));
@@ -60,11 +65,9 @@ void adicionar_produto_ao_carrinho(Carrinho* carrinho, Produto* produto, int qua
     novo->quantidade = quantidade;
     novo->next = NULL;
 
-    decrementarEstoque(produto, quantidade);
-
     if(carrinho->produto == NULL){
         carrinho->produto = novo;
-        return;
+        return 1;
     }
 
     Produto* atual = carrinho->produto;
@@ -73,6 +76,7 @@ void adicionar_produto_ao_carrinho(Carrinho* carrinho, Produto* produto, int qua
     }
 
     atual->next = novo;
+    return 1;
 
 }
 

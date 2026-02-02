@@ -434,8 +434,9 @@ int iniciar_compras_menu(NodeCliente* cliente, Historico* historico, Produto* pr
                     printf("Digite a Quantidade Desejada: ");
                     scanf("%d", &qtd);
                     getchar();
-                    adicionar_produto_ao_carrinho(carrinho, new_produto, qtd);
-                    printf("%dx Produto '%s' adicionado ao carrinho!\n\n", qtd, new_produto->nome);
+                    if(adicionar_produto_ao_carrinho(carrinho, new_produto, qtd)){
+                        printf("%dx Produto '%s' adicionado ao carrinho!\n\n", qtd, new_produto->nome);
+                    }
                     
                     SLEEP(2);
                     limpar_tela();
@@ -457,7 +458,7 @@ int iniciar_compras_menu(NodeCliente* cliente, Historico* historico, Produto* pr
             procura_produto_no_carrinho(carrinho,senha);
 
             SLEEP(2);
-            limpar_tela();
+            //limpar_tela();
         }
         else if(escolha==3){
 

@@ -167,15 +167,16 @@ void liberar_todos_produtos(Produto** head){
 
     *head = NULL;
 }
-void decrementarEstoque(Produto* produto, int quantidade) {
+int decrementarEstoque(Produto* produto, int quantidade) {
     if (produto == NULL || quantidade < 0) {
         printf("Erro: Produto invalido ou quantidade negativa para decremento.\n");
-        return;
+        return 0;
     }
     if (produto->quantidade < quantidade) {
         printf("Erro: Estoque insuficiente para o produto %s. Estoque atual: %d, Tentativa de decremento: %d\n", produto->codigo, produto->quantidade, quantidade);
-        return;
+        return 0;
     }
     produto->quantidade -= quantidade;
     printf("Estoque do produto %s decrementado em %d. Novo estoque: %d\n", produto->codigo, quantidade, produto->quantidade);
+    return 1;
 }
