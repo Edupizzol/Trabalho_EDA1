@@ -116,3 +116,99 @@ int remover_cliente_arquivo(const char *filename, char* cpf) {
     return encontrado;
 
 }
+
+int salvar_produtos(Produto* produto, const char *filename) {
+    FILE *fp = fopen(filename, "w");
+    if(fp==NULL){return 0;}
+
+    Produto *atual = produto;
+    while(atual != NULL){
+        fprintf(fp, "%s;%s;%.2f;%d\n",
+        atual->codigo,
+        atual->nome,
+        atual->preco,
+        atual->quantidade);
+        atual = atual->next;
+    }
+
+    fclose(fp);
+    return 1;
+}
+
+Produto* carregar_produtos(const char *filename) {
+    FILE *fp = fopen(filename, "r");
+    if (fp == NULL) { return NULL; }
+
+    Produto *head = NULL;
+    Produto *atual = NULL;
+
+    char *codigo=malloc(20*sizeof(char));
+    if(codigo==NULL){ printf("Erro de alocacao de memoria\n"); fclose(fp); return NULL;}
+    char *nome = malloc(100 * sizeof(char));
+    if(nome==NULL){printf("Erro de alocacao de memoria\n"); free(codigo); fclose(fp); return NULL;}
+    float preco = 0.0f;
+    int quantidade = 0;
+
+    while(fscanf(fp, " %19[^;];%99[^;];%f;%d\n", codigo, nome, &preco, &quantidade)==4){
+        Produto *novo=(Produto*)malloc(sizeof(Produto));
+        if(novo==NULL){printf("Erro de alocacao de memoria\n");break;}
+
+        novo->codigo = copy_string(codigo);
+        novo->nome = copy_string(nome);
+        novo->preco = preco;
+        novo->quantidade = quantidade;
+        novo->next = NULL;
+
+        if(head==NULL){
+            head=novo;
+            atual=novo;
+        }
+        else{
+            atual->next = novo;
+            atual = novo;
+        }
+    }
+
+    free(codigo);
+    free(nome);
+    fclose(fp);
+    return head;
+}
+
+int remover_produto_arquivo(const char *filename, char* codigo) {
+    FILE *fp=fopen(filename, "r");
+    if(fp==NULL){return 0;}
+
+    FILE *temp = fopen("temp.csv", "w");
+    if(temp==NULL){fclose(fp);return 0;}
+
+    char *linha = malloc(1000 * sizeof(char));
+    if (linha == NULL) { printf("Erro de alocacao de memoria\n"); fclose(fp); fclose(temp); return 0; }
+    char *linha_copia = malloc(1000 * sizeof(char));
+    if (linha_copia == NULL) { printf("Erro de alocacao de memoria\n"); free(linha); fclose(fp); fclose(temp); return 0; }
+    int encontrado = 0;
+
+    while(fgets(linha, 1000, fp)){
+        strcpy(linha_copia,linha);
+
+        char *codigo_linha=strtok(linha,";");
+
+        if(codigo_linha && strcmp(codigo_linha, codigo)==0){
+            encontrado = 1;
+        } 
+        else{
+            fputs(linha_copia, temp);
+        }
+    }
+
+    fclose(fp);
+    fclose(temp);
+
+    free(linha);
+    free(linha_copia);
+
+    remove(filename);
+    rename("temp.csv", filename);
+    return encontrado;
+}
+
