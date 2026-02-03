@@ -2,3 +2,5 @@
 .vscode/launch.json
 .vscode/settings.json
 programa
+programa.exe
+**/*.csv
