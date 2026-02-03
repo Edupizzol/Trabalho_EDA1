@@ -78,45 +78,6 @@ NodeCliente* carregar_clientes(const char *filename) {
     return root;
 }
 
-int remover_cliente_arquivo(const char *filename, char* cpf) {
-    FILE *fp = fopen(filename, "r");
-    if (fp==NULL){return 0;};
-
-    FILE *temp = fopen("temp.csv", "w");
-    if(temp==NULL){fclose(fp);return 0;}
-    
-    char *linha = malloc(1000*sizeof(char));
-    if(linha==NULL){printf("Erro de alocacao de memoria\n");fclose(fp);fclose(temp);return 0;}
-    char *linha_copia = malloc(1000*sizeof(char));
-    if(linha_copia==NULL){printf("Erro de alocacao de memoria\n");free(linha);fclose(fp);fclose(temp);return 0;}
-    int encontrado = 0;
-
-    while (fgets(linha, 1000, fp)) {
-        strcpy(linha_copia, linha);
-
-        strtok(linha, ";"); //pula o nome
-        char *cpf_linha = strtok(NULL, ";"); //pega o CPF
-
-        if(cpf_linha && strcmp(cpf_linha, cpf)==0){
-            encontrado=1; 
-        } 
-        else{
-            fputs(linha_copia, temp); 
-        }
-    }
-
-    fclose(fp);
-    fclose(temp);
-
-    free(linha);
-    free(linha_copia);
-
-    remove(filename);
-    rename("temp.csv", filename);
-    return encontrado;
-
-}
-
 int salvar_produtos(Produto* produto, const char *filename) {
     FILE *fp = fopen(filename, "w");
     if(fp==NULL){return 0;}
@@ -174,41 +135,3 @@ Produto* carregar_produtos(const char *filename) {
     fclose(fp);
     return head;
 }
-
-int remover_produto_arquivo(const char *filename, char* codigo) {
-    FILE *fp=fopen(filename, "r");
-    if(fp==NULL){return 0;}
-
-    FILE *temp = fopen("temp.csv", "w");
-    if(temp==NULL){fclose(fp);return 0;}
-
-    char *linha = malloc(1000 * sizeof(char));
-    if (linha == NULL) { printf("Erro de alocacao de memoria\n"); fclose(fp); fclose(temp); return 0; }
-    char *linha_copia = malloc(1000 * sizeof(char));
-    if (linha_copia == NULL) { printf("Erro de alocacao de memoria\n"); free(linha); fclose(fp); fclose(temp); return 0; }
-    int encontrado = 0;
-
-    while(fgets(linha, 1000, fp)){
-        strcpy(linha_copia,linha);
-
-        char *codigo_linha=strtok(linha,";");
-
-        if(codigo_linha && strcmp(codigo_linha, codigo)==0){
-            encontrado = 1;
-        } 
-        else{
-            fputs(linha_copia, temp);
-        }
-    }
-
-    fclose(fp);
-    fclose(temp);
-
-    free(linha);
-    free(linha_copia);
-
-    remove(filename);
-    rename("temp.csv", filename);
-    return encontrado;
-}
-
