@@ -5,6 +5,7 @@
 #include "../include/produtos.h"
 #include "../include/carrinho.h"
 #include "../include/historico.h"
+#include "../include/salvamento.h"
 
 void finalizar(NodeCliente* cliente, Produto* produto, Historico* historico, char* cpf, char* nome, char* senha);
 void cadastra_cliente_menu(NodeCliente** cliente, Historico* historico, char* nome, char* cpf, char* senha, char* telefone, char* dataDeNascimento, char* email);

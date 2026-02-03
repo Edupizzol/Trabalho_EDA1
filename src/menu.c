@@ -2,6 +2,9 @@
 #include <stdlib.h>
 #include "../include/menu.h"
 
+static const char* CLIENTES_FILE = "clientes.csv";
+static const char* PRODUTOS_FILE = "produtos.csv";
+
 #ifdef _WIN32
     #include <windows.h>
     #define SLEEP(s) Sleep(s * 1000)
@@ -43,8 +46,8 @@ void exibir_menu(){
 
 int menu(){
 
-    NodeCliente* cliente = NULL;
-    Produto* produto = NULL;
+    NodeCliente* cliente = carregar_clientes(CLIENTES_FILE);
+    Produto* produto = carregar_produtos(PRODUTOS_FILE);
     Historico* historico = criar_historico();
     
     int n, quantidade;
@@ -71,6 +74,8 @@ int menu(){
         {
         case 0:
             printf("Execucao Finalizada!\n");
+            salvar_clientes(cliente, CLIENTES_FILE);
+            salvar_produtos(produto, PRODUTOS_FILE);
             limpar_historico(historico);
             free(historico);
             liberar_todos_clientes(&cliente);
@@ -154,6 +159,7 @@ void cadastra_cliente_menu(NodeCliente** cliente, Historico* historico, char* no
     getchar();
 
     cadastrar_cliente(cliente,nome,cpf,telefone,senha,dataDeNascimento,email);
+    salvar_clientes(*cliente, CLIENTES_FILE);
 
     printf("Cliente Cadastrado!\n");
     adicionar_registro(historico, "Novo cliente cadastrado.");
@@ -236,6 +242,7 @@ int edita_cliente_menu(NodeCliente* cliente, Historico* historico, char* nome, c
                 edita_email(cliente,email,cpf);
                 free(email);
             }
+            salvar_clientes(cliente, CLIENTES_FILE);
             printf("Dados Atualizados com Sucesso\n");
             adicionar_registro(historico, "Dados do cliente editados.");
 
@@ -267,6 +274,7 @@ void deletar_clientes_menu(NodeCliente** cliente, Historico* historico, char* cp
     scanf("%s", cpf);
     getchar();
     remover_cliente(cliente,cpf);
+    salvar_clientes(*cliente, CLIENTES_FILE);
 
     adicionar_registro(historico, "Cliente removido.");
 
@@ -287,6 +295,7 @@ void cadastrar_produto_menu(Produto** produto, Historico* historico, char* senha
     scanf("%d", &quantidade);
     getchar();
     *produto = cadastrarProduto(*produto,senha,nome,preco,quantidade);
+    salvar_produtos(*produto, PRODUTOS_FILE);
 
     printf("Produto Cadastrado!\n");
     adicionar_registro(historico, "Produto cadastrado.");
@@ -310,6 +319,7 @@ void remover_produto_menu(Produto** produto, Historico* historico, char* senha){
     scanf("%s", senha);
     getchar();
     removerProduto(produto,senha);
+    salvar_produtos(*produto, PRODUTOS_FILE);
     adicionar_registro(historico, "Produto removido.");
 
     SLEEP(2);
@@ -333,6 +343,7 @@ void editar_produto_menu(Produto* produto, Historico* historico, char* senha, ch
     scanf("%d", &quantidade);
 
     editarDadosProduto(produto,senha,nome,preco,quantidade);
+    salvar_produtos(produto, PRODUTOS_FILE);
 
     printf("Produto Editado com Sucesso!\n");
     adicionar_registro(historico, "Dados do produto editados.");
@@ -420,6 +431,7 @@ int iniciar_compras_menu(NodeCliente* cliente, Historico* historico, Produto* pr
                     getchar();
                     if(adicionar_produto_ao_carrinho(carrinho, new_produto, qtd)){
                         printf("%dx Produto '%s' adicionado ao carrinho!\n\n", qtd, new_produto->nome);
+                        salvar_produtos(produto, PRODUTOS_FILE);
                     }
                     
                     SLEEP(2);
@@ -471,6 +483,7 @@ int iniciar_compras_menu(NodeCliente* cliente, Historico* historico, Produto* pr
                     Produto* new_produto = buscarProduto(produto, senha);
                     if(remove_produto_do_carrinho(carrinho, new_produto, qtd_remover) != NULL){
                         printf("\n");
+                        salvar_produtos(produto, PRODUTOS_FILE);
                     }
 
                     SLEEP(2);
