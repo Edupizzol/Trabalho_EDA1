@@ -3,34 +3,42 @@
 #include <stdlib.h>
 
 char* copy_string(char* string){
+    if(string == NULL) return NULL;
     
-    int i=0;
-    int memory_size=0;
-    char* new_string = NULL;
+    int i = 0;
+    int memory_size = 10;
+    char* new_string = malloc(memory_size * sizeof(char));
+    
+    if(new_string == NULL){
+        printf("Erro durante a alocação de memória do nome do cliente!\n");
+        exit(EXIT_FAILURE);
+    }
 
     while(string[i]!='\0'){
 
-        if(i==memory_size){
+        if(i == memory_size){
 
             memory_size+=10;
 
-            char* temp = realloc(new_string,memory_size*sizeof(char));
+            char* temp = realloc(new_string, memory_size * sizeof(char));
             if(temp==NULL){
+                free(new_string);
                 printf("Erro durante a alocação de memória do nome do cliente!\n");
                 exit(EXIT_FAILURE);
             }
 
             new_string = temp;
 
-            }
+        }
 
         new_string[i]=string[i];
         i++;
 
     }
 
-    char* temp = realloc(new_string,i+1);
+    char* temp = realloc(new_string, (i+1) * sizeof(char));
     if(temp==NULL){
+        free(new_string);
         printf("Erro durante a alocação de memória do nome do cliente!\n");
         exit(EXIT_FAILURE);
     }

@@ -32,5 +32,6 @@ void edita_data_de_nascimento(NodeCliente* root, char* dataDeNascimento, char* c
 void edita_email(NodeCliente* root, char* email, char* cpf);
 int verifica_cpf(NodeCliente* root, char* string);
 void liberar_todos_clientes(NodeCliente** root);
+void vira_maiuscula(char* string);
 
 #endif

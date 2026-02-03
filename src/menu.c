@@ -140,22 +140,30 @@ void finalizar(NodeCliente* cliente, Produto* produto, Historico* historico, cha
 void cadastra_cliente_menu(NodeCliente** cliente, Historico* historico, char* nome, char* cpf, char* senha, char* telefone, char* dataDeNascimento, char* email){
 
     printf("Digite o Nome:\n");
-    scanf("%[^\n]", nome);
+    scanf(" %99[^\n]", nome);
     getchar();
-    printf("Digite o CPF:\n");
-    scanf("%s", cpf);
+    printf("Digite o CPF (11 digitos):\n");
+    scanf("%11s", cpf);
     getchar();
+    
+    if(verifica_cpf(*cliente, cpf) == 0){
+        printf("Erro: CPF ja cadastrado!\n");
+        SLEEP(2);
+        limpar_tela();
+        return;
+    }
+    
     printf("Digite o Telefone:\n");
-    scanf("%s", telefone);
+    scanf("%14s", telefone);
     getchar();
     printf("Digite a Senha:\n");
-    scanf("%s", senha);
+    scanf("%19s", senha);
     getchar();
-    printf("Digite a Data de Nascimento:\n");
-    scanf("%[^\n]", dataDeNascimento);
+    printf("Digite a Data de Nascimento (DD/MM/AAAA):\n");
+    scanf(" %14[^\n]", dataDeNascimento);
     getchar();
     printf("Digite o seu Email:\n");
-    scanf("%s", email);
+    scanf("%99s", email);
     getchar();
 
     cadastrar_cliente(cliente,nome,cpf,telefone,senha,dataDeNascimento,email);

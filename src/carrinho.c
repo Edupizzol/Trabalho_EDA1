@@ -48,6 +48,16 @@ int adicionar_produto_ao_carrinho(Carrinho* carrinho, Produto* produto, int quan
         return 0;
     }
 
+    Produto* existe = procura_produto_no_carrinho(carrinho, produto->codigo);
+    if(existe != NULL){
+        if(!decrementarEstoque(produto, quantidade)){
+            return 0;
+        }
+        existe->quantidade += quantidade;
+        printf("%dx '%s' adicionado ao existente no carrinho!\n", quantidade, produto->nome);
+        return 1;
+    }
+
     // Check if stock decrement is possible before allocating memory
     if(!decrementarEstoque(produto, quantidade)){
         return 0;
@@ -109,20 +119,16 @@ void ver_produtos_no_carrinho(Carrinho* carrinho){
 Produto* procura_produto_no_carrinho(Carrinho* carrinho, char* codigo){
 
     if(carrinho==NULL){
-        printf("Carrinho nao existe!\n");
         return NULL;
     }
 
     Produto* dummy = carrinho->produto;
     while(dummy!=NULL){
         if(compara_strings(dummy->codigo,codigo)==0){
-            printf("Produto encontrado!\n");
-            printf("Codigo: %s\nNome: %s\nPreco: %.2f\n", dummy->codigo, dummy->nome, dummy->preco);
             return dummy;
         }
         dummy=dummy->next;
     }
-    printf("Produto nao encontrado!\n");
     return NULL;
 
 }
