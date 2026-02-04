@@ -25,14 +25,23 @@ typedef struct texto{
     Rectangle limites;
 }texto;
 
-typedef struct AppState{
+typedef struct estado{
     int tela;
     NodeCliente* cliente;
     Produto* produto;
     Historico* historico;
     texto inputs[10];
     int input_cont;
-}AppState;
+}estado;
+
+texto criar_input(Rectangle bounds){
+    texto input = {0};
+    input.limites = bounds;
+    input.ativo = false;
+    memset(input.texto, 0, 256);
+    //só pra limpar se tiver problema de alguma coisa q ficou perdida ai ou seila
+    return input;
+}
 
 
 
