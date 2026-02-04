@@ -18,3 +18,24 @@ static const char* PRODUTOS_FILE = "produtos.csv";
 #define ROXO (Color){128, 0, 128, 255}
 #define AMARELO (Color){255, 255, 0, 255}
 #define VERMELHO (Color){255, 0, 0, 255}
+
+typedef struct texto{
+    char texto[300];
+    bool ativo;
+    Rectangle limites;
+}texto;
+
+typedef struct AppState{
+    int tela;
+    NodeCliente* cliente;
+    Produto* produto;
+    Historico* historico;
+    texto inputs[10];
+    int input_cont;
+}AppState;
+
+
+
+
+
+
