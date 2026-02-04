@@ -159,7 +159,7 @@ void cadastra_cliente_menu(NodeCliente** cliente, Historico* historico, char* no
     }
     
     printf(VERDE "Digite o Telefone:\n" RESET);
-    scanf("%14s", telefone);
+    scanf(" %14[^\n]", telefone);
     getchar();
     printf(VERDE "Digite a Senha:\n" RESET);
     scanf("%19s", senha);
@@ -212,19 +212,21 @@ int edita_cliente_menu(NodeCliente* cliente, Historico* historico, char* nome, c
 
             int verifica = verifica_cpf(cliente,cpf);
             if(verifica == 1){
+                printf(VERDE "Cliente nao encontrado!\n" RESET);
+                aguardar_enter_e_limpar();
                 return 1;
             }
 
             if(numero==1){
                 printf(VERDE "Digite o Novo Nome:\n" RESET);
-                scanf("%s", nome);
+                scanf(" %[^\n]", nome);
                 edita_nome(cliente,nome,cpf);
             }
             else if(numero==2){
                 printf(VERDE "Digite o Novo CPF:\n" RESET);
                 char* cpfNovo = malloc(12*sizeof(char));
                 if(cpfNovo==NULL){printf(VERDE "Erro de alocacao de memoria\n" RESET);return 1;}
-                scanf("%s", cpfNovo);
+                scanf("%11s", cpfNovo);
                 edita_cpf(cliente,cpfNovo,cpf);
                 free(cpfNovo);
             }
@@ -232,20 +234,20 @@ int edita_cliente_menu(NodeCliente* cliente, Historico* historico, char* nome, c
                 char* telefone = malloc(15*sizeof(char));
                 if(telefone==NULL){printf(VERDE "Erro de alocacao de memoria\n" RESET);return 1;}
                 printf(VERDE "Digite o Novo Telefone:\n" RESET);
-                scanf("%s", telefone);
+                scanf(" %14[^\n]", telefone);
                 edita_telefone(cliente,telefone,cpf);
                 free(telefone);
             }
             else if(numero==4){
                 printf(VERDE "Digite a Nova Senha:\n" RESET);
-                scanf("%s", senha);
+                scanf(" %19s", senha);
                 edita_senha(cliente,senha,cpf);
             }
             else if(numero==5){
                 char* dataDeNascimento = malloc(15*sizeof(char));
                 if(dataDeNascimento==NULL){printf(VERDE "Erro de alocacao de memoria\n" RESET);return 1;}
                 printf(VERDE "Digite a Nova Data de Nascimento:\n" RESET);
-                scanf("%s", dataDeNascimento);
+                scanf(" %14[^\n]", dataDeNascimento);
                 edita_data_de_nascimento(cliente,dataDeNascimento,cpf);
                 free(dataDeNascimento);
             }
@@ -366,19 +368,31 @@ void editar_produto_menu(Produto* produto, Historico* historico, char* senha, ch
 
     printf(VERDE "Digite o Codigo do Produto!\n" RESET);
     scanf("%s", senha);
+    getchar();
 
-    printf(VERDE "Digite o Novo Preco e o Novo Nome:\n" RESET);
-    
+    Produto* encontrado = buscarProduto(produto, senha);
+    if(encontrado == NULL){
+        printf(VERDE "Produto nao encontrado!\n" RESET);
+        aguardar_enter_e_limpar();
+        return;
+    }
+
+    printf(VERDE "Digite o Novo Nome:\n" RESET);
+    scanf(" %[^\n]", nome);
+    getchar();
+
+    printf(VERDE "Digite o Novo Preco:\n" RESET);
     scanf("%f", &preco);
     getchar();
-    scanf("%s", nome);
+
+
     printf(VERDE "Digite a Nova Quantidade:\n" RESET);
     scanf("%d", &quantidade);
+    getchar();
 
     editarDadosProduto(produto,senha,nome,preco,quantidade);
     salvar_produtos(produto, PRODUTOS_FILE);
 
-    printf(VERDE "Produto Editado com Sucesso!\n" RESET);
     adicionar_registro(historico, "Dados do produto editados.");
 
     aguardar_enter_e_limpar();
@@ -481,6 +495,8 @@ int iniciar_compras_menu(NodeCliente* cliente, Historico* historico, Produto* pr
             printf(VERDE "\n--- Procurar Produto no Carrinho ---\n" RESET);
             printf(VERDE "Digite o Codigo do Produto: " RESET);
             scanf("%s", senha);
+            getchar();
+
             Produto* encontrado = procura_produto_no_carrinho(carrinho,senha);
             if(encontrado != NULL){
                 printf(VERDE "Produto encontrado!\n" RESET);
@@ -490,7 +506,7 @@ int iniciar_compras_menu(NodeCliente* cliente, Historico* historico, Produto* pr
             } else {
                 printf(VERDE "Produto nao encontrado no carrinho!\n" RESET);
             }
-
+            
             aguardar_enter_e_limpar();
         }
         else if(escolha==3){

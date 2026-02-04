@@ -32,7 +32,6 @@ NodeCliente* carregar_clientes(const char *filename) {
     NodeCliente *root = NULL;
     NodeCliente *atual = NULL;
     
-    // Buffers para ler cada coluna (ajuste o tamanho se necessário)
     char* cpf = malloc(12*sizeof(char));
     if(cpf==NULL){printf("Erro de alocacao de memoria\n");fclose(fp);return NULL;}
     char* nome = malloc(100*sizeof(char));
