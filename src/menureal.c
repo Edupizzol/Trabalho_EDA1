@@ -217,6 +217,34 @@ void tela_edita_cliente() {
 }
 
 
+void tela_deleta_cliente() {
+    if(menu.input_cont == 0){
+        menu.inputs[0] = criar_input((Rectangle){ 200, 150, 300, 35 });
+        menu.input_cont = 1;
+    }
+    
+    DrawText("DELETAR CLIENTE", 150, 20, 25, AMARELO);
+    
+    desenhar_input_em_texto(&menu.inputs[0], "CPF:");
+    
+    if(GuiButton((Rectangle){ 200, 250, 100, 40 }, "Deletar")) {
+        if(remover_cliente(&menu.cliente, menu.inputs[0].texto)){
+            salvar_clientes(menu.cliente, CLIENTES_FILE);
+            adicionar_registro(menu.historico, "Cliente removido.");
+            menu.tela = 0;
+            limpar_inputs(&menu);
+        }
+    }
+    
+    if (GuiButton((Rectangle){ 350, 250, 100, 40 }, "Voltar")) {
+        menu.tela = 0;
+        limpar_inputs(&menu);
+    }
+
+}
+
+
+
 
 
 
