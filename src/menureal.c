@@ -11,6 +11,7 @@ void tela_cadastro_produto();
 void tela_listar_produtos();
 void tela_edita_produto();
 void tela_remove_produto();
+void tela_buscar_produto();
 void tela_historico();
 void tela_login();
 void tela_carrinho_menu();
@@ -67,9 +68,13 @@ void tela_menu_principal() {
         menu.tela = 9;
         limpar_inputs(&menu);
     }
+    if (GuiButton((Rectangle){ botao_x + 350, botao_y + espacamento * 3, largura, altura }, "10: Buscar Produto")) {
+        menu.tela = 16;
+        limpar_inputs(&menu);
+    }
 
 
-    if (GuiButton((Rectangle){ botao_x, botao_y + espacamento * 6, 700, 80 }, "INICIAR COMPRAS")) {
+    if (GuiButton((Rectangle){ botao_x, botao_y + espacamento * 6, 650, 80 }, "INICIAR COMPRAS")) {
         menu.tela = 10;
         limpar_inputs(&menu);
     }
@@ -150,6 +155,9 @@ int menu_real() {
             case 15:
                 tela_remover_produto_carrinho();
                 break;
+            case 16:
+                tela_buscar_produto();
+                break;
             default:
                 tela_menu_principal();
         }
@@ -174,24 +182,24 @@ int menu_real() {
 void tela_cadastro_cliente(){
     //preparando as caixinhas 
     if(menu.input_cont==0){
-        menu.inputs[0] = criar_input((Rectangle){ 200, 100, 300, 35 });
-        menu.inputs[1] = criar_input((Rectangle){ 200, 170, 300, 35 });
-        menu.inputs[2] = criar_input((Rectangle){ 200, 240, 300, 35 });
-        menu.inputs[3] = criar_input((Rectangle){ 200, 310, 300, 35 });
-        menu.inputs[4] = criar_input((Rectangle){ 200, 380, 300, 35 });
-        menu.inputs[5] = criar_input((Rectangle){ 200, 450, 300, 35 });
+        menu.inputs[0] = criar_botao((Rectangle){ 200, 100, 300, 35 });
+        menu.inputs[1] = criar_botao((Rectangle){ 200, 170, 300, 35 });
+        menu.inputs[2] = criar_botao((Rectangle){ 200, 240, 300, 35 });
+        menu.inputs[3] = criar_botao((Rectangle){ 200, 310, 300, 35 });
+        menu.inputs[4] = criar_botao((Rectangle){ 200, 380, 300, 35 });
+        menu.inputs[5] = criar_botao((Rectangle){ 200, 450, 300, 35 });
         menu.input_cont = 6;
     }
 
     DrawText("CADASTRO DE CLIENTE", 150, 20, 25, AMARELO);
     
     //lembrando que o q ta em aspas e o label/titulo do bottao
-    desenhar_input_em_texto(&menu.inputs[0], "Nome:");
-    desenhar_input_em_texto(&menu.inputs[1], "CPF (11 digitos):");
-    desenhar_input_em_texto(&menu.inputs[2], "Telefone:");
-    desenhar_input_em_texto(&menu.inputs[3], "Senha:");
-    desenhar_input_em_texto(&menu.inputs[4], "Data Nascimento (DD/MM/AAAA):");
-    desenhar_input_em_texto(&menu.inputs[5], "Email:");
+    frontend_scanf(&menu.inputs[0], "Nome:");
+    frontend_scanf(&menu.inputs[1], "CPF (11 digitos):");
+    frontend_scanf(&menu.inputs[2], "Telefone:");
+    frontend_scanf(&menu.inputs[3], "Senha:");
+    frontend_scanf(&menu.inputs[4], "Data Nascimento (DD/MM/AAAA):");
+    frontend_scanf(&menu.inputs[5], "Email:");
 
     if(GuiButton((Rectangle){200,580,100,40}, "Salvar")){
 
@@ -225,13 +233,13 @@ void tela_cadastro_cliente(){
 
 void tela_busca_cliente(){
     if(menu.input_cont==0){
-        menu.inputs[0]=criar_input((Rectangle){200, 150, 300, 35});
+        menu.inputs[0]=criar_botao((Rectangle){200, 150, 300, 35});
         menu.input_cont=1;
     }
     
     DrawText("BUSCAR CLIENTE", 150, 20, 25, AMARELO);
     
-    desenhar_input_em_texto(&menu.inputs[0], "CPF:");
+    frontend_scanf(&menu.inputs[0], "CPF:");
     
     if(GuiButton((Rectangle){200, 250, 100, 40}, "Buscar")){
         NodeCliente* encontrado = busca_cliente(menu.cliente, menu.inputs[0].texto);
@@ -276,25 +284,25 @@ void tela_busca_cliente(){
 
 void tela_edita_cliente() {
     if(menu.input_cont == 0){
-        menu.inputs[0] = criar_input((Rectangle){ 200, 100, 300, 35 });
-        menu.inputs[1] = criar_input((Rectangle){ 200, 170, 300, 35 });
-        menu.inputs[2] = criar_input((Rectangle){ 200, 240, 300, 35 });
-        menu.inputs[3] = criar_input((Rectangle){ 200, 310, 300, 35 });
-        menu.inputs[4] = criar_input((Rectangle){ 200, 380, 300, 35 });
-        menu.inputs[5] = criar_input((Rectangle){ 200, 450, 300, 35 });
-        menu.inputs[6] = criar_input((Rectangle){ 200, 520, 300, 35 });
+        menu.inputs[0] = criar_botao((Rectangle){ 200, 100, 300, 35 });
+        menu.inputs[1] = criar_botao((Rectangle){ 200, 170, 300, 35 });
+        menu.inputs[2] = criar_botao((Rectangle){ 200, 240, 300, 35 });
+        menu.inputs[3] = criar_botao((Rectangle){ 200, 310, 300, 35 });
+        menu.inputs[4] = criar_botao((Rectangle){ 200, 380, 300, 35 });
+        menu.inputs[5] = criar_botao((Rectangle){ 200, 450, 300, 35 });
+        menu.inputs[6] = criar_botao((Rectangle){ 200, 520, 300, 35 });
         menu.input_cont = 7;
     }
     
     DrawText("EDITAR CLIENTE", 150, 20, 25, AMARELO);
     
-    desenhar_input_em_texto(&menu.inputs[0], "CPF Original:");
-    desenhar_input_em_texto(&menu.inputs[1], "Novo Nome:");
-    desenhar_input_em_texto(&menu.inputs[2], "Novo Telefone:");
-    desenhar_input_em_texto(&menu.inputs[3], "Nova Senha:");
-    desenhar_input_em_texto(&menu.inputs[4], "Nova Data (DD/MM/AAAA):");
-    desenhar_input_em_texto(&menu.inputs[5], "Novo Email:");
-    desenhar_input_em_texto(&menu.inputs[6], "Novo CPF:");
+    frontend_scanf(&menu.inputs[0], "CPF Original:");
+    frontend_scanf(&menu.inputs[1], "Novo Nome:");
+    frontend_scanf(&menu.inputs[2], "Novo Telefone:");
+    frontend_scanf(&menu.inputs[3], "Nova Senha:");
+    frontend_scanf(&menu.inputs[4], "Nova Data (DD/MM/AAAA):");
+    frontend_scanf(&menu.inputs[5], "Novo Email:");
+    frontend_scanf(&menu.inputs[6], "Novo CPF:");
     
     if (GuiButton((Rectangle){ 200, 580, 100, 40 }, "Atualizar")) {
         if (strlen(menu.inputs[0].texto) > 0) {
@@ -333,13 +341,13 @@ void tela_edita_cliente() {
 
 void tela_deleta_cliente() {
     if(menu.input_cont == 0){
-        menu.inputs[0] = criar_input((Rectangle){ 200, 150, 300, 35 });
+        menu.inputs[0] = criar_botao((Rectangle){ 200, 150, 300, 35 });
         menu.input_cont = 1;
     }
     
     DrawText("DELETAR CLIENTE", 150, 20, 25, AMARELO);
     
-    desenhar_input_em_texto(&menu.inputs[0], "CPF:");
+    frontend_scanf(&menu.inputs[0], "CPF:");
     
     if(GuiButton((Rectangle){ 200, 250, 100, 40 }, "Deletar")) {
         if(remover_cliente(&menu.cliente, menu.inputs[0].texto)){
@@ -380,19 +388,19 @@ void tela_listar_clientes(){
 
 void tela_cadastro_produto() {
     if (menu.input_cont == 0) {
-        menu.inputs[0] = criar_input((Rectangle){ 200, 100, 300, 35 });
-        menu.inputs[1] = criar_input((Rectangle){ 200, 170, 300, 35 });
-        menu.inputs[2] = criar_input((Rectangle){ 200, 240, 300, 35 });
-        menu.inputs[3] = criar_input((Rectangle){ 200, 310, 300, 35 });
+        menu.inputs[0] = criar_botao((Rectangle){ 200, 100, 300, 35 });
+        menu.inputs[1] = criar_botao((Rectangle){ 200, 170, 300, 35 });
+        menu.inputs[2] = criar_botao((Rectangle){ 200, 240, 300, 35 });
+        menu.inputs[3] = criar_botao((Rectangle){ 200, 310, 300, 35 });
         menu.input_cont = 4;
     }
     
     DrawText("CADASTRO DE PRODUTO", 150, 20, 25, VERMELHO);
     
-    desenhar_input_em_texto(&menu.inputs[0], "Codigo:");
-    desenhar_input_em_texto(&menu.inputs[1], "Nome:");
-    desenhar_input_em_texto(&menu.inputs[2], "Preco:");
-    desenhar_input_em_texto(&menu.inputs[3], "Quantidade:");
+    frontend_scanf(&menu.inputs[0], "Codigo:");
+    frontend_scanf(&menu.inputs[1], "Nome:");
+    frontend_scanf(&menu.inputs[2], "Preco:");
+    frontend_scanf(&menu.inputs[3], "Quantidade:");
     
     if(GuiButton((Rectangle){ 200, 380, 100, 40 }, "Salvar")){
 
@@ -451,19 +459,19 @@ void tela_listar_produtos() {
 
 void tela_edita_produto() {
     if (menu.input_cont == 0) {
-        menu.inputs[0] = criar_input((Rectangle){ 200, 100, 300, 35 });
-        menu.inputs[1] = criar_input((Rectangle){ 200, 170, 300, 35 });
-        menu.inputs[2] = criar_input((Rectangle){ 200, 240, 300, 35 });
-        menu.inputs[3] = criar_input((Rectangle){ 200, 310, 300, 35 });
+        menu.inputs[0] = criar_botao((Rectangle){ 200, 100, 300, 35 });
+        menu.inputs[1] = criar_botao((Rectangle){ 200, 170, 300, 35 });
+        menu.inputs[2] = criar_botao((Rectangle){ 200, 240, 300, 35 });
+        menu.inputs[3] = criar_botao((Rectangle){ 200, 310, 300, 35 });
         menu.input_cont = 4;
     }
     
     DrawText("EDITAR PRODUTO", 150, 20, 25, VERMELHO);
     
-    desenhar_input_em_texto(&menu.inputs[0], "Codigo:");
-    desenhar_input_em_texto(&menu.inputs[1], "Novo Nome:");
-    desenhar_input_em_texto(&menu.inputs[2], "Novo Preco:");
-    desenhar_input_em_texto(&menu.inputs[3], "Nova Quantidade:");
+    frontend_scanf(&menu.inputs[0], "Codigo:");
+    frontend_scanf(&menu.inputs[1], "Novo Nome:");
+    frontend_scanf(&menu.inputs[2], "Novo Preco:");
+    frontend_scanf(&menu.inputs[3], "Nova Quantidade:");
     
     if (GuiButton((Rectangle){ 200, 380, 100, 40 }, "Atualizar")) {
         if (strlen(menu.inputs[0].texto) > 0) {
@@ -488,13 +496,13 @@ void tela_edita_produto() {
 
 void tela_remove_produto() {
     if (menu.input_cont == 0) {
-        menu.inputs[0] = criar_input((Rectangle){ 200, 150, 300, 35 });
+        menu.inputs[0] = criar_botao((Rectangle){ 200, 150, 300, 35 });
         menu.input_cont = 1;
     }
     
     DrawText("REMOVER PRODUTO", 150, 20, 25, VERMELHO);
     
-    desenhar_input_em_texto(&menu.inputs[0], "Codigo:");
+    frontend_scanf(&menu.inputs[0], "Codigo:");
     
     if (GuiButton((Rectangle){ 200, 250, 100, 40 }, "Remover")) {
         if (removerProduto(&menu.produto, menu.inputs[0].texto)) {
@@ -510,6 +518,47 @@ void tela_remove_produto() {
         limpar_inputs(&menu);
     }
     
+}
+
+void tela_buscar_produto() {
+    static Produto* produto_encontrado = NULL;
+    static bool busca_realizada = false;
+    
+    if (menu.input_cont == 0) {
+        menu.inputs[0] = criar_botao((Rectangle){ 200, 150, 300, 35 });
+        menu.input_cont = 1;
+        produto_encontrado = NULL;
+        busca_realizada = false;
+    }
+    
+    DrawText("BUSCAR PRODUTO", 150, 20, 25, VERDE);
+    
+    frontend_scanf(&menu.inputs[0], "Codigo:");
+    
+    if (GuiButton((Rectangle){ 200, 250, 100, 40 }, "Buscar")) {
+        if (strlen(menu.inputs[0].texto) > 0) {
+            produto_encontrado = buscarProduto(menu.produto, menu.inputs[0].texto);
+            busca_realizada = true;
+        }
+    }
+    
+    if (busca_realizada) {
+        if (produto_encontrado != NULL) {
+            DrawText("Produto encontrado:", 200, 320, 18, VERDE);
+            DrawText(TextFormat("Nome: %s", produto_encontrado->nome), 200, 350, 16, DARKGRAY);
+            DrawText(TextFormat("Preco: R$ %.2f", produto_encontrado->preco), 200, 380, 16, DARKGRAY);
+            DrawText(TextFormat("Quantidade: %d", produto_encontrado->quantidade), 200, 410, 16, DARKGRAY);
+        } else {
+            DrawText("Produto nao encontrado!", 200, 320, 18, VERMELHO);
+        }
+    }
+    
+    if (GuiButton((Rectangle){ 350, 250, 100, 40 }, "Voltar")) {
+        menu.tela = 0;
+        limpar_inputs(&menu);
+        produto_encontrado = NULL;
+        busca_realizada = false;
+    }
 }
 
 void tela_historico() {
@@ -542,15 +591,15 @@ void tela_historico() {
 void tela_login(){
 
     if(menu.input_cont==0){
-        menu.inputs[0]=criar_input((Rectangle){200,150,300,35});
-        menu.inputs[1]=criar_input((Rectangle){200,250,300,35});
+        menu.inputs[0]=criar_botao((Rectangle){200,150,300,35});
+        menu.inputs[1]=criar_botao((Rectangle){200,250,300,35});
         menu.input_cont=2;
     }
 
     DrawText("LOGIN - COMPRAS", 150, 20, 25, VERDE);
 
-    desenhar_input_em_texto(&menu.inputs[0], "CPF:");
-    desenhar_input_em_texto(&menu.inputs[1], "Senha:");
+    frontend_scanf(&menu.inputs[0], "CPF:");
+    frontend_scanf(&menu.inputs[1], "Senha:");
 
     if(GuiButton((Rectangle){ 200, 350, 100, 40 }, "Entrar")){
         if(strlen(menu.inputs[0].texto)>0 && strlen(menu.inputs[1].texto)>0){
@@ -621,12 +670,12 @@ void tela_carrinho_menu(){
 void tela_adicionar_produto_no_carrinho(){
 
     if(menu.input_cont==0){
-        menu.inputs[0] = criar_input((Rectangle){ 200, 150, 300, 35 });
+        menu.inputs[0] = criar_botao((Rectangle){ 200, 150, 300, 35 });
         menu.input_cont = 1;
     }
 
     DrawText("PROCURAR PRODUTO:", 150, 20, 25, VERDE);
-    desenhar_input_em_texto(&menu.inputs[0], "Codigo do Produto:");
+    frontend_scanf(&menu.inputs[0], "Codigo do Produto:");
 
     if(GuiButton((Rectangle){ 200, 250, 100, 40 }, "Procurar")){
         if(strlen(menu.inputs[0].texto)>0){
@@ -655,15 +704,15 @@ void tela_adicionar_produto_no_carrinho(){
 void tela_adicionar_produto_carrinho(){
 
     if(menu.input_cont==0){
-        menu.inputs[0]=criar_input((Rectangle){ 200, 150, 300, 35 });
-        menu.inputs[1]=criar_input((Rectangle){ 200, 220, 300, 35 });
+        menu.inputs[0]=criar_botao((Rectangle){ 200, 150, 300, 35 });
+        menu.inputs[1]=criar_botao((Rectangle){ 200, 220, 300, 35 });
         menu.input_cont=2;
     }
     
     DrawText("ADICIONAR PRODUTO", 150, 20, 25, VERDE);
     
-    desenhar_input_em_texto(&menu.inputs[0], "Codigo do Produto:");
-    desenhar_input_em_texto(&menu.inputs[1], "Quantidade:");
+    frontend_scanf(&menu.inputs[0], "Codigo do Produto:");
+    frontend_scanf(&menu.inputs[1], "Quantidade:");
     
     if(GuiButton((Rectangle){ 200, 320, 100, 40 }, "Adicionar")) {
         if(strlen(menu.inputs[0].texto)>0 && strlen(menu.inputs[1].texto)>0){
@@ -700,13 +749,13 @@ void tela_adicionar_produto_carrinho(){
 void tela_procurar_produto_carrinho(){
 
     if(menu.input_cont==0){
-        menu.inputs[0]=criar_input((Rectangle){ 200, 150, 300, 35 });
+        menu.inputs[0]=criar_botao((Rectangle){ 200, 150, 300, 35 });
         menu.input_cont=1;
     }
     
     DrawText("PROCURAR PRODUTO NO CARRINHO", 100, 20, 25, VERDE);
     
-    desenhar_input_em_texto(&menu.inputs[0], "Codigo do Produto:");
+    frontend_scanf(&menu.inputs[0], "Codigo do Produto:");
     
     if(GuiButton((Rectangle){ 200, 250, 100, 40 }, "Procurar")) {
         if(strlen(menu.inputs[0].texto)>0){
@@ -732,15 +781,15 @@ void tela_procurar_produto_carrinho(){
 void tela_remover_produto_carrinho(){
 
     if(menu.input_cont==0){
-        menu.inputs[0]=criar_input((Rectangle){ 200, 150, 300, 35 });
-        menu.inputs[1]=criar_input((Rectangle){ 200, 220, 300, 35 });
+        menu.inputs[0]=criar_botao((Rectangle){ 200, 150, 300, 35 });
+        menu.inputs[1]=criar_botao((Rectangle){ 200, 220, 300, 35 });
         menu.input_cont=2;
     }
     
     DrawText("REMOVER PRODUTO", 150, 20, 25, VERDE);
     
-    desenhar_input_em_texto(&menu.inputs[0], "Codigo do Produto:");
-    desenhar_input_em_texto(&menu.inputs[1], "Quantidade a Remover:");
+    frontend_scanf(&menu.inputs[0], "Codigo do Produto:");
+    frontend_scanf(&menu.inputs[1], "Quantidade a Remover:");
     
     if(GuiButton((Rectangle){ 200, 320, 100, 40 }, "Remover")) {
         if(strlen(menu.inputs[0].texto)>0 && strlen(menu.inputs[1].texto)>0){

@@ -1,7 +1,7 @@
 #include <stdio.h>
-int menu();
+int menu_real();
 
 int main(){
-    return menu();
+    return menu_real();
 }
 

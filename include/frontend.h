@@ -44,8 +44,8 @@ typedef struct Menu{
     float aviso_tempo;
 }Menu;
 
-texto criar_input(Rectangle bounds);
-void desenhar_input_em_texto(texto* input, char* label);
+texto criar_botao(Rectangle bounds);
+void frontend_scanf(texto* input, char* label);
 void limpar_inputs(Menu* e);
 void mostrar_aviso(Menu* menu, const char* mensagem);
 void desenhar_aviso(Menu* menu);

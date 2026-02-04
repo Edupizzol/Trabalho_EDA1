@@ -1,6 +1,6 @@
 #include "../include/frontend.h"
 
-texto criar_input(Rectangle bounds){
+texto criar_botao(Rectangle bounds){
     texto input = {0};
     input.limites = bounds;
     input.ativo = false;
@@ -9,7 +9,7 @@ texto criar_input(Rectangle bounds){
     return input;
 }
 
-void desenhar_input_em_texto(texto* input, char* label){
+void frontend_scanf(texto* input, char* label){
 
     Color corFundo;
     Color corBorda;
