@@ -1,516 +1,850 @@
-#include <stdio.h>
-#include <stdlib.h> 
-#include "raylib.h"
-#ifndef TextToFloat
-    #define TextToFloat atof
-#endif
-#define RAYGUI_IMPLEMENTATION
-#include "raygui.h"
 #include "../include/menu.h"
+#include "../include/salvamento.h"
+Menu menu;
 
-
-static const char* CLIENTES_FILE = "clientes.csv";
-static const char* PRODUTOS_FILE = "produtos.csv";
-
-#define VERDE "\x1b[32m"
-#define RESET "\x1b[0m"
-
-// printf("\033[H\033[2J");
-void limpar_tela() {
-    fflush(stdout);
-    #ifdef _WIN32
-        system("cls");
-    #else
-        system("clear");
-    #endif
-}
-
-static void aguardar_enter_e_limpar() {
-    printf(VERDE "\nPressione Enter para continuar..." RESET);
-    int c;
-    do {
-        c = getchar();
-    } while (c != '\n' && c != EOF);
-    limpar_tela();
-}
-
-void exibir_menu(){
-
-    printf(VERDE "\n" RESET);
-    printf(VERDE "========== MENU PRINCIPAL ==========\n" RESET);
-    printf(VERDE "00 : Terminar Execucao\n" RESET);
-    printf(VERDE "01 : Cadastrar Novo Cliente\n" RESET);
-    printf(VERDE "02 : Buscar Cliente\n" RESET);
-    printf(VERDE "03 : Editar Dados do Cliente\n" RESET);
-    printf(VERDE "04 : Listar Clientes\n" RESET);
-    printf(VERDE "05 : Deletar Cliente\n" RESET);
-    printf(VERDE "06 : Cadastrar Novo Produto\n" RESET);
-    printf(VERDE "07 : Listar Produtos\n" RESET);
-    printf(VERDE "08 : Remover Produto\n" RESET);
-    printf(VERDE "09 : Editar Produto\n" RESET);
-    printf(VERDE "10 : Comecar as Compras\n" RESET);
-    printf(VERDE "11 : Ver Historico de Operacoes\n" RESET);
-    printf(VERDE "===================================\n" RESET);
-    printf(VERDE "Escolha uma opcao: " RESET);
-
-}
-int menu() {
+void tela_menu_principal() {
     
-    NodeCliente* cliente = carregar_clientes(CLIENTES_FILE);
-    Produto* produto = carregar_produtos(PRODUTOS_FILE);
-    Historico* historico = criar_historico();
+    DrawText("========== MENU PRINCIPAL ==========", 200, 30, 25, VERDE);
     
-    int n, quantidade;
-    float preco;
-    char* cpf = malloc(12*sizeof(char));
-    char* nome = malloc(100*sizeof(char));
-    char* senha = malloc(20*sizeof(char));
-    char* telefone = malloc(15*sizeof(char));
-    char* dataDeNascimento = malloc(15*sizeof(char));
-    char* email = malloc(100*sizeof(char));
+    int botao_x = 150;
+    int botao_y = 100;
+    int largura = 300;
+    int altura = 40;
+    int espacamento = 50;
+    
+    if (GuiButton((Rectangle){ botao_x, botao_y, largura, altura }, "01: Cadastrar Cliente")) {
+        menu.tela = 1;
+        limpar_inputs(&menu);
+    }
+    if (GuiButton((Rectangle){ botao_x, botao_y + espacamento, largura, altura }, "02: Buscar Cliente")) {
+        menu.tela = 2;
+        limpar_inputs(&menu);
+    }
+    if (GuiButton((Rectangle){ botao_x, botao_y + espacamento * 2, largura, altura }, "03: Editar Cliente")) {
+        menu.tela = 3;
+        limpar_inputs(&menu);
+    }
+    if (GuiButton((Rectangle){ botao_x, botao_y + espacamento * 3, largura, altura }, "04: Listar Clientes")) {
+        menu.tela = 4;
+        limpar_inputs(&menu);
+    }
+    if (GuiButton((Rectangle){ botao_x, botao_y + espacamento * 4, largura, altura }, "05: Deletar Cliente")) {
+        menu.tela = 5;
+        limpar_inputs(&menu);
+    }
+    if (GuiButton((Rectangle){ botao_x, botao_y + espacamento * 5, largura, altura }, "06: Cadastrar Produto")) {
+        menu.tela = 6;
+        limpar_inputs(&menu);
+    }
+    
+    if (GuiButton((Rectangle){ botao_x + 350, botao_y, largura, altura }, "07: Listar Produtos")) {
+        menu.tela = 7;
+        limpar_inputs(&menu);
+    }
+    if (GuiButton((Rectangle){ botao_x + 350, botao_y + espacamento, largura, altura }, "08: Remover Produto")) {
+        menu.tela = 8;
+        limpar_inputs(&menu);
+    }
+    if (GuiButton((Rectangle){ botao_x + 350, botao_y + espacamento * 2, largura, altura }, "09: Editar Produto")) {
+        menu.tela = 9;
+        limpar_inputs(&menu);
+    }
+    if (GuiButton((Rectangle){ botao_x + 350, botao_y + espacamento * 3, largura, altura }, "10: Buscar Produto")) {
+        menu.tela = 16;
+        limpar_inputs(&menu);
+    }
 
-    InitWindow(600, 500, "Gerenciador EDA1 - Interface Grafica");
+
+    if (GuiButton((Rectangle){ botao_x, botao_y + espacamento * 6, 650, 80 }, "INICIAR COMPRAS")) {
+        menu.tela = 10;
+        limpar_inputs(&menu);
+    }
+    if (GuiButton((Rectangle){ botao_x + 350, botao_y + espacamento * 4, largura, altura }, "11: Ver Histórico")) {
+        menu.tela = 11;
+        limpar_inputs(&menu);
+    }
+    if (GuiButton((Rectangle){ botao_x + 350, botao_y + espacamento * 5, largura, altura }, "00: Sair")) {
+        menu.tela = -1;
+    }
+    
+}
+
+int menu_real() {
+    menu.tela = 0;
+    menu.cliente = carregar_clientes(CLIENTES_FILE);
+    menu.produto = carregar_produtos(PRODUTOS_FILE);
+    menu.historico = criar_historico();
+    menu.input_cont = 0;
+    menu.aviso_visivel = false;
+    menu.aviso_tempo = 0;
+    memset(menu.aviso_mensagem, 0, 200);
+    
+    InitWindow(SCREEN_WIDTH, SCREEN_HEIGHT, "Sistema de Gestao - Interface Grafica");
     SetTargetFPS(60);
+    
+    while(!WindowShouldClose() && menu.tela != -1){
 
-    while (!WindowShouldClose()) {
         BeginDrawing();
         ClearBackground(RAYWHITE);
 
-        DrawText("SISTEMA DE GESTAO - MENU PRINCIPAL", 100, 20, 20, DARKGREEN);
-
-
-        if (GuiButton((Rectangle){ 50, 80, 230, 40 }, "01: Cadastrar Cliente")) {
-            cadastra_cliente_menu(&cliente, historico, nome, cpf, senha, telefone, dataDeNascimento, email);
+        switch (menu.tela) {
+            case 0:
+                tela_menu_principal();
+                break;
+            case 1:
+                tela_cadastro_cliente();
+                break;
+            case 2:
+                tela_busca_cliente();
+                break;
+            case 3:
+                tela_edita_cliente();
+                break;
+            case 4:
+                tela_listar_clientes();
+                break;
+            case 5:
+                tela_deleta_cliente();
+                break;
+            case 6:
+                tela_cadastro_produto();
+                break;
+            case 7:
+                tela_listar_produtos();
+                break;
+            case 8:
+                tela_remove_produto();
+                break;
+            case 9:
+                tela_edita_produto();
+                break;
+            case 10:
+                tela_login();
+                break;
+            case 11:
+                tela_historico();
+                break;
+            case 12:
+                tela_carrinho_menu();
+                break;
+            case 13:
+                tela_adicionar_produto_carrinho();
+                break;
+            case 14:
+                tela_procurar_produto_carrinho();
+                break;
+            case 15:
+                tela_remover_produto_carrinho();
+                break;
+            case 16:
+                tela_buscar_produto();
+                break;
+            case 17:
+                tela_resumo_compras();
+                break;
+            default:
+                tela_menu_principal();
         }
-        if (GuiButton((Rectangle){ 50, 130, 230, 40 }, "02: Buscar Cliente")) {
-            busca_cliente_menu(cliente, historico, cpf);
-        }
-        if (GuiButton((Rectangle){ 50, 180, 230, 40 }, "03: Editar Cliente")) {
-            edita_cliente_menu(cliente, historico, nome, cpf, senha, dataDeNascimento, email);
-        }
-        if (GuiButton((Rectangle){ 50, 230, 230, 40 }, "04: Listar Clientes")) {
-            listar_clientes_menu(cliente, historico);
-        }
-        if (GuiButton((Rectangle){ 50, 280, 230, 40 }, "05: Deletar Cliente")) {
-            deletar_clientes_menu(&cliente, historico, cpf);
-        }
-
-
-        if (GuiButton((Rectangle){ 320, 80, 230, 40 }, "06: Novo Produto")) {
-            cadastrar_produto_menu(&produto, historico, senha, nome, preco, quantidade);
-        }
-        if (GuiButton((Rectangle){ 320, 130, 230, 40 }, "07: Listar Produtos")) {
-            listar_produtos_menu(produto, historico);
-        }
-        if (GuiButton((Rectangle){ 320, 180, 230, 40 }, "10: Começar Compras")) {
-            iniciar_compras_menu(cliente, historico, produto, cpf, senha);
-        }
-        if (GuiButton((Rectangle){ 320, 230, 230, 40 }, "11: Ver Histórico")) {
-            exibir_historico(historico);
-            aguardar_enter_e_limpar();
-        }
-
-   
-        if (GuiButton((Rectangle){ 185, 400, 230, 50 }, "00: FINALIZAR E SALVAR")) {
-            break; 
-        }
+        
+        //desenha o aviso
+        desenhar_aviso(&menu);
 
         EndDrawing();
     }
-
-   
-    salvar_clientes(cliente, CLIENTES_FILE);
-    salvar_produtos(produto, PRODUTOS_FILE);
-    limpar_historico(historico);
-    free(historico);
-    liberar_todos_clientes(&cliente);
-    liberar_todos_produtos(&produto);
-    free(cpf); free(nome); free(senha); free(telefone); free(dataDeNascimento); free(email);
     
-    CloseWindow(); 
+    salvar_clientes(menu.cliente, CLIENTES_FILE);
+    salvar_produtos(menu.produto, PRODUTOS_FILE);
+    limpar_historico(menu.historico);
+    free(menu.historico);
+    liberar_todos_clientes(&menu.cliente);
+    liberar_todos_produtos(&menu.produto);
+    
+    CloseWindow();
     return 0;
 }
 
-void finalizar(NodeCliente* cliente, Produto* produto, Historico* historico, char* cpf, char* nome, char* senha){
-    return;
-}
-
-void cadastra_cliente_menu(NodeCliente** cliente, Historico* historico, char* nome, char* cpf, char* senha, char* telefone, char* dataDeNascimento, char* email){
-
-    printf(VERDE "Digite o Nome:\n" RESET);
-    scanf(" %99[^\n]", nome);
-    getchar();
-    printf(VERDE "Digite o CPF (11 digitos):\n" RESET);
-    scanf("%11s", cpf);
-    getchar();
-    
-    if(verifica_cpf(*cliente, cpf) == 0){
-        printf(VERDE "Erro: CPF ja cadastrado!\n" RESET);
-        aguardar_enter_e_limpar();
-        return;
-    }
-    
-    printf(VERDE "Digite o Telefone:\n" RESET);
-    scanf("%14s", telefone);
-    getchar();
-    printf(VERDE "Digite a Senha:\n" RESET);
-    scanf("%19s", senha);
-    getchar();
-    printf(VERDE "Digite a Data de Nascimento (DD/MM/AAAA):\n" RESET);
-    scanf(" %14[^\n]", dataDeNascimento);
-    getchar();
-    printf(VERDE "Digite o seu Email:\n" RESET);
-    scanf("%99s", email);
-    getchar();
-
-    cadastrar_cliente(cliente,nome,cpf,telefone,senha,dataDeNascimento,email);
-    salvar_clientes(*cliente, CLIENTES_FILE);
-
-    printf(VERDE "Cliente Cadastrado!\n" RESET);
-    adicionar_registro(historico, "Novo cliente cadastrado.");
-
-    aguardar_enter_e_limpar();
-}
-
-void busca_cliente_menu(NodeCliente* cliente, Historico* historico, char* cpf){
-    printf(VERDE "Digite o CPF do Cliente:\n" RESET);
-    scanf("%s", cpf);
-    getchar();
-    
-    NodeCliente* encontrado = busca_cliente(cliente,cpf);
-    if(encontrado != NULL){
-        adicionar_registro(historico, "Cliente buscado.");
-    }
-    
-    aguardar_enter_e_limpar();
-}
-
-int edita_cliente_menu(NodeCliente* cliente, Historico* historico, char* nome, char* cpf, char* senha, char* dataDeNascimento, char* email){
-
-    printf(VERDE "Qual Dado Deseja Editar:\n" RESET);
-            printf(VERDE "1: Nome\n" RESET);
-            printf(VERDE "2: CPF\n" RESET);
-            printf(VERDE "3: Telefone\n" RESET);
-            printf(VERDE "4: Senha\n" RESET);
-            printf(VERDE "5: Data de Nascimento\n" RESET);
-            printf(VERDE "6: email\n" RESET);
-
-            int numero;
-            scanf("%d", &numero);
-            getchar();
-
-            printf(VERDE "Digite o CPF Original do Cliente:\n" RESET);
-            scanf("%s", cpf);
-
-            int verifica = verifica_cpf(cliente,cpf);
-            if(verifica == 1){
-                return 1;
-            }
-
-            if(numero==1){
-                printf(VERDE "Digite o Novo Nome:\n" RESET);
-                scanf("%s", nome);
-                edita_nome(cliente,nome,cpf);
-            }
-            else if(numero==2){
-                printf(VERDE "Digite o Novo CPF:\n" RESET);
-                char* cpfNovo = malloc(12*sizeof(char));
-                if(cpfNovo==NULL){printf(VERDE "Erro de alocacao de memoria\n" RESET);return 1;}
-                scanf("%s", cpfNovo);
-                edita_cpf(cliente,cpfNovo,cpf);
-                free(cpfNovo);
-            }
-            else if(numero==3){
-                char* telefone = malloc(15*sizeof(char));
-                if(telefone==NULL){printf(VERDE "Erro de alocacao de memoria\n" RESET);return 1;}
-                printf(VERDE "Digite o Novo Telefone:\n" RESET);
-                scanf("%s", telefone);
-                edita_telefone(cliente,telefone,cpf);
-                free(telefone);
-            }
-            else if(numero==4){
-                printf(VERDE "Digite a Nova Senha:\n" RESET);
-                scanf("%s", senha);
-                edita_senha(cliente,senha,cpf);
-            }
-            else if(numero==5){
-                char* dataDeNascimento = malloc(15*sizeof(char));
-                if(dataDeNascimento==NULL){printf(VERDE "Erro de alocacao de memoria\n" RESET);return 1;}
-                printf(VERDE "Digite a Nova Data de Nascimento:\n" RESET);
-                scanf("%s", dataDeNascimento);
-                edita_data_de_nascimento(cliente,dataDeNascimento,cpf);
-                free(dataDeNascimento);
-            }
-            else if(numero==6){
-                char* email = malloc(100*sizeof(char));
-                if(email==NULL){printf(VERDE "Erro de alocacao de memoria\n" RESET);return 1;}
-                printf(VERDE "Digite o Novo email:\n" RESET);
-                scanf("%s", email);
-                edita_email(cliente,email,cpf);
-                free(email);
-            }
-            salvar_clientes(cliente, CLIENTES_FILE);
-            printf(VERDE "Dados Atualizados com Sucesso\n" RESET);
-            adicionar_registro(historico, "Dados do cliente editados.");
-
-            aguardar_enter_e_limpar();
-            return 0;
-}
-
-void listar_clientes_menu(NodeCliente* cliente, Historico* historico){
-    if(cliente==NULL){
-        printf(VERDE "Nao ha clientes cadastrados!\n" RESET);
-        printf(VERDE "\nPressione Enter para continuar..." RESET);
-        getchar();
-        limpar_tela();
-        return;
-    } 
-    else{
-        listar_clientes(cliente);
+void tela_cadastro_cliente(){
+    //preparando as caixinhas 
+    if(menu.input_cont==0){
+        menu.inputs[0] = criar_botao((Rectangle){ 200, 100, 300, 35 });
+        menu.inputs[1] = criar_botao((Rectangle){ 200, 170, 300, 35 });
+        menu.inputs[2] = criar_botao((Rectangle){ 200, 240, 300, 35 });
+        menu.inputs[3] = criar_botao((Rectangle){ 200, 310, 300, 35 });
+        menu.inputs[4] = criar_botao((Rectangle){ 200, 380, 300, 35 });
+        menu.inputs[5] = criar_botao((Rectangle){ 200, 450, 300, 35 });
+        menu.input_cont = 6;
     }
 
-    adicionar_registro(historico, "Lista de clientes exibida.");
-    aguardar_enter_e_limpar();
-    return;
-}
-
-void deletar_clientes_menu(NodeCliente** cliente, Historico* historico, char* cpf){
-    printf(VERDE "Digite o CPF do Cliente:\n" RESET);
-    scanf("%s", cpf);
-    getchar();
+    DrawText("CADASTRO DE CLIENTE", 150, 20, 25, AMARELO);
     
-    if(remover_cliente(cliente,cpf)){
-        salvar_clientes(*cliente, CLIENTES_FILE);
-        adicionar_registro(historico, "Cliente removido.");
-    }
+    //lembrando que o q ta em aspas e o label/titulo do bottao
+    frontend_scanf(&menu.inputs[0], "Nome:");
+    frontend_scanf(&menu.inputs[1], "CPF (11 digitos):");
+    frontend_scanf(&menu.inputs[2], "Telefone:");
+    frontend_scanf(&menu.inputs[3], "Senha:");
+    frontend_scanf(&menu.inputs[4], "Data Nascimento (DD/MM/AAAA):");
+    frontend_scanf(&menu.inputs[5], "Email:");
 
-    aguardar_enter_e_limpar();
-    return;
-}
+    if(GuiButton((Rectangle){200,580,100,40}, "Salvar")){
 
-void cadastrar_produto_menu(Produto** produto, Historico* historico, char* senha, char* nome, float preco, int quantidade){
-    
-    printf(VERDE "Digite o Codigo do Produto:\n" RESET);
-    scanf("%s", senha);
-    printf(VERDE "Digite o Nome do Produto:\n" RESET);
-    scanf(" %[^\n]", nome);
-    printf(VERDE "Digite o Preco do Produto:\n" RESET);
-    scanf("%f", &preco);
-    printf(VERDE "Digite a Quantidade do Produto:\n" RESET);
-    scanf("%d", &quantidade);
-    getchar();
-    *produto = cadastrarProduto(*produto,senha,nome,preco,quantidade);
-    salvar_produtos(*produto, PRODUTOS_FILE);
-
-    printf(VERDE "Produto Cadastrado!\n" RESET);
-    adicionar_registro(historico, "Produto cadastrado.");
-
-    aguardar_enter_e_limpar();
-    return;
-}
-
-void listar_produtos_menu(Produto* produto, Historico* historico){
-    listarProdutos(produto);
-    adicionar_registro(historico, "Lista de produtos exibida.");
-
-    aguardar_enter_e_limpar();
-    return;
-}
-
-void remover_produto_menu(Produto** produto, Historico* historico, char* senha){
-    printf(VERDE "Digite o Codigo do Produto:\n" RESET);
-    scanf("%s", senha);
-    getchar();
-    
-    if(removerProduto(produto,senha)){
-        salvar_produtos(*produto, PRODUTOS_FILE);
-        adicionar_registro(historico, "Produto removido.");
-    }
-
-    aguardar_enter_e_limpar();
-    return;
-}
-
-void editar_produto_menu(Produto* produto, Historico* historico, char* senha, char* nome){
-    float preco;
-    int quantidade;
-
-    printf(VERDE "Digite o Codigo do Produto!\n" RESET);
-    scanf("%s", senha);
-
-    printf(VERDE "Digite o Novo Preco e o Novo Nome:\n" RESET);
-    
-    scanf("%f", &preco);
-    getchar();
-    scanf("%s", nome);
-    printf(VERDE "Digite a Nova Quantidade:\n" RESET);
-    scanf("%d", &quantidade);
-
-    editarDadosProduto(produto,senha,nome,preco,quantidade);
-    salvar_produtos(produto, PRODUTOS_FILE);
-
-    printf(VERDE "Produto Editado com Sucesso!\n" RESET);
-    adicionar_registro(historico, "Dados do produto editados.");
-
-    aguardar_enter_e_limpar();
-    return;
-}
-
-int iniciar_compras_menu(NodeCliente* cliente, Historico* historico, Produto* produto, char* cpf, char* senha){
-    
-    printf(VERDE "\n========== LOGIN ==========\n" RESET);
-    printf(VERDE "Digite o CPF do seu Usuario: " RESET);
-    scanf("%s", cpf);
-    getchar();
-    printf(VERDE "Digite a Senha do seu Usuario: " RESET);
-    scanf("%s", senha);
-
-    if(login(cliente,cpf,senha)==1){
-        return 1;
-    }
-
-    printf(VERDE "\nLogin Realizado com Sucesso!\n" RESET);
-    adicionar_registro(historico, "Usuario fez login no modo compra.");
-
-    aguardar_enter_e_limpar();
-
-    Carrinho *carrinho = criar_carrinho();
-
-    NodeCliente* novo_cliente = busca_cliente(cliente,cpf);
-
-    if(novo_cliente!=NULL){
-        adicionar_dono_do_carrinho(carrinho, &(novo_cliente->dados));
-    } 
-    else{
-        printf(VERDE "Cliente Nao Existe!\n" RESET);
-        free(carrinho); 
-        return 1;
-    }
-
-    while(2==2){
-
-        printf(VERDE "\n========== CARRINHO DE COMPRAS ==========\n" RESET);
-        printf(VERDE "1 : Adicionar Produtos\n" RESET);
-        printf(VERDE "2 : Procurar Produto\n" RESET);
-        printf(VERDE "3 : Remover Produtos\n" RESET);
-        printf(VERDE "0 : Finalizar Compras\n" RESET);
-        printf(VERDE "========================================\n" RESET);
-        printf(VERDE "Escolha uma opcao: " RESET);
-        int escolha;
-
-        scanf("%d", &escolha);
-        getchar();
-
-        if(escolha==0){
-            printf(VERDE "\nFinalizando compras...\n" RESET);
-            adicionar_registro(historico, "Compras finalizadas.");
-
-            aguardar_enter_e_limpar();
-            break;
+        if(strlen(menu.inputs[0].texto)>0 && strlen(menu.inputs[1].texto)>0){
+            //AVISO PRA SE AJ TIVER UM CLIENTE CSDASTRADO
+            if(busca_cliente(menu.cliente, menu.inputs[1].texto) != NULL) {
+                mostrar_aviso(&menu, "CPF ja cadastrado! Tente novamente.");
+            } 
+            else{
+                cadastrar_cliente(&menu.cliente,
+                    menu.inputs[0].texto,
+                    menu.inputs[1].texto,
+                    menu.inputs[2].texto,
+                    menu.inputs[3].texto,
+                    menu.inputs[4].texto,
+                    menu.inputs[5].texto);
+                salvar_clientes(menu.cliente, CLIENTES_FILE);
+                adicionar_registro(menu.historico, "Novo cliente cadastrado.");
+                menu.tela = 0;
+                limpar_inputs(&menu);
+            }
         }
+    }
+    
+    if (GuiButton((Rectangle){ 350, 580, 100, 40 }, "Voltar")) {
+        menu.tela = 0;
+        limpar_inputs(&menu);
+    }
+    
+}
 
-        if(escolha==1){
-
-            printf(VERDE "\n--- Adicionar ao Carrinho ---\n" RESET);
-            while(2==2){
-
-                printf(VERDE "Produtos Disponiveis:\n" RESET);
-                listarProdutos(produto);
-                printf(VERDE "Digite o Codigo (ou '0' para voltar): " RESET);
-                scanf("%s", senha);
-
-                if(senha[0]=='0' && senha[1]=='\0'){
-                    printf(VERDE "Voltando...\n" RESET);
-                    aguardar_enter_e_limpar();
-                    break;
-                }
-
-                Produto* new_produto = buscarProduto(produto,senha);
-                if(new_produto!=NULL){
-                    int qtd;
-                    printf(VERDE "Digite a Quantidade Desejada: " RESET);
-                    scanf("%d", &qtd);
-                    getchar();
-                    if(adicionar_produto_ao_carrinho(carrinho, new_produto, qtd)){
-                        printf(VERDE "%dx Produto '%s' adicionado ao carrinho!\n\n" RESET, qtd, new_produto->nome);
-                        adicionar_registro(historico, "Produto adicionado ao carrinho.");
-                        salvar_produtos(produto, PRODUTOS_FILE);
-                    }
-                    
-                    aguardar_enter_e_limpar();
-                } 
-                else{
-                    printf(VERDE "Codigo invalido! Tente novamente.\n\n" RESET);
-                    aguardar_enter_e_limpar();
-                }
-
-            }
-
+void tela_busca_cliente(){
+    if(menu.input_cont==0){
+        menu.inputs[0]=criar_botao((Rectangle){200, 150, 300, 35});
+        menu.input_cont=1;
+    }
+    
+    DrawText("BUSCAR CLIENTE", 150, 20, 25, AMARELO);
+    
+    frontend_scanf(&menu.inputs[0], "CPF:");
+    
+    if(GuiButton((Rectangle){200, 250, 100, 40}, "Buscar")){
+        NodeCliente* encontrado = busca_cliente(menu.cliente, menu.inputs[0].texto);
+        if(encontrado != NULL){
+            adicionar_registro(menu.historico, "Cliente buscado.");
+            menu.resultado_visivel = true;
+            menu.resultado_sucesso = true;
+        } 
+        else{
+            menu.resultado_visivel = true;
+            menu.resultado_sucesso = false;
         }
-        else if(escolha==2){
+    }
+    
+    if(menu.resultado_visivel){
+        Color cor;
+        const char* msg;
 
-            printf(VERDE "\n--- Procurar Produto no Carrinho ---\n" RESET);
-            printf(VERDE "Digite o Codigo do Produto: " RESET);
-            scanf("%s", senha);
-            Produto* encontrado = procura_produto_no_carrinho(carrinho,senha);
-            if(encontrado != NULL){
-                printf(VERDE "Produto encontrado!\n" RESET);
-                printf(VERDE "Codigo: %s\nNome: %s\nPreco: %.2f\nQuantidade: %d\n" RESET, 
-                       encontrado->codigo, encontrado->nome, encontrado->preco, encontrado->quantidade);
-                adicionar_registro(historico, "Produto buscado no carrinho.");
+        if(menu.resultado_sucesso){
+            cor=GREEN;
+            msg="Cliente encontrado!";
+            NodeCliente* dados = busca_cliente(menu.cliente, menu.inputs[0].texto);
+            if(dados != NULL){
+                DrawText(TextFormat("Nome: %s", dados->dados.nome), 200, 350, 20, BLACK);
+                DrawText(TextFormat("Email: %s", dados->dados.email), 200, 380, 20, DARKGRAY);
+            }
+        } 
+        else{
+            cor=RED;
+            msg="Cliente não encontrado!";
+        }
+        DrawText(msg, 200, 320, 20, cor);
+    }
+    
+    if(GuiButton((Rectangle){ 350, 250, 100, 40 }, "Voltar")){
+        menu.tela = 0;
+        menu.resultado_visivel = 0;
+        limpar_inputs(&menu);
+    }
+    
+}
+
+void tela_edita_cliente() {
+    if(menu.input_cont == 0){
+        menu.inputs[0] = criar_botao((Rectangle){ 200, 100, 300, 35 });
+        menu.inputs[1] = criar_botao((Rectangle){ 200, 170, 300, 35 });
+        menu.inputs[2] = criar_botao((Rectangle){ 200, 240, 300, 35 });
+        menu.inputs[3] = criar_botao((Rectangle){ 200, 310, 300, 35 });
+        menu.inputs[4] = criar_botao((Rectangle){ 200, 380, 300, 35 });
+        menu.inputs[5] = criar_botao((Rectangle){ 200, 450, 300, 35 });
+        menu.inputs[6] = criar_botao((Rectangle){ 200, 520, 300, 35 });
+        menu.input_cont = 7;
+    }
+    
+    DrawText("EDITAR CLIENTE", 150, 20, 25, AMARELO);
+    
+    frontend_scanf(&menu.inputs[0], "CPF Original:");
+    frontend_scanf(&menu.inputs[1], "Novo Nome:");
+    frontend_scanf(&menu.inputs[2], "Novo Telefone:");
+    frontend_scanf(&menu.inputs[3], "Nova Senha:");
+    frontend_scanf(&menu.inputs[4], "Nova Data (DD/MM/AAAA):");
+    frontend_scanf(&menu.inputs[5], "Novo Email:");
+    frontend_scanf(&menu.inputs[6], "Novo CPF:");
+    
+    if (GuiButton((Rectangle){ 200, 580, 100, 40 }, "Atualizar")) {
+        if (strlen(menu.inputs[0].texto) > 0) {
+            if(strlen(menu.inputs[1].texto) > 0){
+                edita_nome(menu.cliente, menu.inputs[1].texto, menu.inputs[0].texto);
+            }
+            if(strlen(menu.inputs[2].texto) > 0){
+                edita_telefone(menu.cliente, menu.inputs[2].texto, menu.inputs[0].texto);
+            }
+            if(strlen(menu.inputs[3].texto) > 0){
+                edita_senha(menu.cliente, menu.inputs[3].texto, menu.inputs[0].texto);
+            }
+            if(strlen(menu.inputs[4].texto) > 0){
+                edita_data_de_nascimento(menu.cliente, menu.inputs[4].texto, menu.inputs[0].texto);
+            }
+            if(strlen(menu.inputs[5].texto) > 0){
+                edita_email(menu.cliente, menu.inputs[5].texto, menu.inputs[0].texto);
+            }
+            if(strlen(menu.inputs[6].texto) > 0){
+                edita_cpf(menu.cliente, menu.inputs[6].texto, menu.inputs[0].texto);
+            }
+            salvar_clientes(menu.cliente, CLIENTES_FILE);
+            adicionar_registro(menu.historico, "Dados do cliente editados.");
+            menu.tela = 0;
+            limpar_inputs(&menu);
+        }
+    }
+    
+    if(GuiButton((Rectangle){ 350, 580, 100, 40 }, "Voltar")){
+        menu.tela = 0;
+        limpar_inputs(&menu);
+    }
+    
+}
+
+
+void tela_deleta_cliente() {
+    if(menu.input_cont == 0){
+        menu.inputs[0] = criar_botao((Rectangle){ 200, 150, 300, 35 });
+        menu.input_cont = 1;
+    }
+    
+    DrawText("DELETAR CLIENTE", 150, 20, 25, AMARELO);
+    
+    frontend_scanf(&menu.inputs[0], "CPF:");
+    
+    if(GuiButton((Rectangle){ 200, 250, 100, 40 }, "Deletar")) {
+        if(remover_cliente(&menu.cliente, menu.inputs[0].texto)){
+            salvar_clientes(menu.cliente, CLIENTES_FILE);
+            adicionar_registro(menu.historico, "Cliente removido.");
+            menu.tela = 0;
+            limpar_inputs(&menu);
+        }
+    }
+    
+    if (GuiButton((Rectangle){ 350, 250, 100, 40 }, "Voltar")) {
+        menu.tela = 0;
+        limpar_inputs(&menu);
+    }
+
+}
+
+
+void tela_listar_clientes(){
+    
+    DrawText("LISTA DE CLIENTES", 150, 20, 25, AMARELO);
+    
+    int y = 80;
+    NodeCliente* atual = menu.cliente;
+    while(atual != NULL && y < 600) {
+        DrawText(TextFormat("Nome: %s | CPF: %s", atual->dados.nome, atual->dados.cpf), 50, y, 15, BLACK);
+        y += 30;
+        atual = atual->prox;
+    }
+    
+    adicionar_registro(menu.historico, "Lista de clientes exibida.");
+    
+    if (GuiButton((Rectangle){ 200, 650, 100, 40 }, "Voltar")) {
+        menu.tela = 0;
+    }
+
+}
+
+void tela_cadastro_produto() {
+    if (menu.input_cont == 0) {
+        menu.inputs[0] = criar_botao((Rectangle){ 200, 100, 300, 35 });
+        menu.inputs[1] = criar_botao((Rectangle){ 200, 170, 300, 35 });
+        menu.inputs[2] = criar_botao((Rectangle){ 200, 240, 300, 35 });
+        menu.inputs[3] = criar_botao((Rectangle){ 200, 310, 300, 35 });
+        menu.input_cont = 4;
+    }
+    
+    DrawText("CADASTRO DE PRODUTO", 150, 20, 25, VERMELHO);
+    
+    frontend_scanf(&menu.inputs[0], "Codigo:");
+    frontend_scanf(&menu.inputs[1], "Nome:");
+    frontend_scanf(&menu.inputs[2], "Preco:");
+    frontend_scanf(&menu.inputs[3], "Quantidade:");
+    
+    if(GuiButton((Rectangle){ 200, 380, 100, 40 }, "Salvar")){
+
+        if (strlen(menu.inputs[0].texto) > 0) {
+            // Verificar se o codigo ja existe
+            if(buscarProduto(menu.produto, menu.inputs[0].texto) != NULL) {
+                mostrar_aviso(&menu, "Codigo de produto ja cadastrado! Tente novamente.");
             } else {
-                printf(VERDE "Produto nao encontrado no carrinho!\n" RESET);
+                float preco = TextToFloat(menu.inputs[2].texto);
+                int quantidade = atoi(menu.inputs[3].texto);
+                menu.produto = cadastrarProduto(
+                    menu.produto,
+                    menu.inputs[0].texto,
+                    menu.inputs[1].texto,
+                    preco,
+                    quantidade
+                );
+                salvar_produtos(menu.produto, PRODUTOS_FILE);
+                adicionar_registro(menu.historico, "Produto cadastrado.");
+                menu.tela = 0;
+                limpar_inputs(&menu);
             }
-
-            aguardar_enter_e_limpar();
         }
-        else if(escolha==3){
 
-            printf(VERDE "\n--- Remover do Carrinho ---\n" RESET);
-            while(2==2){
+    }
+    
+    if (GuiButton((Rectangle){ 350, 380, 100, 40 }, "Voltar")) {
+        menu.tela = 0;
+        limpar_inputs(&menu);
+    }
+    
+}
 
-                printf(VERDE "Digite o Codigo (ou '0' para voltar): " RESET);
-                scanf("%s", senha);
+void tela_listar_produtos() {
+    
+    DrawText("LISTA DE PRODUTOS", 150, 20, 25, VERMELHO);
+    
+    int y = 80;
+    Produto* atual = menu.produto;
+    while (atual != NULL && y < 600){
 
-                if(senha[0]=='0' && senha[1]=='\0'){
-                    printf(VERDE "Voltando...\n" RESET);
+        DrawText(TextFormat("Codigo: %s | Nome: %s | Preco: R$%.2f | Qtd: %d", 
+        atual->codigo, atual->nome, atual->preco, atual->quantidade), 50, y, 15, BLACK);
+        y += 30;
+        atual = atual->next;
 
-                    aguardar_enter_e_limpar();
-                    break;
+    }
+    
+    adicionar_registro(menu.historico, "Lista de produtos exibida.");
+    
+    if (GuiButton((Rectangle){ 200, 650, 100, 40 }, "Voltar")) {
+        menu.tela = 0;
+    }
+    
+}
+
+void tela_edita_produto() {
+    if (menu.input_cont == 0) {
+        menu.inputs[0] = criar_botao((Rectangle){ 200, 100, 300, 35 });
+        menu.inputs[1] = criar_botao((Rectangle){ 200, 170, 300, 35 });
+        menu.inputs[2] = criar_botao((Rectangle){ 200, 240, 300, 35 });
+        menu.inputs[3] = criar_botao((Rectangle){ 200, 310, 300, 35 });
+        menu.input_cont = 4;
+    }
+    
+    DrawText("EDITAR PRODUTO", 150, 20, 25, VERMELHO);
+    
+    frontend_scanf(&menu.inputs[0], "Codigo:");
+    frontend_scanf(&menu.inputs[1], "Novo Nome:");
+    frontend_scanf(&menu.inputs[2], "Novo Preco:");
+    frontend_scanf(&menu.inputs[3], "Nova Quantidade:");
+    
+    if (GuiButton((Rectangle){ 200, 380, 100, 40 }, "Atualizar")) {
+        if (strlen(menu.inputs[0].texto) > 0) {
+            float preco = TextToFloat(menu.inputs[2].texto);
+            int quantidade = atoi(menu.inputs[3].texto);
+            editarDadosProduto(menu.produto, menu.inputs[0].texto,
+                menu.inputs[1].texto, preco, quantidade);
+            salvar_produtos(menu.produto, PRODUTOS_FILE);
+            adicionar_registro(menu.historico, "Dados do produto editados.");
+            menu.tela = 0;
+            limpar_inputs(&menu);
+        }
+    }
+    
+    if (GuiButton((Rectangle){ 350, 380, 100, 40 }, "Voltar")) {
+        menu.tela = 0;
+        limpar_inputs(&menu);
+    }
+    
+}
+
+
+void tela_remove_produto() {
+    if (menu.input_cont == 0) {
+        menu.inputs[0] = criar_botao((Rectangle){ 200, 150, 300, 35 });
+        menu.input_cont = 1;
+    }
+    
+    DrawText("REMOVER PRODUTO", 150, 20, 25, VERMELHO);
+    
+    frontend_scanf(&menu.inputs[0], "Codigo:");
+    
+    if (GuiButton((Rectangle){ 200, 250, 100, 40 }, "Remover")) {
+        if (removerProduto(&menu.produto, menu.inputs[0].texto)) {
+            salvar_produtos(menu.produto, PRODUTOS_FILE);
+            adicionar_registro(menu.historico, "Produto removido.");
+            menu.tela = 0;
+            limpar_inputs(&menu);
+        }
+    }
+    
+    if (GuiButton((Rectangle){ 350, 250, 100, 40 }, "Voltar")) {
+        menu.tela = 0;
+        limpar_inputs(&menu);
+    }
+    
+}
+
+void tela_buscar_produto() {
+    static Produto* produto_encontrado = NULL;
+    static bool busca_realizada = false;
+    
+    if (menu.input_cont == 0) {
+        menu.inputs[0] = criar_botao((Rectangle){ 200, 150, 300, 35 });
+        menu.input_cont = 1;
+        produto_encontrado = NULL;
+        busca_realizada = false;
+    }
+    
+    DrawText("BUSCAR PRODUTO", 150, 20, 25, VERDE);
+    
+    frontend_scanf(&menu.inputs[0], "Codigo:");
+    
+    if (GuiButton((Rectangle){ 200, 250, 100, 40 }, "Buscar")) {
+        if (strlen(menu.inputs[0].texto) > 0) {
+            produto_encontrado = buscarProduto(menu.produto, menu.inputs[0].texto);
+            busca_realizada = true;
+        }
+    }
+    
+    if (busca_realizada) {
+        if (produto_encontrado != NULL) {
+            DrawText("Produto encontrado:", 200, 320, 18, VERDE);
+            DrawText(TextFormat("Nome: %s", produto_encontrado->nome), 200, 350, 16, DARKGRAY);
+            DrawText(TextFormat("Preco: R$ %.2f", produto_encontrado->preco), 200, 380, 16, DARKGRAY);
+            DrawText(TextFormat("Quantidade: %d", produto_encontrado->quantidade), 200, 410, 16, DARKGRAY);
+        } else {
+            DrawText("Produto nao encontrado!", 200, 320, 18, VERMELHO);
+        }
+    }
+    
+    if (GuiButton((Rectangle){ 350, 250, 100, 40 }, "Voltar")) {
+        menu.tela = 0;
+        limpar_inputs(&menu);
+        produto_encontrado = NULL;
+        busca_realizada = false;
+    }
+}
+
+void tela_historico() {
+
+    DrawText("HISTORICO DE OPERACOES", 150, 20, 25, GREEN);
+    DrawText(TextFormat("Total: %d operacoes", menu.historico->total), 150, 50, 15, GRAY);
+    
+    int y = 100;
+    int max_visible = 12;
+    int contador = 0;
+    
+    NoHistorico* atual = menu.historico->inicio;
+    while(atual != NULL && contador < max_visible) {
+        DrawText(TextFormat("[%s] %s", atual->dados.timestamp, atual->dados.operacao), 50, y, 14, BLACK);
+        y += 30;
+        atual = atual->proximo;
+        contador++;
+    }
+    
+    if (menu.historico->total == 0) {
+        DrawText("Historico vazio", 50, 100, 14, GRAY);
+    }
+    
+    if (GuiButton((Rectangle){ 200, 650, 100, 40 }, "Voltar")) {
+        menu.tela = 0;
+    }
+    
+}
+
+void tela_login(){
+
+    if(menu.input_cont==0){
+        menu.inputs[0]=criar_botao((Rectangle){200,150,300,35});
+        menu.inputs[1]=criar_botao((Rectangle){200,250,300,35});
+        menu.input_cont=2;
+    }
+
+    DrawText("LOGIN - COMPRAS", 150, 20, 25, VERDE);
+
+    frontend_scanf(&menu.inputs[0], "CPF:");
+    frontend_scanf(&menu.inputs[1], "Senha:");
+
+    if(GuiButton((Rectangle){ 200, 350, 100, 40 }, "Entrar")){
+        if(strlen(menu.inputs[0].texto)>0 && strlen(menu.inputs[1].texto)>0){
+            NodeCliente* cliente_encontrado = busca_cliente(menu.cliente, menu.inputs[0].texto);
+            
+            if(cliente_encontrado != NULL){
+                if(login(menu.cliente, menu.inputs[0].texto, menu.inputs[1].texto) == 0){
+
+                    menu.cliente_logado = cliente_encontrado;
+                    menu.carrinho = criar_carrinho();
+                    adicionar_dono_do_carrinho(menu.carrinho, &cliente_encontrado->dados);
+                    adicionar_registro(menu.historico, "Usuario fez login no modo compra.");
+                    menu.tela = 12;
+                    limpar_inputs(&menu);
+
                 }
-
-                Produto* produto_carrinho = procura_produto_no_carrinho(carrinho, senha);
-                if(produto_carrinho!=NULL){
-                    int qtd_remover;
-                    printf(VERDE "Quantidade no carrinho: %d\n" RESET, produto_carrinho->quantidade);
-                    printf(VERDE "Digite a Quantidade a Remover: " RESET);
-                    scanf("%d", &qtd_remover);
-                    getchar();
-
-                    Produto* new_produto = buscarProduto(produto, senha);
-                    if(remove_produto_do_carrinho(carrinho, new_produto, qtd_remover) != NULL){
-                        printf(VERDE "\n" RESET);
-                        adicionar_registro(historico, "Produto removido do carrinho.");
-                        salvar_produtos(produto, PRODUTOS_FILE);
-                    }
-
-                    aguardar_enter_e_limpar();
-                } 
                 else{
-                    printf(VERDE "Codigo invalido! Tente novamente.\n\n" RESET);
-                    aguardar_enter_e_limpar();
+                    mostrar_aviso(&menu, "Senha incorreta!");
                 }
-
             }
+            else {
+                mostrar_aviso(&menu, "CPF nao encontrado!");
+            }
+        }
+    }
+    
+    if(GuiButton((Rectangle){ 350, 350, 100, 40 }, "Voltar")) {
+        menu.tela = 0;
+        limpar_inputs(&menu);
+    }
 
+}
+
+void tela_carrinho_menu(){
+    DrawText("CARRINHO DE COMPRAS", 150, 20, 25, VERDE);
+    
+    int botao_x = 150;
+    int botao_y = 100;
+    int largura = 300;
+    int altura = 60;
+    int espacamento = 80;
+    
+    if(GuiButton((Rectangle){ botao_x, botao_y, largura, altura }, "Colocar no Carrinho")) {
+        menu.tela = 13;
+        limpar_inputs(&menu);
+    }
+    
+    if(GuiButton((Rectangle){ botao_x, botao_y + espacamento, largura, altura }, "Buscar no Carrinho")) {
+        menu.tela = 14;
+        limpar_inputs(&menu);
+    }
+    
+    if(GuiButton((Rectangle){ botao_x, botao_y + espacamento*2, largura, altura }, "Remover do Carrinho")) {
+        menu.tela = 15;
+        limpar_inputs(&menu);
+    }
+    
+    if(GuiButton((Rectangle){ botao_x, botao_y + espacamento*3, largura, altura }, "Voltar")) {
+        menu.tela = 17;
+        limpar_inputs(&menu);
+    }
+}
+
+void tela_resumo_compras(){
+    DrawText("RESUMO DAS COMPRAS", 150, 20, 25, VERDE);
+
+    int y = 80;
+    float total = 0.0f;
+
+    DrawText("Produto", 150, y, 16, DARKGRAY);
+    DrawText("Qtd", 520, y, 16, DARKGRAY);
+    DrawText("Preco", 600, y, 16, DARKGRAY);
+    y += 25;
+
+    if(menu.carrinho == NULL || menu.carrinho->produto == NULL){
+        DrawText("Carrinho vazio.", 150, y, 16, VERMELHO);
+        y += 25;
+    }
+    else{
+        Produto* atual = menu.carrinho->produto;
+        while(atual != NULL) {
+            DrawText(TextFormat("%s", atual->nome), 150, y, 16, BLACK);
+            DrawText(TextFormat("%d", atual->quantidade), 520, y, 16, BLACK);
+            DrawText(TextFormat("R$ %.2f", atual->preco), 600, y, 16, BLACK);
+            total += atual->preco * atual->quantidade;
+            y += 25;
+            atual = atual->next;
         }
     }
 
-    printf(VERDE "\n============= RESUMO DO CARRINHO =============\n" RESET);
-    ver_produtos_no_carrinho(carrinho);
-    printf(VERDE "===============================================\n" RESET);
-    liberar_carrinho(&carrinho);
-    aguardar_enter_e_limpar();
+    DrawText(TextFormat("Total: R$ %.2f", total), 150, y + 20, 18, VERDE);
 
-    return 0;
+    if(GuiButton((Rectangle){ 150, y + 60, 200, 40 }, "Voltar ao Menu")) {
+        if(menu.carrinho != NULL) {
+            liberar_carrinho(&menu.carrinho);
+        }
+        menu.cliente_logado = NULL;
+        menu.tela = 0;
+        limpar_inputs(&menu);
+    }
 }
+
+void tela_adicionar_produto_no_carrinho(){
+
+    if(menu.input_cont==0){
+        menu.inputs[0] = criar_botao((Rectangle){ 200, 150, 300, 35 });
+        menu.input_cont = 1;
+    }
+
+    DrawText("PROCURAR PRODUTO:", 150, 20, 25, VERDE);
+    frontend_scanf(&menu.inputs[0], "Codigo do Produto:");
+
+    if(GuiButton((Rectangle){ 200, 250, 100, 40 }, "Procurar")){
+        if(strlen(menu.inputs[0].texto)>0){
+            Produto* encontrado = procura_produto_no_carrinho(menu.carrinho, menu.inputs[0].texto);
+            if(encontrado != NULL){
+
+                DrawText(TextFormat("Produto: %s", encontrado->nome), 200, 350, 16, VERDE);
+                DrawText(TextFormat("Preco: R$ %.2f", encontrado->preco), 200, 380, 16, BLACK);
+                DrawText(TextFormat("Quantidade: %d", encontrado->quantidade), 200, 410, 16, BLACK);
+                adicionar_registro(menu.historico, "Produto buscado no carrinho.");
+
+            } 
+            else{
+                DrawText("Produto nao encontrado no carrinho!", 200, 350, 16, VERMELHO);
+            }
+        }
+    }
+    
+    if(GuiButton((Rectangle){ 350, 250, 100, 40 }, "Voltar")) {
+        menu.tela = 12;
+        limpar_inputs(&menu);
+    }
+
+}
+
+void tela_adicionar_produto_carrinho(){
+
+    if(menu.input_cont==0){
+        menu.inputs[0]=criar_botao((Rectangle){ 200, 150, 300, 35 });
+        menu.inputs[1]=criar_botao((Rectangle){ 200, 220, 300, 35 });
+        menu.input_cont=2;
+    }
+    
+    DrawText("ADICIONAR PRODUTO", 150, 20, 25, VERDE);
+    
+    frontend_scanf(&menu.inputs[0], "Codigo do Produto:");
+    frontend_scanf(&menu.inputs[1], "Quantidade:");
+    
+    if(GuiButton((Rectangle){ 200, 320, 100, 40 }, "Adicionar")) {
+        if(strlen(menu.inputs[0].texto)>0 && strlen(menu.inputs[1].texto)>0){
+
+            Produto* produto_db = buscarProduto(menu.produto, menu.inputs[0].texto);
+            if(produto_db != NULL) {
+
+                int quantidade = atoi(menu.inputs[1].texto);
+                if(quantidade > 0 && quantidade <= produto_db->quantidade) {
+                    adicionar_produto_ao_carrinho(menu.carrinho, produto_db, quantidade);
+                    adicionar_registro(menu.historico, "Produto adicionado ao carrinho.");
+                    salvar_produtos(menu.produto, PRODUTOS_FILE);
+                    menu.tela = 12;
+                    limpar_inputs(&menu);
+                }
+                else {
+                    mostrar_aviso(&menu, "Quantidade invalida!");
+                }
+
+            } 
+            else{
+                mostrar_aviso(&menu, "Produto nao encontrado!");
+            }
+        }
+    }
+    
+    if(GuiButton((Rectangle){ 350, 320, 100, 40 }, "Voltar")) {
+        menu.tela = 12;
+        limpar_inputs(&menu);
+    }
+
+}
+
+void tela_procurar_produto_carrinho(){
+    static Produto* produto_encontrado = NULL;
+    static bool busca_realizada = false;
+
+    if(menu.input_cont==0){
+        menu.inputs[0]=criar_botao((Rectangle){ 200, 150, 300, 35 });
+        menu.input_cont=1;
+        produto_encontrado = NULL;
+        busca_realizada = false;
+    }
+    
+    DrawText("PROCURAR PRODUTO NO CARRINHO", 100, 20, 25, VERDE);
+    
+    frontend_scanf(&menu.inputs[0], "Codigo do Produto:");
+    
+    if(GuiButton((Rectangle){ 200, 250, 100, 40 }, "Procurar")) {
+        if(strlen(menu.inputs[0].texto)>0){
+            produto_encontrado = procura_produto_no_carrinho(menu.carrinho, menu.inputs[0].texto);
+            busca_realizada = true;
+        }
+    }
+    
+    if(busca_realizada) {
+        if(produto_encontrado != NULL) {
+            DrawText("Produto encontrado no carrinho!", 200, 320, 16, VERDE);
+            DrawText(TextFormat("Quantidade: %d", produto_encontrado->quantidade), 200, 350, 16, VERDE);
+        } 
+        else{
+            DrawText("Produto nao encontrado no carrinho!", 200, 320, 16, VERMELHO);
+        }
+    }
+    
+    if(GuiButton((Rectangle){ 350, 250, 100, 40 }, "Voltar")) {
+        menu.tela = 12;
+        limpar_inputs(&menu);
+        produto_encontrado = NULL;
+        busca_realizada = false;
+    }
+
+}
+
+void tela_remover_produto_carrinho(){
+
+    if(menu.input_cont==0){
+        menu.inputs[0]=criar_botao((Rectangle){ 200, 150, 300, 35 });
+        menu.inputs[1]=criar_botao((Rectangle){ 200, 220, 300, 35 });
+        menu.input_cont=2;
+    }
+    
+    DrawText("REMOVER PRODUTO", 150, 20, 25, VERDE);
+    
+    frontend_scanf(&menu.inputs[0], "Codigo do Produto:");
+    frontend_scanf(&menu.inputs[1], "Quantidade a Remover:");
+    
+    if(GuiButton((Rectangle){ 200, 320, 100, 40 }, "Remover")) {
+        if(strlen(menu.inputs[0].texto)>0 && strlen(menu.inputs[1].texto)>0){
+
+            Produto* produto_carrinho = procura_produto_no_carrinho(menu.carrinho, menu.inputs[0].texto);
+            if(produto_carrinho != NULL) {
+
+                int qtd_remover = atoi(menu.inputs[1].texto);
+                Produto* produto_db = buscarProduto(menu.produto, menu.inputs[0].texto);
+
+                if(remove_produto_do_carrinho(menu.carrinho, produto_db, qtd_remover) != NULL){
+                    adicionar_registro(menu.historico, "Produto removido do carrinho.");
+                    salvar_produtos(menu.produto, PRODUTOS_FILE);
+                    menu.tela = 12;
+                    limpar_inputs(&menu);
+                }
+
+            } 
+            else{
+                mostrar_aviso(&menu, "Produto nao encontrado no carrinho!");
+            }
+        }
+    }
+    
+    if(GuiButton((Rectangle){ 350, 320, 100, 40 }, "Voltar")) {
+        menu.tela = 12;
+        limpar_inputs(&menu);
+    }
+}
+

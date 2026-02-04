@@ -1,21 +1,25 @@
 #ifndef MENU_H
 #define MENU_H
+#include "frontend.h"
 
-#include "../include/clientes.h"
-#include "../include/produtos.h"
-#include "../include/carrinho.h"
-#include "../include/historico.h"
-#include "../include/salvamento.h"
+void tela_menu_principal();
+void tela_cadastro_cliente();
+void tela_busca_cliente();
+void tela_edita_cliente();
+void tela_listar_clientes();
+void tela_deleta_cliente();
+void tela_cadastro_produto();
+void tela_listar_produtos();
+void tela_edita_produto();
+void tela_remove_produto();
+void tela_buscar_produto();
+void tela_historico();
+void tela_login();
+void tela_carrinho_menu();
+void tela_resumo_compras();
+void tela_adicionar_produto_carrinho();
+void tela_procurar_produto_carrinho();
+void tela_remover_produto_carrinho();
 
-void finalizar(NodeCliente* cliente, Produto* produto, Historico* historico, char* cpf, char* nome, char* senha);
-void cadastra_cliente_menu(NodeCliente** cliente, Historico* historico, char* nome, char* cpf, char* senha, char* telefone, char* dataDeNascimento, char* email);
-void busca_cliente_menu(NodeCliente* cliente, Historico* historico, char* cpf);
-int edita_cliente_menu(NodeCliente* cliente, Historico* historico, char* nome, char* cpf, char* senha, char* dataDeNascimento, char* email);
-void listar_clientes_menu(NodeCliente* cliente, Historico* historico);
-void deletar_clientes_menu(NodeCliente** cliente, Historico* historico, char* cpf);
-void cadastrar_produto_menu(Produto** produto, Historico* historico, char* senha, char* nome, float preco, int quantidade);
-void listar_produtos_menu(Produto* produto, Historico* historico);
-void remover_produto_menu(Produto** produto, Historico* historico, char* senha);
-void editar_produto_menu(Produto* produto, Historico* historico, char* senha, char* nome);
-int iniciar_compras_menu(NodeCliente* cliente, Historico* historico, Produto* produto, char* cpf, char* senha);
+extern Menu menu;
 #endif

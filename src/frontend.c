@@ -1,3 +1,4 @@
+#define RAYGUI_IMPLEMENTATION
 #include "../include/frontend.h"
 
 texto criar_botao(Rectangle bounds){

@@ -1,3 +1,6 @@
+#ifndef FRONTEND_H
+#define FRONTEND_H
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -5,12 +8,9 @@
 #ifndef TextToFloat
     #define TextToFloat atof
 #endif
-#ifndef RAYGUI_NO_IMPLEMENTATION
-    #define RAYGUI_IMPLEMENTATION
-#endif
 #include "raygui.h"
-#include "../include/menu.h"
 #include "../include/carrinho.h"
+#include "../include/historico.h"
 
 static const char* CLIENTES_FILE = "clientes.csv";
 static const char* PRODUTOS_FILE = "produtos.csv";
@@ -49,4 +49,6 @@ void frontend_scanf(texto* input, char* label);
 void limpar_inputs(Menu* e);
 void mostrar_aviso(Menu* menu, const char* mensagem);
 void desenhar_aviso(Menu* menu);
+
+#endif
 
