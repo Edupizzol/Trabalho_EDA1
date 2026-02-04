@@ -180,8 +180,12 @@ void busca_cliente_menu(NodeCliente* cliente, Historico* historico, char* cpf){
     printf("Digite o CPF do Cliente:\n");
     scanf("%s", cpf);
     getchar();
-    busca_cliente(cliente,cpf);
-    adicionar_registro(historico, "Cliente buscado.");
+    
+    NodeCliente* encontrado = busca_cliente(cliente,cpf);
+    if(encontrado != NULL){
+        adicionar_registro(historico, "Cliente buscado.");
+    }
+    
     SLEEP(2);
     limpar_tela();
 }
@@ -281,10 +285,11 @@ void deletar_clientes_menu(NodeCliente** cliente, Historico* historico, char* cp
     printf("Digite o CPF do Cliente:\n");
     scanf("%s", cpf);
     getchar();
-    remover_cliente(cliente,cpf);
-    salvar_clientes(*cliente, CLIENTES_FILE);
-
-    adicionar_registro(historico, "Cliente removido.");
+    
+    if(remover_cliente(cliente,cpf)){
+        salvar_clientes(*cliente, CLIENTES_FILE);
+        adicionar_registro(historico, "Cliente removido.");
+    }
 
     SLEEP(2);
     limpar_tela();
@@ -326,9 +331,11 @@ void remover_produto_menu(Produto** produto, Historico* historico, char* senha){
     printf("Digite o Codigo do Produto:\n");
     scanf("%s", senha);
     getchar();
-    removerProduto(produto,senha);
-    salvar_produtos(*produto, PRODUTOS_FILE);
-    adicionar_registro(historico, "Produto removido.");
+    
+    if(removerProduto(produto,senha)){
+        salvar_produtos(*produto, PRODUTOS_FILE);
+        adicionar_registro(historico, "Produto removido.");
+    }
 
     SLEEP(2);
     limpar_tela();
@@ -375,6 +382,7 @@ int iniciar_compras_menu(NodeCliente* cliente, Historico* historico, Produto* pr
     }
 
     printf("\nLogin Realizado com Sucesso!\n");
+    adicionar_registro(historico, "Usuario fez login no modo compra.");
 
     SLEEP(2);
     limpar_tela();
@@ -408,6 +416,7 @@ int iniciar_compras_menu(NodeCliente* cliente, Historico* historico, Produto* pr
 
         if(escolha==0){
             printf("\nFinalizando compras...\n");
+            adicionar_registro(historico, "Compras finalizadas.");
 
             SLEEP(2);
             limpar_tela();
@@ -439,6 +448,7 @@ int iniciar_compras_menu(NodeCliente* cliente, Historico* historico, Produto* pr
                     getchar();
                     if(adicionar_produto_ao_carrinho(carrinho, new_produto, qtd)){
                         printf("%dx Produto '%s' adicionado ao carrinho!\n\n", qtd, new_produto->nome);
+                        adicionar_registro(historico, "Produto adicionado ao carrinho.");
                         salvar_produtos(produto, PRODUTOS_FILE);
                     }
                     
@@ -459,7 +469,15 @@ int iniciar_compras_menu(NodeCliente* cliente, Historico* historico, Produto* pr
             printf("\n--- Procurar Produto no Carrinho ---\n");
             printf("Digite o Codigo do Produto: ");
             scanf("%s", senha);
-            procura_produto_no_carrinho(carrinho,senha);
+            Produto* encontrado = procura_produto_no_carrinho(carrinho,senha);
+            if(encontrado != NULL){
+                printf("Produto encontrado!\n");
+                printf("Codigo: %s\nNome: %s\nPreco: %.2f\nQuantidade: %d\n", 
+                       encontrado->codigo, encontrado->nome, encontrado->preco, encontrado->quantidade);
+                adicionar_registro(historico, "Produto buscado no carrinho.");
+            } else {
+                printf("Produto nao encontrado no carrinho!\n");
+            }
 
             SLEEP(2);
             //limpar_tela();
@@ -491,6 +509,7 @@ int iniciar_compras_menu(NodeCliente* cliente, Historico* historico, Produto* pr
                     Produto* new_produto = buscarProduto(produto, senha);
                     if(remove_produto_do_carrinho(carrinho, new_produto, qtd_remover) != NULL){
                         printf("\n");
+                        adicionar_registro(historico, "Produto removido do carrinho.");
                         salvar_produtos(produto, PRODUTOS_FILE);
                     }
 

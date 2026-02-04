@@ -111,7 +111,7 @@ void editarDadosProduto(Produto* head, char* codigo, char* novoNome, float novoP
 
 }
 
-void removerProduto(Produto** head, char* codigo) {
+int removerProduto(Produto** head, char* codigo) {
     Produto* atual = *head;
     Produto* anterior = NULL;
 
@@ -122,7 +122,7 @@ void removerProduto(Produto** head, char* codigo) {
 
     if (atual == NULL) {
         printf("Produto com codigo %s nao encontrado.\n", codigo);
-        return;
+        return 0;
     }
 
     if (anterior == NULL) {
@@ -135,6 +135,7 @@ void removerProduto(Produto** head, char* codigo) {
     free(atual->nome);
     free(atual); // libera o espaco q o produto ocupava
     printf("Produto com codigo %s removido.\n", codigo);
+    return 1;
 }
 
 void incrementarEstoque(Produto* produto, int quantidade) { // n precisa do codigo como parametro

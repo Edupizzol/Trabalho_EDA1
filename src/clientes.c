@@ -244,7 +244,7 @@ NodeCliente* busca_cliente(NodeCliente *root, char* cpf){
 
 }
 
-void remover_cliente(NodeCliente **root, char* cpf){
+int remover_cliente(NodeCliente **root, char* cpf){
 
     NodeCliente *temp = *root;
     NodeCliente *previous = NULL;
@@ -259,7 +259,8 @@ void remover_cliente(NodeCliente **root, char* cpf){
         free(temp->dados.dataDeNascimento);
         free(temp->dados.email);
         free(temp);
-        return;
+        printf("Cliente removido!\n");
+        return 1;
     }
 
     while(temp!=NULL && compara_strings(temp->dados.cpf,cpf)!=0){
@@ -271,9 +272,7 @@ void remover_cliente(NodeCliente **root, char* cpf){
 
     if(temp==NULL){
         printf("Cliente nao encontrado!\n");
-        return;
-    } else {
-        printf("Cliente removido!\n");
+        return 0;
     }
 
     //desconectar o no que vai ser removido
@@ -286,6 +285,8 @@ void remover_cliente(NodeCliente **root, char* cpf){
     free(temp->dados.dataDeNascimento);
     free(temp->dados.email);
     free(temp);
+    printf("Cliente removido!\n");
+    return 1;
 
 }
 
@@ -382,7 +383,6 @@ int verifica_cpf(NodeCliente* root, char* string){
         }
         root=root->prox;
     }
-    printf("Cliente com esse CPF nao Esta Cadastrado!\n");
     return 1;
 
 }
