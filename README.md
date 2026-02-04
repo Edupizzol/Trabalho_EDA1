@@ -81,6 +81,6 @@ gcc src/*.c -I include -o programa.exe
 ```
 
 ## Autores
-Desenvolvido por Eduardo Jesus e Matheus Moretti Soares como trabalho prático da disciplina **EDA1** - Estrutura de Dados 1
+Desenvolvido por Eduardo Jesus Dal Pizzol e Matheus Moretti Soares como trabalho prático da disciplina **EDA1** - Estrutura de Dados 1
 
 * Sinta-se à vontade para sugestões ou reports no código!
