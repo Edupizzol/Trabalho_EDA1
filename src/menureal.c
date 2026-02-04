@@ -244,6 +244,25 @@ void tela_deleta_cliente() {
 }
 
 
+void tela_listar_clientes(){
+    
+    DrawText("LISTA DE CLIENTES", 150, 20, 25, AMARELO);
+    
+    int y = 80;
+    NodeCliente* atual = menu.cliente;
+    while(atual != NULL && y < 600) {
+        DrawText(TextFormat("Nome: %s | CPF: %s", atual->dados.nome, atual->dados.cpf), 50, y, 15, BLACK);
+        y += 30;
+        atual = atual->prox;
+    }
+    
+    adicionar_registro(menu.historico, "Lista de clientes exibida.");
+    
+    if (GuiButton((Rectangle){ 200, 650, 100, 40 }, "Voltar")) {
+        menu.tela = 0;
+    }
+
+}
 
 
 
