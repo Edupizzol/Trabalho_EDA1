@@ -139,7 +139,7 @@ int menu_real() {
                 tela_menu_principal();
         }
         
-        // Desenhar aviso se visivel
+        //desenha o aviso
         desenhar_aviso(&menu);
 
         EndDrawing();
@@ -560,58 +560,6 @@ void tela_login(){
                 mostrar_aviso(&menu, "CPF nao encontrado!");
             }
         }
-    }
-
-}
-
-void tela_adicionar_produto_no_carrinho(){
-    if(menu.input_cont==0){
-        menu.inputs[0] = criar_input((Rectangle){ 200, 200, 300, 35 });
-        menu.inputs[1] = criar_input((Rectangle){ 200, 270, 300, 35 });
-        menu.input_cont = 2;
-    }
-
-    DrawText("ADICIONAR PRODUTOS", 150, 20, 25, VERDE);
-    
-    DrawText("Produtos Disponiveis:", 150, 70, 16, BLACK);
-    int y = 100;
-    Produto* atual = menu.produto;
-    while(atual != NULL && y < 180) {
-        DrawText(TextFormat("%s - R$ %.2f | Qtd: %d", atual->nome, atual->preco, atual->quantidade), 150, y, 12, BLACK);
-        y += 25;
-        atual = atual->next;
-    }
-
-    desenhar_input_em_texto(&menu.inputs[0], "Codigo do Produto:");
-    desenhar_input_em_texto(&menu.inputs[1], "Quantidade:");
-    
-    if(GuiButton((Rectangle){ 200, 350, 100, 40 }, "Adicionar")) {
-        if(strlen(menu.inputs[0].texto)>0 && strlen(menu.inputs[1].texto)>0){
-
-            Produto* produto_encontrado = buscarProduto(menu.produto, menu.inputs[0].texto);
-            if(produto_encontrado != NULL) {
-                int qtd = atoi(menu.inputs[1].texto);
-                if(qtd>0){
-                    if(adicionar_produto_ao_carrinho(menu.carrinho, produto_encontrado, qtd)){
-                        adicionar_registro(menu.historico, "Produto adicionado ao carrinho.");
-                        salvar_produtos(menu.produto, PRODUTOS_FILE);
-                        menu.tela = 21;
-                        limpar_inputs(&menu);
-                    }
-                }
-                else{
-                    mostrar_aviso(&menu, "Quantidade invalida!");
-                }
-            } 
-            else{
-                mostrar_aviso(&menu, "Produto nao encontrado!");
-            }
-        }
-    }
-    
-    if(GuiButton((Rectangle){ 350, 350, 100, 40 }, "Voltar")) {
-        menu.tela = 1;
-        limpar_inputs(&menu);
     }
 
 }
