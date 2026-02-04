@@ -357,8 +357,8 @@ void tela_listar_clientes(){
     int y = 80;
     NodeCliente* atual = menu.cliente;
     while(atual != NULL && y < 600) {
-        DrawText(TextFormat("Nome: %s | CPF: %s", atual->dados.nome, atual->dados.cpf), 50, y, 15, BLACK);
-        y += 30;
+        DrawText(TextFormat("Nome: %s | CPF: %s | Tel: %s | Data: %s | Senha: %s", atual->dados.nome, atual->dados.cpf, atual->dados.telefone, atual->dados.dataDeNascimento, atual->dados.senha), 30, y, 12, BLACK);
+        y += 25;
         atual = atual->prox;
     }
     
