@@ -2,6 +2,9 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+#define AMARELO "\x1b[33m"
+#define RESET "\x1b[0m"
+
 char* copy_string(char* string){
     if(string == NULL) return NULL;
     
@@ -10,7 +13,7 @@ char* copy_string(char* string){
     char* new_string = malloc(memory_size * sizeof(char));
     
     if(new_string == NULL){
-        printf("Erro durante a alocação de memória do nome do cliente!\n");
+        printf(AMARELO "Erro durante a alocação de memória do nome do cliente!\n" RESET);
         exit(EXIT_FAILURE);
     }
 
@@ -23,7 +26,7 @@ char* copy_string(char* string){
             char* temp = realloc(new_string, memory_size * sizeof(char));
             if(temp==NULL){
                 free(new_string);
-                printf("Erro durante a alocação de memória do nome do cliente!\n");
+                printf(AMARELO "Erro durante a alocação de memória do nome do cliente!\n" RESET);
                 exit(EXIT_FAILURE);
             }
 
@@ -39,7 +42,7 @@ char* copy_string(char* string){
     char* temp = realloc(new_string, (i+1) * sizeof(char));
     if(temp==NULL){
         free(new_string);
-        printf("Erro durante a alocação de memória do nome do cliente!\n");
+        printf(AMARELO "Erro durante a alocação de memória do nome do cliente!\n" RESET);
         exit(EXIT_FAILURE);
     }
     new_string = temp;
@@ -113,7 +116,7 @@ Cliente* criar_cliente(char* nome, char* cpf, char* telefone, char* senha, char*
 
     Cliente* new_cliente = malloc(sizeof(Cliente));
     if(new_cliente==NULL){
-        printf("Erro ao alocar memória para Cliente!");
+        printf(AMARELO "Erro ao alocar memória para Cliente!" RESET);
         exit(EXIT_FAILURE);
     }
 
@@ -135,7 +138,7 @@ void cadastrar_cliente(NodeCliente** lista, char* nome, char* cpf, char* telefon
     NodeCliente* new_node = malloc(sizeof(NodeCliente));
 
     if(new_node==NULL){
-        printf("Erro ao alocar memória para o nó do Cliente!\n");
+        printf(AMARELO "Erro ao alocar memória para o nó do Cliente!\n" RESET);
         exit(EXIT_FAILURE);
     }
 
@@ -171,18 +174,18 @@ int login(NodeCliente* root, char* cpf, char* senha){
     while(root!=NULL){
         if(compara_strings(cpf,root->dados.cpf)==0){
             if(compara_strings(senha,root->dados.senha)==0){
-                printf("Logado!\n");
+                printf(AMARELO "Logado!\n" RESET);
                 return 0;
             }
             else{
-                printf("Senha incorreta!\n");
+                printf(AMARELO "Senha incorreta!\n" RESET);
                 return 1;
             }
         }
         root=root->prox;
     }
 
-    printf("Cliente nao encontrado!\n");
+    printf(AMARELO "Cliente nao encontrado!\n" RESET);
     return 1;
 
 }
@@ -190,7 +193,7 @@ int login(NodeCliente* root, char* cpf, char* senha){
 void listar_clientes(NodeCliente *root){
 
     if(root==NULL){
-        printf("Nao ha clientes cadastrados!\n");
+        printf(AMARELO "Nao ha clientes cadastrados!\n" RESET);
         return;
     }
     NodeCliente* atual = root;
@@ -198,16 +201,16 @@ void listar_clientes(NodeCliente *root){
     while(atual!=NULL){
 
         if(atual->dados.nome == NULL || atual->dados.cpf == NULL){
-            printf("ERRO: Dados do cliente incompletos.\n");
+            printf(AMARELO "ERRO: Dados do cliente incompletos.\n" RESET);
             break;
         }
-        printf("---------------------------------------\n");
-        printf("Nome: %s\n", atual->dados.nome);
-        printf("CPF: %s\n", atual->dados.cpf);
-        printf("Telefone: %s\n", atual->dados.telefone);
-        printf("Data de Nascimento: %s\n", atual->dados.dataDeNascimento);
-        printf("Email: %s\n", atual->dados.email);
-        printf("---------------------------------------\n");
+        printf(AMARELO "---------------------------------------\n" RESET);
+        printf(AMARELO "Nome: %s\n" RESET, atual->dados.nome);
+        printf(AMARELO "CPF: %s\n" RESET, atual->dados.cpf);
+        printf(AMARELO "Telefone: %s\n" RESET, atual->dados.telefone);
+        printf(AMARELO "Data de Nascimento: %s\n" RESET, atual->dados.dataDeNascimento);
+        printf(AMARELO "Email: %s\n" RESET, atual->dados.email);
+        printf(AMARELO "---------------------------------------\n" RESET);
         atual=atual->prox;
 
     }
@@ -219,7 +222,7 @@ void listar_clientes(NodeCliente *root){
 NodeCliente* busca_cliente(NodeCliente *root, char* cpf){
 
     if(root==NULL){
-        printf("Nao ha clientes cadastrados!\n");
+        printf(AMARELO "Nao ha clientes cadastrados!\n" RESET);
         return NULL;
     }
 
@@ -227,19 +230,19 @@ NodeCliente* busca_cliente(NodeCliente *root, char* cpf){
 
     while(atual!=NULL){
         if(compara_strings(atual->dados.cpf,cpf)==0){
-            printf("-------Dados do Cliente-------\n");
-            printf("Nome: %s\n", atual->dados.nome);
-            printf("CPF: %s\n", atual->dados.cpf);
-            printf("Telefone: %s\n", atual->dados.telefone);
-            printf("Data de Nascimento: %s\n", atual->dados.dataDeNascimento);
-            printf("Email: %s\n", atual->dados.email);
-            printf("-----------------------------\n");
+            printf(AMARELO "-------Dados do Cliente-------\n" RESET);
+            printf(AMARELO "Nome: %s\n" RESET, atual->dados.nome);
+            printf(AMARELO "CPF: %s\n" RESET, atual->dados.cpf);
+            printf(AMARELO "Telefone: %s\n" RESET, atual->dados.telefone);
+            printf(AMARELO "Data de Nascimento: %s\n" RESET, atual->dados.dataDeNascimento);
+            printf(AMARELO "Email: %s\n" RESET, atual->dados.email);
+            printf(AMARELO "-----------------------------\n" RESET);
             return atual;
         }
         atual=atual->prox;
     }
 
-    printf("O cliente nao esta cadastrado\n");
+    printf(AMARELO "O cliente nao esta cadastrado\n" RESET);
     return NULL;
 
 }
@@ -259,7 +262,7 @@ int remover_cliente(NodeCliente **root, char* cpf){
         free(temp->dados.dataDeNascimento);
         free(temp->dados.email);
         free(temp);
-        printf("Cliente removido!\n");
+        printf(AMARELO "Cliente removido!\n" RESET);
         return 1;
     }
 
@@ -271,7 +274,7 @@ int remover_cliente(NodeCliente **root, char* cpf){
     }
 
     if(temp==NULL){
-        printf("Cliente nao encontrado!\n");
+        printf(AMARELO "Cliente nao encontrado!\n" RESET);
         return 0;
     }
 
@@ -285,7 +288,7 @@ int remover_cliente(NodeCliente **root, char* cpf){
     free(temp->dados.dataDeNascimento);
     free(temp->dados.email);
     free(temp);
-    printf("Cliente removido!\n");
+    printf(AMARELO "Cliente removido!\n" RESET);
     return 1;
 
 }
@@ -307,15 +310,15 @@ void edita_nome(NodeCliente* root,char* nome, char* cpf){
         cliente->dados.nome = copy_string(nome);
         vira_maiuscula(cliente->dados.nome);  
 
-        printf("-------Dados do Cliente (Atualizado)-------\n");
-        printf("Nome: %s\n", cliente->dados.nome);
-        printf("CPF: %s\n", cliente->dados.cpf);
-        printf("Telefone: %s\n", cliente->dados.telefone);
-        printf("Data de Nascimento: %s\n", cliente->dados.dataDeNascimento);
-        printf("Email: %s\n", cliente->dados.email);
-        printf("------------------------------------------\n");
+        printf(AMARELO "-------Dados do Cliente (Atualizado)-------\n" RESET);
+        printf(AMARELO "Nome: %s\n" RESET, cliente->dados.nome);
+        printf(AMARELO "CPF: %s\n" RESET, cliente->dados.cpf);
+        printf(AMARELO "Telefone: %s\n" RESET, cliente->dados.telefone);
+        printf(AMARELO "Data de Nascimento: %s\n" RESET, cliente->dados.dataDeNascimento);
+        printf(AMARELO "Email: %s\n" RESET, cliente->dados.email);
+        printf(AMARELO "------------------------------------------\n" RESET);
     } else {
-        printf("Cliente nao encontrado!\n");
+        printf(AMARELO "Cliente nao encontrado!\n" RESET);
     }
 
 }

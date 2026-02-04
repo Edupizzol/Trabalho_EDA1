@@ -3,11 +3,14 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+#define ROXO "\x1b[35m"
+#define RESET "\x1b[0m"
+
 Carrinho* criar_carrinho(){
 
     Carrinho* carrinho = malloc(sizeof(Carrinho));
     if(carrinho==NULL){
-        printf("Erro ao criar carrinho!\n");
+        printf(ROXO "Erro ao criar carrinho!\n" RESET);
         return NULL;
     }
 
@@ -20,11 +23,11 @@ Carrinho* criar_carrinho(){
 void adicionar_dono_do_carrinho(Carrinho* carrinho, Cliente* cliente){
 
     if(cliente==NULL){
-        printf("Cliente nao existe!\n");
+        printf(ROXO "Cliente nao existe!\n" RESET);
         return;
     }
     if(carrinho==NULL){
-        printf("Carrinho nao existe!\n");
+        printf(ROXO "Carrinho nao existe!\n" RESET);
         return;
     }
 
@@ -36,15 +39,15 @@ void adicionar_dono_do_carrinho(Carrinho* carrinho, Cliente* cliente){
 int adicionar_produto_ao_carrinho(Carrinho* carrinho, Produto* produto, int quantidade){
 
     if(produto==NULL){
-        printf("Produto nao existe!\n");
+        printf(ROXO "Produto nao existe!\n" RESET);
         return 0;
     }
     if(carrinho==NULL){
-        printf("Carrinho nao existe!\n");
+        printf(ROXO "Carrinho nao existe!\n" RESET);
         return 0;
     }
     if(quantidade <= 0){
-        printf("Quantidade invalida!\n");
+        printf(ROXO "Quantidade invalida!\n" RESET);
         return 0;
     }
 
@@ -54,7 +57,7 @@ int adicionar_produto_ao_carrinho(Carrinho* carrinho, Produto* produto, int quan
             return 0;
         }
         existe->quantidade += quantidade;
-        printf("%dx '%s' adicionado ao existente no carrinho!\n", quantidade, produto->nome);
+        printf(ROXO "%dx '%s' adicionado ao existente no carrinho!\n" RESET, quantidade, produto->nome);
         return 1;
     }
 
@@ -65,7 +68,7 @@ int adicionar_produto_ao_carrinho(Carrinho* carrinho, Produto* produto, int quan
 
     Produto* novo = malloc(sizeof(Produto));
     if(novo==NULL){
-        printf("Erro ao alocar memoria para o Produto!\n");
+        printf(ROXO "Erro ao alocar memoria para o Produto!\n" RESET);
         exit(EXIT_FAILURE);
     }
 
@@ -93,27 +96,27 @@ int adicionar_produto_ao_carrinho(Carrinho* carrinho, Produto* produto, int quan
 void ver_produtos_no_carrinho(Carrinho* carrinho){
 
     if(carrinho == NULL || carrinho->produto == NULL){
-        printf("\nO seu carrinho esta vazio!\n");
+        printf(ROXO "\nO seu carrinho esta vazio!\n" RESET);
         return;
     }
 
-    printf("\n========== SEU CARRINHO ==========\n");
-    printf("Cliente: %s\n", carrinho->cliente->nome);
-    printf("----------------------------------\n");
+    printf(ROXO "\n========== SEU CARRINHO ==========\n" RESET);
+    printf(ROXO "Cliente: %s\n" RESET, carrinho->cliente->nome);
+    printf(ROXO "----------------------------------\n" RESET);
 
     float total = 0;
     Produto* atual = carrinho->produto;
 
     while(atual!=NULL){
-        printf("Codigo: %-5s | %-15s | R$ %7.2f | Quantidade: %d\n", atual->codigo, atual->nome, atual->preco, atual->quantidade);
+        printf(ROXO "Codigo: %-5s | %-15s | R$ %7.2f | Quantidade: %d\n" RESET, atual->codigo, atual->nome, atual->preco, atual->quantidade);
         
         total += atual->preco * atual->quantidade;
         atual = atual->next;  
     }
 
-    printf("----------------------------------\n");
-    printf("VALOR TOTAL:             R$ %7.2f\n", total);
-    printf("==================================\n\n");
+    printf(ROXO "----------------------------------\n" RESET);
+    printf(ROXO "VALOR TOTAL:             R$ %7.2f\n" RESET, total);
+    printf(ROXO "==================================\n\n" RESET);
 }
 
 Produto* procura_produto_no_carrinho(Carrinho* carrinho, char* codigo){
@@ -136,12 +139,12 @@ Produto* procura_produto_no_carrinho(Carrinho* carrinho, char* codigo){
 Produto* remove_produto_do_carrinho(Carrinho* carrinho, Produto* produto, int quantidade){
 
     if(carrinho==NULL || produto==NULL){
-        printf("Carrinho ou produto invalido!\n");
+        printf(ROXO "Carrinho ou produto invalido!\n" RESET);
         return NULL;
     }
 
     if(quantidade <= 0){
-        printf("Quantidade invalida!\n");
+        printf(ROXO "Quantidade invalida!\n" RESET);
         return NULL;
     }
 
@@ -154,12 +157,12 @@ Produto* remove_produto_do_carrinho(Carrinho* carrinho, Produto* produto, int qu
     }
 
     if(atual==NULL){
-        printf("Produto nao encontrado no carrinho!\n");
+        printf(ROXO "Produto nao encontrado no carrinho!\n" RESET);
         return NULL;
     }
 
     if(quantidade > atual->quantidade){
-        printf("Quantidade superior ao carrinho! Max: %d\n", atual->quantidade);
+        printf(ROXO "Quantidade superior ao carrinho! Max: %d\n" RESET, atual->quantidade);
         return NULL;
     }
 
@@ -173,11 +176,11 @@ Produto* remove_produto_do_carrinho(Carrinho* carrinho, Produto* produto, int qu
         } else {
             anterior->next = atual->next;
         }
-        printf("Produto '%s' removido completamente do carrinho!\n", atual->nome);
+        printf(ROXO "Produto '%s' removido completamente do carrinho!\n" RESET, atual->nome);
         return atual;
     }
 
-    printf("%d unidades de '%s' removidas do carrinho!\n", quantidade, atual->nome);
+    printf(ROXO "%d unidades de '%s' removidas do carrinho!\n" RESET, quantidade, atual->nome);
     return atual;
 
 }

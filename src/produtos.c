@@ -3,6 +3,9 @@
 #include <stdlib.h>
 #include <string.h>
 
+#define VERMELHO "\x1b[31m"
+#define RESET "\x1b[0m"
+
 char* alocarTexto(char* textoOriginal){
     if(textoOriginal == NULL){
         return NULL;
@@ -16,17 +19,17 @@ char* alocarTexto(char* textoOriginal){
 
 Produto* cadastrarProduto(Produto* head, char* codigo, char* nome, float preco, int quantidade) {
     if (codigo == NULL || nome == NULL || preco < 0 || quantidade < 0){
-        printf("Erro: Dados invalidos para cadastro do produto.\n");
+        printf(VERMELHO "Erro: Dados invalidos para cadastro do produto.\n" RESET);
         return head;
     }    
     if(buscarProduto(head, codigo) != NULL) {
-        printf("Erro: Produto com esse codigo %s ja esta cadastrado.\n", codigo);
+        printf(VERMELHO "Erro: Produto com esse codigo %s ja esta cadastrado.\n" RESET, codigo);
         return head;
     }
 
     Produto* novoProduto = (Produto*)malloc(sizeof(Produto));
     if(novoProduto == NULL) {
-        printf("Erro: Falha na alocacao de memoria para novo produto.\n");
+        printf(VERMELHO "Erro: Falha na alocacao de memoria para novo produto.\n" RESET);
         return head;
     }
 
@@ -34,7 +37,7 @@ Produto* cadastrarProduto(Produto* head, char* codigo, char* nome, float preco, 
     novoProduto->nome = alocarTexto(nome);
 
     if(novoProduto->codigo == NULL || novoProduto->nome == NULL) {
-        printf("Erro: Falha na alocacao de memoria para dados do produto.\n");
+        printf(VERMELHO "Erro: Falha na alocacao de memoria para dados do produto.\n" RESET);
         free(novoProduto->codigo);
         free(novoProduto->nome);
         free(novoProduto);
@@ -66,13 +69,13 @@ Produto* cadastrarProduto(Produto* head, char* codigo, char* nome, float preco, 
 void listarProdutos(Produto* head) {
     Produto* atual = head;
     if (atual == NULL) {
-        printf("Nenhum produto cadastrado.\n");
+        printf(VERMELHO "Nenhum produto cadastrado.\n" RESET);
         return;
     }
     while (atual != NULL) {
-        printf("-------Produtos-------\n");
-        printf("Codigo: %s\nNome: %s\nPreco: %.2f\nQuantidade: %d\n", atual->codigo, atual->nome, atual->preco, atual->quantidade);
-        printf("----------------------\n");
+        printf(VERMELHO "-------Produtos-------\n" RESET);
+        printf(VERMELHO "Codigo: %s\nNome: %s\nPreco: %.2f\nQuantidade: %d\n" RESET, atual->codigo, atual->nome, atual->preco, atual->quantidade);
+        printf(VERMELHO "----------------------\n" RESET);
         atual = atual->next;
     }
 }
@@ -99,14 +102,14 @@ void editarDadosProduto(Produto* head, char* codigo, char* novoNome, float novoP
             atual->nome = alocarTexto(novoNome);
             atual->preco = novoPreco;
             atual->quantidade = novaQuantidade;
-            printf("Produto %s atualizado com sucesso!\n", codigo);
+            printf(VERMELHO "Produto %s atualizado com sucesso!\n" RESET, codigo);
             return; 
         }
 
         atual=atual->next;
     }
 
-    printf("Erro: Produto com codigo %s nao encontrado.\n", codigo);
+    printf(VERMELHO "Erro: Produto com codigo %s nao encontrado.\n" RESET, codigo);
     return;
 
 }
@@ -121,7 +124,7 @@ int removerProduto(Produto** head, char* codigo) {
     }
 
     if (atual == NULL) {
-        printf("Produto com codigo %s nao encontrado.\n", codigo);
+        printf(VERMELHO "Produto com codigo %s nao encontrado.\n" RESET, codigo);
         return 0;
     }
 
@@ -134,17 +137,17 @@ int removerProduto(Produto** head, char* codigo) {
     free(atual->codigo);
     free(atual->nome);
     free(atual); // libera o espaco q o produto ocupava
-    printf("Produto com codigo %s removido.\n", codigo);
+    printf(VERMELHO "Produto com codigo %s removido.\n" RESET, codigo);
     return 1;
 }
 
 void incrementarEstoque(Produto* produto, int quantidade) { // n precisa do codigo como parametro
     if (produto == NULL || quantidade < 0) {
-        printf("Erro: Produto invalido ou quantidade negativa para incremento.\n");
+        printf(VERMELHO "Erro: Produto invalido ou quantidade negativa para incremento.\n" RESET);
         return;
     }
     produto->quantidade += quantidade;
-    printf("Estoque do produto %s incrementado em %d. Novo estoque: %d\n", produto->codigo, quantidade, produto->quantidade);
+    printf(VERMELHO "Estoque do produto %s incrementado em %d. Novo estoque: %d\n" RESET, produto->codigo, quantidade, produto->quantidade);
 }
 void liberar_todos_produtos(Produto** head){
     
@@ -170,14 +173,14 @@ void liberar_todos_produtos(Produto** head){
 }
 int decrementarEstoque(Produto* produto, int quantidade) {
     if (produto == NULL || quantidade < 0) {
-        printf("Erro: Produto invalido ou quantidade negativa para decremento.\n");
+        printf(VERMELHO "Erro: Produto invalido ou quantidade negativa para decremento.\n" RESET);
         return 0;
     }
     if (produto->quantidade < quantidade) {
-        printf("Erro: Estoque insuficiente para o produto %s. Estoque atual: %d, Tentativa de decremento: %d\n", produto->codigo, produto->quantidade, quantidade);
+        printf(VERMELHO "Erro: Estoque insuficiente para o produto %s. Estoque atual: %d, Tentativa de decremento: %d\n" RESET, produto->codigo, produto->quantidade, quantidade);
         return 0;
     }
     produto->quantidade -= quantidade;
-    printf("Estoque do produto %s decrementado em %d. Novo estoque: %d\n", produto->codigo, quantidade, produto->quantidade);
+    printf(VERMELHO "Estoque do produto %s decrementado em %d. Novo estoque: %d\n" RESET, produto->codigo, quantidade, produto->quantidade);
     return 1;
 }
