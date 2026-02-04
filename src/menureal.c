@@ -266,10 +266,10 @@ void tela_listar_clientes(){
 
 void tela_cadastro_produto() {
     if (menu.input_cont == 0) {
-        menu.inputs[0] = criar_text_input((Rectangle){ 200, 100, 300, 35 });
-        menu.inputs[1] = criar_text_input((Rectangle){ 200, 170, 300, 35 });
-        menu.inputs[2] = criar_text_input((Rectangle){ 200, 240, 300, 35 });
-        menu.inputs[3] = criar_text_input((Rectangle){ 200, 310, 300, 35 });
+        menu.inputs[0] = criar_input((Rectangle){ 200, 100, 300, 35 });
+        menu.inputs[1] = criar_input((Rectangle){ 200, 170, 300, 35 });
+        menu.inputs[2] = criar_input((Rectangle){ 200, 240, 300, 35 });
+        menu.inputs[3] = criar_input((Rectangle){ 200, 310, 300, 35 });
         menu.input_cont = 4;
     }
     
@@ -303,6 +303,29 @@ void tela_cadastro_produto() {
     if (GuiButton((Rectangle){ 350, 380, 100, 40 }, "Voltar")) {
         menu.tela = 0;
         limpar_inputs(&menu);
+    }
+    
+}
+
+void tela_listar_produtos() {
+    
+    DrawText("LISTA DE PRODUTOS", 150, 20, 25, VERMELHO);
+    
+    int y = 80;
+    Produto* atual = menu.produto;
+    while (atual != NULL && y < 600){
+
+        DrawText(TextFormat("Codigo: %s | Nome: %s | Preco: R$%.2f | Qtd: %d", 
+        atual->codigo, atual->nome, atual->preco, atual->quantidade), 50, y, 15, BLACK);
+        y += 30;
+        atual = atual->next;
+        
+    }
+    
+    adicionar_registro(menu.historico, "Lista de produtos exibida.");
+    
+    if (GuiButton((Rectangle){ 200, 650, 100, 40 }, "Voltar")) {
+        menu.tela = 0;
     }
     
 }
