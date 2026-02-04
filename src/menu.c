@@ -196,75 +196,89 @@ void busca_cliente_menu(NodeCliente* cliente, Historico* historico, char* cpf){
 int edita_cliente_menu(NodeCliente* cliente, Historico* historico, char* nome, char* cpf, char* senha, char* dataDeNascimento, char* email){
 
     printf(VERDE "Qual Dado Deseja Editar:\n" RESET);
-            printf(VERDE "1: Nome\n" RESET);
-            printf(VERDE "2: CPF\n" RESET);
-            printf(VERDE "3: Telefone\n" RESET);
-            printf(VERDE "4: Senha\n" RESET);
-            printf(VERDE "5: Data de Nascimento\n" RESET);
-            printf(VERDE "6: email\n" RESET);
+        printf(VERDE "1: Nome\n" RESET);
+        printf(VERDE "2: CPF\n" RESET);
+        printf(VERDE "3: Telefone\n" RESET);
+        printf(VERDE "4: Senha\n" RESET);
+        printf(VERDE "5: Data de Nascimento\n" RESET);
+        printf(VERDE "6: email\n" RESET);
 
-            int numero;
-            scanf("%d", &numero);
+        int numero;
+        scanf("%d", &numero);
+        getchar();
+
+        printf(VERDE "Digite o CPF Original do Cliente:\n" RESET);
+        scanf("%s", cpf);
+        getchar();
+
+        int verifica = verifica_cpf(cliente,cpf);
+        if(verifica == 1){
+            printf(VERDE "Cliente nao encontrado!\n" RESET);
+            aguardar_enter_e_limpar();
+            return 1;
+        }
+
+        if(numero==1){
+            printf(VERDE "Digite o Novo Nome:\n" RESET);
+            scanf(" %[^\n]", nome);
+            getchar();
+            edita_nome(cliente,nome,cpf);
+        }
+        else if(numero==2){
+            printf(VERDE "Digite o Novo CPF:\n" RESET);
+            char* cpfNovo = malloc(12*sizeof(char));
+            if(cpfNovo==NULL){printf(VERDE "Erro de alocacao de memoria\n" RESET);return 1;}
+            scanf("%11s", cpfNovo);
             getchar();
 
-            printf(VERDE "Digite o CPF Original do Cliente:\n" RESET);
-            scanf("%s", cpf);
-
-            int verifica = verifica_cpf(cliente,cpf);
-            if(verifica == 1){
-                printf(VERDE "Cliente nao encontrado!\n" RESET);
+            if(verifica_cpf(cliente,cpfNovo) == 0){
+                printf(VERDE "Erro: CPF ja cadastrado!\n" RESET);
+                free(cpfNovo);
                 aguardar_enter_e_limpar();
                 return 1;
             }
+        edita_cpf(cliente,cpfNovo,cpf);
+        free(cpfNovo);
+        }
+        else if(numero==3){
+            char* telefone = malloc(15*sizeof(char));
+            if(telefone==NULL){printf(VERDE "Erro de alocacao de memoria\n" RESET);return 1;}
+            printf(VERDE "Digite o Novo Telefone:\n" RESET);
+            scanf(" %14[^\n]", telefone);
+            getchar();
+            edita_telefone(cliente,telefone,cpf);
+            free(telefone);
+        }
+        else if(numero==4){
+            printf(VERDE "Digite a Nova Senha:\n" RESET);
+            scanf(" %19s", senha);
+            getchar();
+            edita_senha(cliente,senha,cpf);
+        }
+        else if(numero==5){
+            char* dataDeNascimento = malloc(15*sizeof(char));
+            if(dataDeNascimento==NULL){printf(VERDE "Erro de alocacao de memoria\n" RESET);return 1;}
+            printf(VERDE "Digite a Nova Data de Nascimento:\n" RESET);
+            scanf(" %14[^\n]", dataDeNascimento);
+            getchar();
+            edita_data_de_nascimento(cliente,dataDeNascimento,cpf);
+            free(dataDeNascimento);
+        }
+        else if(numero==6){
+            char* email = malloc(100*sizeof(char));
+            if(email==NULL){printf(VERDE "Erro de alocacao de memoria\n" RESET);return 1;}
+            printf(VERDE "Digite o Novo email:\n" RESET);
+            scanf("%s", email);
+            getchar();
+            edita_email(cliente,email,cpf);
+            free(email);
+        }
+        salvar_clientes(cliente, CLIENTES_FILE);
+        adicionar_registro(historico, "Dados do cliente editados.");
 
-            if(numero==1){
-                printf(VERDE "Digite o Novo Nome:\n" RESET);
-                scanf(" %[^\n]", nome);
-                edita_nome(cliente,nome,cpf);
-            }
-            else if(numero==2){
-                printf(VERDE "Digite o Novo CPF:\n" RESET);
-                char* cpfNovo = malloc(12*sizeof(char));
-                if(cpfNovo==NULL){printf(VERDE "Erro de alocacao de memoria\n" RESET);return 1;}
-                scanf("%11s", cpfNovo);
-                edita_cpf(cliente,cpfNovo,cpf);
-                free(cpfNovo);
-            }
-            else if(numero==3){
-                char* telefone = malloc(15*sizeof(char));
-                if(telefone==NULL){printf(VERDE "Erro de alocacao de memoria\n" RESET);return 1;}
-                printf(VERDE "Digite o Novo Telefone:\n" RESET);
-                scanf(" %14[^\n]", telefone);
-                edita_telefone(cliente,telefone,cpf);
-                free(telefone);
-            }
-            else if(numero==4){
-                printf(VERDE "Digite a Nova Senha:\n" RESET);
-                scanf(" %19s", senha);
-                edita_senha(cliente,senha,cpf);
-            }
-            else if(numero==5){
-                char* dataDeNascimento = malloc(15*sizeof(char));
-                if(dataDeNascimento==NULL){printf(VERDE "Erro de alocacao de memoria\n" RESET);return 1;}
-                printf(VERDE "Digite a Nova Data de Nascimento:\n" RESET);
-                scanf(" %14[^\n]", dataDeNascimento);
-                edita_data_de_nascimento(cliente,dataDeNascimento,cpf);
-                free(dataDeNascimento);
-            }
-            else if(numero==6){
-                char* email = malloc(100*sizeof(char));
-                if(email==NULL){printf(VERDE "Erro de alocacao de memoria\n" RESET);return 1;}
-                printf(VERDE "Digite o Novo email:\n" RESET);
-                scanf("%s", email);
-                edita_email(cliente,email,cpf);
-                free(email);
-            }
-            salvar_clientes(cliente, CLIENTES_FILE);
-            printf(VERDE "Dados Atualizados com Sucesso\n" RESET);
-            adicionar_registro(historico, "Dados do cliente editados.");
-
-            aguardar_enter_e_limpar();
-            return 0;
+    printf(VERDE "Dados Atualizados com Sucesso\n" RESET);
+    aguardar_enter_e_limpar();
+    return 0;
 }
 
 void listar_clientes_menu(NodeCliente* cliente, Historico* historico){

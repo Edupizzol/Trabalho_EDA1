@@ -46,7 +46,7 @@ NodeCliente* carregar_clientes(const char *filename) {
     if(email==NULL){printf("Erro de alocacao de memoria\n");free(cpf);free(nome);free(senha);free(telefone);free(dataDeNascimento);fclose(fp);return NULL;}
 
     
-    while (fscanf(fp, " %99[^;];%11[^;];%19[^;];%14[^;];%14[^;];%99[^\n]\n", nome, cpf, senha, telefone, dataDeNascimento, email) == 6){
+    while (fscanf(fp, " %99[^;];%11[^;];%14[^;];%19[^;];%14[^;];%99[^\n]\n", nome, cpf, telefone, senha, dataDeNascimento, email) == 6){
         NodeCliente *novo = (NodeCliente*)malloc(sizeof(NodeCliente));
         
         novo->dados.nome = copy_string(nome);

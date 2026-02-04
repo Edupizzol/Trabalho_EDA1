@@ -380,7 +380,7 @@ void edita_email(NodeCliente* root, char* email, char* cpf){
 
 int verifica_cpf(NodeCliente* root, char* string){
 
-    while(root!=NULL){
+    while(root!=NULL){ //achou
         if(compara_strings(root->dados.cpf, string)==0){
             return 0;
         }
