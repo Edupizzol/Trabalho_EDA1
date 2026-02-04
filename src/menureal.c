@@ -264,7 +264,48 @@ void tela_listar_clientes(){
 
 }
 
+void tela_cadastro_produto() {
+    if (menu.input_cont == 0) {
+        menu.inputs[0] = criar_text_input((Rectangle){ 200, 100, 300, 35 });
+        menu.inputs[1] = criar_text_input((Rectangle){ 200, 170, 300, 35 });
+        menu.inputs[2] = criar_text_input((Rectangle){ 200, 240, 300, 35 });
+        menu.inputs[3] = criar_text_input((Rectangle){ 200, 310, 300, 35 });
+        menu.input_cont = 4;
+    }
+    
+    DrawText("CADASTRO DE PRODUTO", 150, 20, 25, VERMELHO);
+    
+    desenhar_text_input(&menu.inputs[0], "Codigo:");
+    desenhar_text_input(&menu.inputs[1], "Nome:");
+    desenhar_text_input(&menu.inputs[2], "Preco:");
+    desenhar_text_input(&menu.inputs[3], "Quantidade:");
+    
+    if(GuiButton((Rectangle){ 200, 380, 100, 40 }, "Salvar")){
 
+        if (strlen(menu.inputs[0].texto) > 0) {
+            float preco = TextToFloat(menu.inputs[2].texto);
+            int quantidade = atoi(menu.inputs[3].texto);
+            menu.produto = cadastrarProduto(
+                menu.produto,
+                menu.inputs[0].texto,
+                menu.inputs[1].texto,
+                preco,
+                quantidade
+            );
+            salvar_produtos(menu.produto, PRODUTOS_FILE);
+            adicionar_registro(menu.historico, "Produto cadastrado.");
+            menu.tela = 0;
+            limpar_inputs(&menu);
+        }
+
+    }
+    
+    if (GuiButton((Rectangle){ 350, 380, 100, 40 }, "Voltar")) {
+        menu.tela = 0;
+        limpar_inputs(&menu);
+    }
+    
+}
 
 
 
