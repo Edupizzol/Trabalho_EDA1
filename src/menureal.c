@@ -1,10 +1,23 @@
+#define RAYGUI_NO_IMPLEMENTATION
 #include "frontend.h"
+
+void tela_menu_principal();
+void tela_cadastro_cliente();
+void tela_busca_cliente();
+void tela_edita_cliente();
+void tela_listar_clientes();
+void tela_deleta_cliente();
+void tela_cadastro_produto();
+void tela_listar_produtos();
+void tela_edita_produto();
+void tela_remove_produto();
+void tela_historico();
 
 Menu menu;
 
 void tela_menu_principal() {
     
-    Drawtexto("========== MENU PRINCIPAL ==========", 200, 30, 25, VERDE);
+    DrawText("========== MENU PRINCIPAL ==========", 200, 30, 25, VERDE);
     
     int button_x = 150;
     int button_y = 100;
@@ -61,6 +74,73 @@ void tela_menu_principal() {
         menu.tela = -1;
     }
     
+}
+
+int menu_real() {
+    menu.tela = 0;
+    menu.cliente = carregar_clientes(CLIENTES_FILE);
+    menu.produto = carregar_produtos(PRODUTOS_FILE);
+    menu.historico = criar_historico();
+    menu.input_cont = 0;
+    
+    InitWindow(SCREEN_WIDTH, SCREEN_HEIGHT, "Sistema de Gestao - Interface Grafica");
+    SetTargetFPS(60);
+    
+    while(!WindowShouldClose() && menu.tela != -1){
+
+        BeginDrawing();
+        ClearBackground(RAYWHITE);
+
+        switch (menu.tela) {
+            case 0:
+                tela_menu_principal();
+                break;
+            case 1:
+                tela_cadastro_cliente();
+                break;
+            case 2:
+                tela_busca_cliente();
+                break;
+            case 3:
+                tela_edita_cliente();
+                break;
+            case 4:
+                tela_listar_clientes();
+                break;
+            case 5:
+                tela_deleta_cliente();
+                break;
+            case 6:
+                tela_cadastro_produto();
+                break;
+            case 7:
+                tela_listar_produtos();
+                break;
+            case 8:
+                tela_remove_produto();
+                break;
+            case 9:
+                tela_edita_produto();
+                break;
+            case 11:
+                tela_historico();
+                break;
+            default:
+                tela_menu_principal();
+        }
+
+        EndDrawing();
+    }
+    
+    salvar_clientes(menu.cliente, CLIENTES_FILE);
+    salvar_produtos(menu.produto, PRODUTOS_FILE);
+    limpar_historico(menu.historico);
+    free(menu.historico);
+    liberar_todos_clientes(&menu.cliente);
+    liberar_todos_produtos(&menu.produto);
+    
+    CloseWindow();
+    return 0;
 }
 
 void tela_cadastro_cliente(){
@@ -275,10 +355,10 @@ void tela_cadastro_produto() {
     
     DrawText("CADASTRO DE PRODUTO", 150, 20, 25, VERMELHO);
     
-    desenhar_text_input(&menu.inputs[0], "Codigo:");
-    desenhar_text_input(&menu.inputs[1], "Nome:");
-    desenhar_text_input(&menu.inputs[2], "Preco:");
-    desenhar_text_input(&menu.inputs[3], "Quantidade:");
+    desenhar_input_em_texto(&menu.inputs[0], "Codigo:");
+    desenhar_input_em_texto(&menu.inputs[1], "Nome:");
+    desenhar_input_em_texto(&menu.inputs[2], "Preco:");
+    desenhar_input_em_texto(&menu.inputs[3], "Quantidade:");
     
     if(GuiButton((Rectangle){ 200, 380, 100, 40 }, "Salvar")){
 

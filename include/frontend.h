@@ -5,7 +5,9 @@
 #ifndef TextToFloat
     #define TextToFloat atof
 #endif
-#define RAYGUI_IMPLEMENTATION
+#ifndef RAYGUI_NO_IMPLEMENTATION
+    #define RAYGUI_IMPLEMENTATION
+#endif
 #include "raygui.h"
 #include "../include/menu.h"
 
