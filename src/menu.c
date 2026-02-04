@@ -27,6 +27,23 @@ static void aguardar_enter_e_limpar() {
     limpar_tela();
 }
 
+static void hard_reset_CSVs(NodeCliente** cliente, Produto** produto, Historico* historico){
+    liberar_todos_clientes(cliente);
+    liberar_todos_produtos(produto);
+    limpar_historico(historico);
+    
+    FILE* fc = fopen(CLIENTES_FILE, "w");
+    if(fc != NULL) fclose(fc);
+
+    FILE* fp = fopen(PRODUTOS_FILE, "w");
+    if(fp != NULL) fclose(fp);
+    
+    *cliente = carregar_clientes(CLIENTES_FILE);
+    *produto = carregar_produtos(PRODUTOS_FILE);
+    
+    adicionar_registro(historico, "Hard Reset realizado - todos os dados foram limpos.");
+}
+
 void exibir_menu(){
 
     printf(VERDE "\n" RESET);
@@ -44,6 +61,7 @@ void exibir_menu(){
     printf(VERDE "10 : Deletar Produto\n" RESET);
     printf(VERDE "11 : Comecar as Compras\n" RESET);
     printf(VERDE "12 : Ver Historico de Operacoes\n" RESET);
+    printf(VERDE "13 : Hard Reset (limpar todos os dados salvos)\n" RESET);
     printf(VERDE "===================================\n" RESET);
     printf(VERDE "Escolha uma opcao: " RESET);
 
@@ -126,6 +144,11 @@ int menu(){
             break;
         case 12:
             exibir_historico(historico);
+            aguardar_enter_e_limpar();
+            break;
+        case 13:
+            hard_reset_CSVs(&cliente, &produto, historico);
+            printf(VERDE "Hard Reset concluido! CSVs de produtos e clientes foram limpos.\n" RESET);
             aguardar_enter_e_limpar();
             break;
         default:
