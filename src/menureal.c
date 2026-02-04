@@ -610,8 +610,85 @@ void tela_adicionar_produto_no_carrinho(){
     }
     
     if(GuiButton((Rectangle){ 350, 350, 100, 40 }, "Voltar")) {
-        menu.tela = 12;
+        menu.tela = 1;
         limpar_inputs(&menu);
     }
 
 }
+
+void tela_adicionar_produto_no_carrinho(){
+
+    if(menu.input_cont==0){
+        menu.inputs[0] = criar_input((Rectangle){ 200, 150, 300, 35 });
+        menu.input_cont = 1;
+    }
+
+    DrawText("PROCURAR PRODUTO:", 150, 20, 25, VERDE);
+    desenhar_input_em_texto(&menu.inputs[0], "Codigo do Produto:");
+
+    if(GuiButton((Rectangle){ 200, 250, 100, 40 }, "Procurar")){
+        if(strlen(menu.inputs[0].texto)>0){
+            Produto* encontrado = procura_produto_no_carrinho(menu.carrinho, menu.inputs[0].texto);
+            if(encontrado != NULL){
+
+                DrawText(TextFormat("Produto: %s", encontrado->nome), 200, 350, 16, VERDE);
+                DrawText(TextFormat("Preco: R$ %.2f", encontrado->preco), 200, 380, 16, BLACK);
+                DrawText(TextFormat("Quantidade: %d", encontrado->quantidade), 200, 410, 16, BLACK);
+                adicionar_registro(menu.historico, "Produto buscado no carrinho.");
+
+            } 
+            else{
+                DrawText("Produto nao encontrado no carrinho!", 200, 350, 16, VERMELHO);
+            }
+        }
+    }
+    
+    if(GuiButton((Rectangle){ 350, 250, 100, 40 }, "Voltar")) {
+        menu.tela = 11;
+        limpar_inputs(&menu);
+    }
+
+}
+
+void tela_remover_produto_carrinho(){
+
+    if(menu.input_cont==0){
+        menu.inputs[0]=criar_input((Rectangle){ 200, 150, 300, 35 });
+        menu.inputs[1]=criar_input((Rectangle){ 200, 220, 300, 35 });
+        menu.input_cont=2;
+    }
+    
+    DrawText("REMOVER PRODUTO", 150, 20, 25, VERDE);
+    
+    desenhar_input_em_texto(&menu.inputs[0], "Codigo do Produto:");
+    desenhar_input_em_texto(&menu.inputs[1], "Quantidade a Remover:");
+    
+    if(GuiButton((Rectangle){ 200, 320, 100, 40 }, "Remover")) {
+        if(strlen(menu.inputs[0].texto)>0 && strlen(menu.inputs[1].texto)>0){
+
+            Produto* produto_carrinho = procura_produto_no_carrinho(menu.carrinho, menu.inputs[0].texto);
+            if(produto_carrinho != NULL) {
+
+                int qtd_remover = atoi(menu.inputs[1].texto);
+                Produto* produto_db = buscarProduto(menu.produto, menu.inputs[0].texto);
+
+                if(remove_produto_do_carrinho(menu.carrinho, produto_db, qtd_remover) != NULL){
+                    adicionar_registro(menu.historico, "Produto removido do carrinho.");
+                    salvar_produtos(menu.produto, PRODUTOS_FILE);
+                    menu.tela = 21;
+                    limpar_inputs(&menu);
+                }
+
+            } 
+            else{
+                mostrar_aviso(&menu, "Produto nao encontrado no carrinho!");
+            }
+        }
+    }
+    
+    if(GuiButton((Rectangle){ 350, 320, 100, 40 }, "Voltar")) {
+        menu.tela = 21;
+        limpar_inputs(&menu);
+    }
+}
+
