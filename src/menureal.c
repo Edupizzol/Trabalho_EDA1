@@ -160,6 +160,62 @@ void tela_busca_cliente(){
     
 }
 
+void tela_edita_cliente() {
+    if(menu.input_cont == 0){
+        menu.inputs[0] = criar_input((Rectangle){ 200, 100, 300, 35 });
+        menu.inputs[1] = criar_input((Rectangle){ 200, 170, 300, 35 });
+        menu.inputs[2] = criar_input((Rectangle){ 200, 240, 300, 35 });
+        menu.inputs[3] = criar_input((Rectangle){ 200, 310, 300, 35 });
+        menu.inputs[4] = criar_input((Rectangle){ 200, 380, 300, 35 });
+        menu.inputs[5] = criar_input((Rectangle){ 200, 450, 300, 35 });
+        menu.inputs[6] = criar_input((Rectangle){ 200, 520, 300, 35 });
+        menu.input_cont = 7;
+    }
+    
+    DrawText("EDITAR CLIENTE", 150, 20, 25, AMARELO);
+    
+    desenhar_input_em_texto(&menu.inputs[0], "CPF Original:");
+    desenhar_input_em_texto(&menu.inputs[1], "Novo Nome:");
+    desenhar_input_em_texto(&menu.inputs[2], "Novo Telefone:");
+    desenhar_input_em_texto(&menu.inputs[3], "Nova Senha:");
+    desenhar_input_em_texto(&menu.inputs[4], "Nova Data (DD/MM/AAAA):");
+    desenhar_input_em_texto(&menu.inputs[5], "Novo Email:");
+    desenhar_input_em_texto(&menu.inputs[6], "Novo CPF:");
+    
+    if (GuiButton((Rectangle){ 200, 580, 100, 40 }, "Atualizar")) {
+        if (strlen(menu.inputs[0].texto) > 0) {
+            if(strlen(menu.inputs[1].texto) > 0){
+                edita_nome(menu.cliente, menu.inputs[1].texto, menu.inputs[0].texto);
+            }
+            if(strlen(menu.inputs[2].texto) > 0){
+                edita_telefone(menu.cliente, menu.inputs[2].texto, menu.inputs[0].texto);
+            }
+            if(strlen(menu.inputs[3].texto) > 0){
+                edita_senha(menu.cliente, menu.inputs[3].texto, menu.inputs[0].texto);
+            }
+            if(strlen(menu.inputs[4].texto) > 0){
+                edita_data_de_nascimento(menu.cliente, menu.inputs[4].texto, menu.inputs[0].texto);
+            }
+            if(strlen(menu.inputs[5].texto) > 0){
+                edita_email(menu.cliente, menu.inputs[5].texto, menu.inputs[0].texto);
+            }
+            if(strlen(menu.inputs[6].texto) > 0){
+                edita_cpf(menu.cliente, menu.inputs[6].texto, menu.inputs[0].texto);
+            }
+            salvar_clientes(menu.cliente, CLIENTES_FILE);
+            adicionar_registro(menu.historico, "Dados do cliente editados.");
+            menu.tela = 0;
+            limpar_inputs(&menu);
+        }
+    }
+    
+    if(GuiButton((Rectangle){ 350, 580, 100, 40 }, "Voltar")){
+        menu.tela = 0;
+        limpar_inputs(&menu);
+    }
+    
+}
+
 
 
 
