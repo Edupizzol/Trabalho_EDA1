@@ -1,9 +1,13 @@
 #include <stdio.h>
-#include <stdlib.h>
-#include "../include/menu.h"
+#include <stdlib.h> 
 #include "raylib.h"
+#ifndef TextToFloat
+    #define TextToFloat atof
+#endif
 #define RAYGUI_IMPLEMENTATION
 #include "raygui.h"
+#include "../include/menu.h"
+
 
 static const char* CLIENTES_FILE = "clientes.csv";
 static const char* PRODUTOS_FILE = "produtos.csv";
@@ -50,9 +54,8 @@ void exibir_menu(){
     printf(VERDE "Escolha uma opcao: " RESET);
 
 }
-
-int menu(){
-
+int menu() {
+    
     NodeCliente* cliente = carregar_clientes(CLIENTES_FILE);
     Produto* produto = carregar_produtos(PRODUTOS_FILE);
     Historico* historico = criar_historico();
@@ -60,81 +63,71 @@ int menu(){
     int n, quantidade;
     float preco;
     char* cpf = malloc(12*sizeof(char));
-    if(cpf==NULL){printf(VERDE "Erro de alocacao de memoria\n" RESET);return 1;}
     char* nome = malloc(100*sizeof(char));
-    if(nome==NULL){printf(VERDE "Erro de alocacao de memoria\n" RESET);return 1;}
     char* senha = malloc(20*sizeof(char));
-    if(senha==NULL){printf(VERDE "Erro de alocacao de memoria\n" RESET);return 1;}
-    char* telefone =  malloc(15*sizeof(char));
-    if(telefone==NULL){printf(VERDE "Erro de alocacao de memoria\n" RESET);return 1;}
+    char* telefone = malloc(15*sizeof(char));
     char* dataDeNascimento = malloc(15*sizeof(char));
-    if(dataDeNascimento==NULL){printf(VERDE "Erro de alocacao de memoria\n" RESET);return 1;}
     char* email = malloc(100*sizeof(char));
-    if(email==NULL){printf(VERDE "Erro de alocacao de memoria\n" RESET);return 1;}
-    
-    while(1){
-        exibir_menu();
-        scanf("%d", &n);
-        getchar();
 
-        switch (n)
-        {
-        case 0:
-            printf(VERDE "Execucao Finalizada!\n" RESET);
-            salvar_clientes(cliente, CLIENTES_FILE);
-            salvar_produtos(produto, PRODUTOS_FILE);
-            limpar_historico(historico);
-            free(historico);
-            liberar_todos_clientes(&cliente);
-            liberar_todos_produtos(&produto);
-            free(cpf);free(nome);free(senha);free(telefone);free(dataDeNascimento);free(email);
-            return 0;
-        case 1:
-            cadastra_cliente_menu(&cliente, historico, nome, cpf, senha, telefone ,dataDeNascimento, email);
-            break;
-        case 2:
+    InitWindow(600, 500, "Gerenciador EDA1 - Interface Grafica");
+    SetTargetFPS(60);
+
+    while (!WindowShouldClose()) {
+        BeginDrawing();
+        ClearBackground(RAYWHITE);
+
+        DrawText("SISTEMA DE GESTAO - MENU PRINCIPAL", 100, 20, 20, DARKGREEN);
+
+
+        if (GuiButton((Rectangle){ 50, 80, 230, 40 }, "01: Cadastrar Cliente")) {
+            cadastra_cliente_menu(&cliente, historico, nome, cpf, senha, telefone, dataDeNascimento, email);
+        }
+        if (GuiButton((Rectangle){ 50, 130, 230, 40 }, "02: Buscar Cliente")) {
             busca_cliente_menu(cliente, historico, cpf);
-            break;
-        case 3:
-            if(edita_cliente_menu(cliente, historico, nome, cpf, senha, dataDeNascimento, email) == 1){
-                continue;
-            }
-            break;
-        case 4:
+        }
+        if (GuiButton((Rectangle){ 50, 180, 230, 40 }, "03: Editar Cliente")) {
+            edita_cliente_menu(cliente, historico, nome, cpf, senha, dataDeNascimento, email);
+        }
+        if (GuiButton((Rectangle){ 50, 230, 230, 40 }, "04: Listar Clientes")) {
             listar_clientes_menu(cliente, historico);
-            break;
-        case 5:
+        }
+        if (GuiButton((Rectangle){ 50, 280, 230, 40 }, "05: Deletar Cliente")) {
             deletar_clientes_menu(&cliente, historico, cpf);
-            break;
-        case 6:
-            cadastrar_produto_menu(&produto, historico, senha, nome, preco, quantidade);
-            break;
-        case 7:
-            listar_produtos_menu(produto,historico);
-            break;
-        case 8:
-            remover_produto_menu(&produto, historico, senha);
-            break;
-        case 9:
-            editar_produto_menu(produto, historico, senha, nome);
-            break;
-        case 10:
-            if(iniciar_compras_menu(cliente, historico, produto, cpf, senha) == 1){
-                continue;
-            }
-            break;
-        case 11:
-            exibir_historico(historico);
-            aguardar_enter_e_limpar();
-            break;
-        default:
-            printf(VERDE "Opcao Invalida! Tente Novamente.\n" RESET);
-            aguardar_enter_e_limpar();
-            break;
         }
 
+
+        if (GuiButton((Rectangle){ 320, 80, 230, 40 }, "06: Novo Produto")) {
+            cadastrar_produto_menu(&produto, historico, senha, nome, preco, quantidade);
+        }
+        if (GuiButton((Rectangle){ 320, 130, 230, 40 }, "07: Listar Produtos")) {
+            listar_produtos_menu(produto, historico);
+        }
+        if (GuiButton((Rectangle){ 320, 180, 230, 40 }, "10: Começar Compras")) {
+            iniciar_compras_menu(cliente, historico, produto, cpf, senha);
+        }
+        if (GuiButton((Rectangle){ 320, 230, 230, 40 }, "11: Ver Histórico")) {
+            exibir_historico(historico);
+            aguardar_enter_e_limpar();
+        }
+
+   
+        if (GuiButton((Rectangle){ 185, 400, 230, 50 }, "00: FINALIZAR E SALVAR")) {
+            break; 
+        }
+
+        EndDrawing();
     }
 
+   
+    salvar_clientes(cliente, CLIENTES_FILE);
+    salvar_produtos(produto, PRODUTOS_FILE);
+    limpar_historico(historico);
+    free(historico);
+    liberar_todos_clientes(&cliente);
+    liberar_todos_produtos(&produto);
+    free(cpf); free(nome); free(senha); free(telefone); free(dataDeNascimento); free(email);
+    
+    CloseWindow(); 
     return 0;
 }
 
