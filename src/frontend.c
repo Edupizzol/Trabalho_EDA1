@@ -85,12 +85,23 @@ void desenhar_aviso(Menu* menu) {
     DrawRectangle(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT, (Color){0, 0, 0, 150});
     
     //desenha a caixinha com as bordas vermelhas
-    Rectangle aviso_box = (Rectangle){200, 250, 600, 150};
+    int box_width = 600;
+    int box_height = 150;
+    int box_x = (SCREEN_WIDTH - box_width) / 2;
+    int box_y = (SCREEN_HEIGHT - box_height) / 2;
+    Rectangle aviso_box = (Rectangle){ box_x, box_y, box_width, box_height };
     DrawRectangleRec(aviso_box, WHITE);
     DrawRectangleLinesEx(aviso_box, 3, VERMELHO);
     
     //aqui novamente adaptacao do printf pro frontend
-    DrawText("AVISO!", 450, 280, 25, VERMELHO);
-    DrawText(menu->aviso_mensagem, 220, 330, 18, BLACK);
-    DrawText(TextFormat("Retornando em %.1f s", menu->aviso_tempo), 350, 370, 14, GRAY);
+    int title_x = (SCREEN_WIDTH - MeasureText("AVISO!", 25)) / 2;
+    int title_y = box_y + 25;
+    DrawText("AVISO!", title_x, title_y, 25, VERMELHO);
+
+    int msg_x = (SCREEN_WIDTH - MeasureText(menu->aviso_mensagem, 18)) / 2;
+    DrawText(menu->aviso_mensagem, msg_x, box_y + 75, 18, BLACK);
+
+    const char* tempo_text = TextFormat("Retornando em %.1f s", menu->aviso_tempo);
+    int tempo_x = (SCREEN_WIDTH - MeasureText(tempo_text, 14)) / 2;
+    DrawText(tempo_text, tempo_x, box_y + 115, 14, GRAY);
 }
