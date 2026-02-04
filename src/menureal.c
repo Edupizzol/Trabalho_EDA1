@@ -109,6 +109,58 @@ void tela_cadastro_cliente(){
     
 }
 
+void tela_busca_cliente(){
+    if(menu.input_cont==0){
+        menu.inputs[0]=criar_input((Rectangle){200, 150, 300, 35});
+        menu.input_cont=1;
+    }
+    
+    DrawText("BUSCAR CLIENTE", 150, 20, 25, AMARELO);
+    
+    desenhar_input_em_texto(&menu.inputs[0], "CPF:");
+    
+    if(GuiButton((Rectangle){200, 250, 100, 40}, "Buscar")){
+        NodeCliente* encontrado = busca_cliente(menu.cliente, menu.inputs[0].texto);
+        if(encontrado != NULL){
+            adicionar_registro(menu.historico, "Cliente buscado.");
+            menu.resultado_visivel = true;
+            menu.resultado_sucesso = true;
+        } 
+        else{
+            menu.resultado_visivel = true;
+            menu.resultado_sucesso = false;
+        }
+    }
+    
+    if(menu.resultado_visivel){
+        Color cor;
+        const char* msg;
+
+        if(menu.resultado_sucesso){
+            cor=GREEN;
+            msg="Cliente encontrado!";
+            NodeCliente* dados = busca_cliente(menu.cliente, menu.inputs[0].texto);
+            if(dados != NULL){
+                DrawText(TextFormat("Nome: %s", dados->dados.nome), 200, 350, 20, BLACK);
+                DrawText(TextFormat("Email: %s", dados->dados.email), 200, 380, 20, DARKGRAY);
+            }
+        } 
+        else{
+            cor=RED;
+            msg="Cliente não encontrado!";
+        }
+        DrawText(msg, 200, 320, 20, cor);
+    }
+    
+    if(GuiButton((Rectangle){ 350, 250, 100, 40 }, "Voltar")){
+        menu.tela = 0;
+        menu.resultado_visivel = 0;
+        limpar_inputs(&menu);
+    }
+    
+}
+
+
 
 
 

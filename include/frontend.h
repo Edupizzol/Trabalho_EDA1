@@ -32,6 +32,8 @@ typedef struct Menu{
     Historico* historico;
     texto inputs[10];
     int input_cont;
+    bool resultado_visivel;
+    bool resultado_sucesso;
 }Menu;
 
 texto criar_input(Rectangle bounds);
