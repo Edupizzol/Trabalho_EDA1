@@ -13,7 +13,7 @@ void limpar_tela() {
     fflush(stdout);
     #ifdef _WIN32
         system("cls");
-    #else
+    #else // serve pra MacOs e linux
         system("clear");
     #endif
 }
