@@ -12,6 +12,11 @@ void tela_listar_produtos();
 void tela_edita_produto();
 void tela_remove_produto();
 void tela_historico();
+void tela_login_compras();
+void tela_carrinho_compras();
+void tela_adicionar_produto_carrinho();
+void tela_procurar_produto_carrinho();
+void tela_remover_produto_carrinho();
 
 Menu menu;
 
@@ -70,6 +75,10 @@ void tela_menu_principal() {
         menu.tela = 11;
         limpar_inputs(&menu);
     }
+    if (GuiButton((Rectangle){ button_x, button_y + spacing * 6, 700, 80 }, "INICIAR COMPRAS")) {
+        menu.tela = 20;
+        limpar_inputs(&menu);
+    }
     if (GuiButton((Rectangle){ button_x + 350, button_y + spacing * 5, button_width, button_height }, "00: Sair")) {
         menu.tela = -1;
     }
@@ -84,7 +93,7 @@ int menu_real() {
     menu.input_cont = 0;
     menu.aviso_visivel = false;
     menu.aviso_tempo = 0;
-    memset(menu.aviso_mensagem, 0, 256);
+    memset(menu.aviso_mensagem, 0, 200);
     
     InitWindow(SCREEN_WIDTH, SCREEN_HEIGHT, "Sistema de Gestao - Interface Grafica");
     SetTargetFPS(60);
@@ -517,3 +526,40 @@ void tela_historico() {
     
 }
 
+void tela_login(){
+
+    if(menu.input_cont==0){
+        menu.inputs[0]=criar_input((Rectangle){200,150,300,35});
+        menu.inputs[1]=criar_input((Rectangle){200,150,300,35});
+        menu.input_cont=2;
+    }
+
+    DrawText("LOGIN", 150, 20, 25, VERDE);
+
+    desenhar_input_em_texto(&menu.inputs[0], "CPF");
+    desenhar_input_em_texto(&menu.inputs[1], "SENHA");
+
+    if(GuiButton((Rectangle){ 200, 350, 100, 40 }, "Entrar")){
+        if(strlen(menu.inputs[0].texto)>0 && strlen(menu.inputs[1].texto)>0){
+            NodeCliente* cliente_encontrado = busca_cliente(menu.cliente, menu.inputs[0].texto);
+            
+            if(cliente_encontrado != NULL){
+                if(login(menu.cliente, menu.inputs[0].texto, menu.inputs[1].texto) == 0) {
+                    menu.cliente_logado = cliente_encontrado;
+                    menu.carrinho = criar_carrinho();
+                    adicionar_dono_do_carrinho(menu.carrinho, &cliente_encontrado->dados);
+                    adicionar_registro(menu.historico, "Usuario fez login no modo compra.");
+                    menu.tela = 21;
+                    limpar_inputs(&menu);
+                }
+                else{
+                    mostrar_aviso(&menu, "Senha incorreta!");
+                }
+            }
+            else {
+                mostrar_aviso(&menu, "CPF nao encontrado!");
+            }
+        }
+    }
+
+}

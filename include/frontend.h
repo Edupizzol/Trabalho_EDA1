@@ -10,6 +10,7 @@
 #endif
 #include "raygui.h"
 #include "../include/menu.h"
+#include "../include/carrinho.h"
 
 static const char* CLIENTES_FILE = "clientes.csv";
 static const char* PRODUTOS_FILE = "produtos.csv";
@@ -33,11 +34,13 @@ typedef struct Menu{
     Produto* produto;
     Historico* historico;
     texto inputs[10];
+    Carrinho* carrinho;
+    NodeCliente* cliente_logado;
     int input_cont;
     bool resultado_visivel;
     bool resultado_sucesso;
     bool aviso_visivel;
-    char aviso_mensagem[200];
+    char aviso_mensagem[256];
     float aviso_tempo;
 }Menu;
 

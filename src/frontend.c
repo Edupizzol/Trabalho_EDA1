@@ -70,8 +70,7 @@ void mostrar_aviso(Menu* menu, const char* mensagem) {
 }
 
 void desenhar_aviso(Menu* menu) {
-    if (!menu->aviso_visivel) return;
-    
+    if(!menu->aviso_visivel){return;};
     menu->aviso_tempo -= GetFrameTime();
     
     if (menu->aviso_tempo <= 0) {
@@ -81,12 +80,15 @@ void desenhar_aviso(Menu* menu) {
         return;
     }
     
+    //coloca um fundo escuro
     DrawRectangle(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT, (Color){0, 0, 0, 150});
     
+    //desenha a caixinha com as bordas vermelhas
     Rectangle aviso_box = (Rectangle){200, 250, 600, 150};
     DrawRectangleRec(aviso_box, WHITE);
     DrawRectangleLinesEx(aviso_box, 3, VERMELHO);
     
+    //aqui novamente adaptacao do printf pro frontend
     DrawText("AVISO!", 450, 280, 25, VERMELHO);
     DrawText(menu->aviso_mensagem, 220, 330, 18, BLACK);
     DrawText(TextFormat("Retornando em %.1f s", menu->aviso_tempo), 350, 370, 14, GRAY);
