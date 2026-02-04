@@ -319,7 +319,7 @@ void tela_listar_produtos() {
         atual->codigo, atual->nome, atual->preco, atual->quantidade), 50, y, 15, BLACK);
         y += 30;
         atual = atual->next;
-        
+
     }
     
     adicionar_registro(menu.historico, "Lista de produtos exibida.");
@@ -330,6 +330,68 @@ void tela_listar_produtos() {
     
 }
 
+void tela_edita_produto() {
+    if (menu.input_cont == 0) {
+        menu.inputs[0] = criar_input((Rectangle){ 200, 100, 300, 35 });
+        menu.inputs[1] = criar_input((Rectangle){ 200, 170, 300, 35 });
+        menu.inputs[2] = criar_input((Rectangle){ 200, 240, 300, 35 });
+        menu.inputs[3] = criar_input((Rectangle){ 200, 310, 300, 35 });
+        menu.input_cont = 4;
+    }
+    
+    DrawText("EDITAR PRODUTO", 150, 20, 25, VERMELHO);
+    
+    desenhar_input_em_texto(&menu.inputs[0], "Codigo:");
+    desenhar_input_em_texto(&menu.inputs[1], "Novo Nome:");
+    desenhar_input_em_texto(&menu.inputs[2], "Novo Preco:");
+    desenhar_input_em_texto(&menu.inputs[3], "Nova Quantidade:");
+    
+    if (GuiButton((Rectangle){ 200, 380, 100, 40 }, "Atualizar")) {
+        if (strlen(menu.inputs[0].texto) > 0) {
+            float preco = TextToFloat(menu.inputs[2].texto);
+            int quantidade = atoi(menu.inputs[3].texto);
+            editarDadosProduto(menu.produto, menu.inputs[0].texto,
+                menu.inputs[1].texto, preco, quantidade);
+            salvar_produtos(menu.produto, PRODUTOS_FILE);
+            adicionar_registro(menu.historico, "Dados do produto editados.");
+            menu.tela = 0;
+            limpar_inputs(&menu);
+        }
+    }
+    
+    if (GuiButton((Rectangle){ 350, 380, 100, 40 }, "Voltar")) {
+        menu.tela = 0;
+        limpar_inputs(&menu);
+    }
+    
+}
+
+
+void tela_remove_produto() {
+    if (menu.input_cont == 0) {
+        menu.inputs[0] = criar_input((Rectangle){ 200, 150, 300, 35 });
+        menu.input_cont = 1;
+    }
+    
+    DrawText("REMOVER PRODUTO", 150, 20, 25, VERMELHO);
+    
+    desenhar_input_em_texto(&menu.inputs[0], "Codigo:");
+    
+    if (GuiButton((Rectangle){ 200, 250, 100, 40 }, "Remover")) {
+        if (removerProduto(&menu.produto, menu.inputs[0].texto)) {
+            salvar_produtos(menu.produto, PRODUTOS_FILE);
+            adicionar_registro(menu.historico, "Produto removido.");
+            menu.tela = 0;
+            limpar_inputs(&menu);
+        }
+    }
+    
+    if (GuiButton((Rectangle){ 350, 250, 100, 40 }, "Voltar")) {
+        menu.tela = 0;
+        limpar_inputs(&menu);
+    }
+    
+}
 
 
 
