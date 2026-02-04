@@ -747,10 +747,14 @@ void tela_adicionar_produto_carrinho(){
 }
 
 void tela_procurar_produto_carrinho(){
+    static Produto* produto_encontrado = NULL;
+    static bool busca_realizada = false;
 
     if(menu.input_cont==0){
         menu.inputs[0]=criar_botao((Rectangle){ 200, 150, 300, 35 });
         menu.input_cont=1;
+        produto_encontrado = NULL;
+        busca_realizada = false;
     }
     
     DrawText("PROCURAR PRODUTO NO CARRINHO", 100, 20, 25, VERDE);
@@ -759,21 +763,26 @@ void tela_procurar_produto_carrinho(){
     
     if(GuiButton((Rectangle){ 200, 250, 100, 40 }, "Procurar")) {
         if(strlen(menu.inputs[0].texto)>0){
-
-            Produto* produto_carrinho = procura_produto_no_carrinho(menu.carrinho, menu.inputs[0].texto);
-            if(produto_carrinho != NULL) {
-                DrawText("Produto encontrado no carrinho!", 200, 320, 16, VERDE);
-                DrawText(TextFormat("Quantidade: %d", produto_carrinho->quantidade), 200, 350, 16, VERDE);
-            } 
-            else{
-                DrawText("Produto nao encontrado no carrinho!", 200, 320, 16, VERMELHO);
-            }
+            produto_encontrado = procura_produto_no_carrinho(menu.carrinho, menu.inputs[0].texto);
+            busca_realizada = true;
+        }
+    }
+    
+    if(busca_realizada) {
+        if(produto_encontrado != NULL) {
+            DrawText("Produto encontrado no carrinho!", 200, 320, 16, VERDE);
+            DrawText(TextFormat("Quantidade: %d", produto_encontrado->quantidade), 200, 350, 16, VERDE);
+        } 
+        else{
+            DrawText("Produto nao encontrado no carrinho!", 200, 320, 16, VERMELHO);
         }
     }
     
     if(GuiButton((Rectangle){ 350, 250, 100, 40 }, "Voltar")) {
         menu.tela = 12;
         limpar_inputs(&menu);
+        produto_encontrado = NULL;
+        busca_realizada = false;
     }
 
 }
