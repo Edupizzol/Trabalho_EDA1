@@ -5,14 +5,6 @@
 static const char* CLIENTES_FILE = "clientes.csv";
 static const char* PRODUTOS_FILE = "produtos.csv";
 
-#ifdef _WIN32
-    #include <windows.h>
-    #define SLEEP(s) Sleep(s * 1000)
-#else
-    #include <unistd.h>
-    #define SLEEP(s) sleep(s)
-#endif
-
 // printf("\033[H\033[2J");
 void limpar_tela() {
     fflush(stdout);
@@ -21,6 +13,15 @@ void limpar_tela() {
     #else
         system("clear");
     #endif
+}
+
+static void aguardar_enter_e_limpar() {
+    printf("\nPressione Enter para continuar...");
+    int c;
+    do {
+        c = getchar();
+    } while (c != '\n' && c != EOF);
+    limpar_tela();
 }
 
 void exibir_menu(){
@@ -118,13 +119,11 @@ int menu(){
             break;
         case 11:
             exibir_historico(historico);
-            SLEEP(2);
-            limpar_tela();
+            aguardar_enter_e_limpar();
             break;
         default:
             printf("Opcao Invalida! Tente Novamente.\n");
-            SLEEP(2);
-            limpar_tela();
+            aguardar_enter_e_limpar();
             break;
         }
 
@@ -148,8 +147,7 @@ void cadastra_cliente_menu(NodeCliente** cliente, Historico* historico, char* no
     
     if(verifica_cpf(*cliente, cpf) == 0){
         printf("Erro: CPF ja cadastrado!\n");
-        SLEEP(2);
-        limpar_tela();
+        aguardar_enter_e_limpar();
         return;
     }
     
@@ -172,8 +170,7 @@ void cadastra_cliente_menu(NodeCliente** cliente, Historico* historico, char* no
     printf("Cliente Cadastrado!\n");
     adicionar_registro(historico, "Novo cliente cadastrado.");
 
-    SLEEP(2);
-    limpar_tela();
+    aguardar_enter_e_limpar();
 }
 
 void busca_cliente_menu(NodeCliente* cliente, Historico* historico, char* cpf){
@@ -186,8 +183,7 @@ void busca_cliente_menu(NodeCliente* cliente, Historico* historico, char* cpf){
         adicionar_registro(historico, "Cliente buscado.");
     }
     
-    SLEEP(2);
-    limpar_tela();
+    aguardar_enter_e_limpar();
 }
 
 int edita_cliente_menu(NodeCliente* cliente, Historico* historico, char* nome, char* cpf, char* senha, char* dataDeNascimento, char* email){
@@ -258,8 +254,7 @@ int edita_cliente_menu(NodeCliente* cliente, Historico* historico, char* nome, c
             printf("Dados Atualizados com Sucesso\n");
             adicionar_registro(historico, "Dados do cliente editados.");
 
-            SLEEP(2);
-            limpar_tela();
+            aguardar_enter_e_limpar();
             return 0;
 }
 
@@ -276,8 +271,7 @@ void listar_clientes_menu(NodeCliente* cliente, Historico* historico){
     }
 
     adicionar_registro(historico, "Lista de clientes exibida.");
-    SLEEP(2);
-    limpar_tela();
+    aguardar_enter_e_limpar();
     return;
 }
 
@@ -291,8 +285,7 @@ void deletar_clientes_menu(NodeCliente** cliente, Historico* historico, char* cp
         adicionar_registro(historico, "Cliente removido.");
     }
 
-    SLEEP(2);
-    limpar_tela();
+    aguardar_enter_e_limpar();
     return;
 }
 
@@ -313,8 +306,7 @@ void cadastrar_produto_menu(Produto** produto, Historico* historico, char* senha
     printf("Produto Cadastrado!\n");
     adicionar_registro(historico, "Produto cadastrado.");
 
-    SLEEP(2);
-    limpar_tela();
+    aguardar_enter_e_limpar();
     return;
 }
 
@@ -322,8 +314,7 @@ void listar_produtos_menu(Produto* produto, Historico* historico){
     listarProdutos(produto);
     adicionar_registro(historico, "Lista de produtos exibida.");
 
-    SLEEP(2);
-    limpar_tela();
+    aguardar_enter_e_limpar();
     return;
 }
 
@@ -337,8 +328,7 @@ void remover_produto_menu(Produto** produto, Historico* historico, char* senha){
         adicionar_registro(historico, "Produto removido.");
     }
 
-    SLEEP(2);
-    limpar_tela();
+    aguardar_enter_e_limpar();
     return;
 }
 
@@ -363,8 +353,7 @@ void editar_produto_menu(Produto* produto, Historico* historico, char* senha, ch
     printf("Produto Editado com Sucesso!\n");
     adicionar_registro(historico, "Dados do produto editados.");
 
-    SLEEP(2);
-    limpar_tela();
+    aguardar_enter_e_limpar();
     return;
 }
 
@@ -384,8 +373,7 @@ int iniciar_compras_menu(NodeCliente* cliente, Historico* historico, Produto* pr
     printf("\nLogin Realizado com Sucesso!\n");
     adicionar_registro(historico, "Usuario fez login no modo compra.");
 
-    SLEEP(2);
-    limpar_tela();
+    aguardar_enter_e_limpar();
 
     Carrinho *carrinho = criar_carrinho();
 
@@ -418,8 +406,7 @@ int iniciar_compras_menu(NodeCliente* cliente, Historico* historico, Produto* pr
             printf("\nFinalizando compras...\n");
             adicionar_registro(historico, "Compras finalizadas.");
 
-            SLEEP(2);
-            limpar_tela();
+            aguardar_enter_e_limpar();
             break;
         }
 
@@ -435,8 +422,7 @@ int iniciar_compras_menu(NodeCliente* cliente, Historico* historico, Produto* pr
 
                 if(senha[0]=='0' && senha[1]=='\0'){
                     printf("Voltando...\n");
-                    SLEEP(2);
-                    limpar_tela();
+                    aguardar_enter_e_limpar();
                     break;
                 }
 
@@ -452,13 +438,11 @@ int iniciar_compras_menu(NodeCliente* cliente, Historico* historico, Produto* pr
                         salvar_produtos(produto, PRODUTOS_FILE);
                     }
                     
-                    SLEEP(2);
-                    limpar_tela();
+                    aguardar_enter_e_limpar();
                 } 
                 else{
                     printf("Codigo invalido! Tente novamente.\n\n");
-                    SLEEP(2);
-                    limpar_tela();
+                    aguardar_enter_e_limpar();
                 }
 
             }
@@ -479,8 +463,7 @@ int iniciar_compras_menu(NodeCliente* cliente, Historico* historico, Produto* pr
                 printf("Produto nao encontrado no carrinho!\n");
             }
 
-            SLEEP(2);
-            //limpar_tela();
+            aguardar_enter_e_limpar();
         }
         else if(escolha==3){
 
@@ -493,8 +476,7 @@ int iniciar_compras_menu(NodeCliente* cliente, Historico* historico, Produto* pr
                 if(senha[0]=='0' && senha[1]=='\0'){
                     printf("Voltando...\n");
 
-                    SLEEP(2);
-                    limpar_tela();
+                    aguardar_enter_e_limpar();
                     break;
                 }
 
@@ -513,13 +495,11 @@ int iniciar_compras_menu(NodeCliente* cliente, Historico* historico, Produto* pr
                         salvar_produtos(produto, PRODUTOS_FILE);
                     }
 
-                    SLEEP(2);
-                    limpar_tela();
+                    aguardar_enter_e_limpar();
                 } 
                 else{
                     printf("Codigo invalido! Tente novamente.\n\n");
-                    SLEEP(2);
-                    limpar_tela();
+                    aguardar_enter_e_limpar();
                 }
 
             }
@@ -531,8 +511,7 @@ int iniciar_compras_menu(NodeCliente* cliente, Historico* historico, Produto* pr
     ver_produtos_no_carrinho(carrinho);
     printf("===============================================\n");
     liberar_carrinho(&carrinho);
-    SLEEP(2);
-    limpar_tela();
+    aguardar_enter_e_limpar();
 
     return 0;
 }
