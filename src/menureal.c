@@ -393,5 +393,30 @@ void tela_remove_produto() {
     
 }
 
+void tela_historico() {
 
+    DrawText("HISTORICO DE OPERACOES", 150, 20, 25, GREEN);
+    DrawText(TextFormat("Total: %d operacoes", menu.historico->total), 150, 50, 15, GRAY);
+    
+    int y = 100;
+    int max_visible = 12;
+    int contador = 0;
+    
+    NoHistorico* atual = menu.historico->inicio;
+    while(atual != NULL && contador < max_visible) {
+        DrawText(TextFormat("[%s] %s", atual->dados.timestamp, atual->dados.operacao), 50, y, 14, BLACK);
+        y += 30;
+        atual = atual->proximo;
+        contador++;
+    }
+    
+    if (menu.historico->total == 0) {
+        DrawText("Historico vazio", 50, 100, 14, GRAY);
+    }
+    
+    if (GuiButton((Rectangle){ 200, 650, 100, 40 }, "Voltar")) {
+        menu.tela = 0;
+    }
+    
+}
 
