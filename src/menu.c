@@ -540,11 +540,18 @@ void tela_edita_produto() {
 
 
 void tela_remove_produto() {
+    static bool resultado_visivel = false;
+    static bool resultado_sucesso = false;
+    static char resultado_msg[128];
+
     if (menu.input_cont == 0) {
         int largura_forma = 300;
         int forma_x = center_x(largura_forma);
         menu.inputs[0] = criar_botao((Rectangle){ forma_x, 150, largura_forma, 35 });
         menu.input_cont = 1;
+        resultado_visivel = false;
+        resultado_sucesso = false;
+        memset(resultado_msg, 0, sizeof(resultado_msg));
     }
 
     DrawText("REMOVER PRODUTO", center_text_x("REMOVER PRODUTO", 25), 20, 25, VERMELHO);
@@ -557,12 +564,32 @@ void tela_remove_produto() {
     int botao_y = 250;
 
     if (GuiButton((Rectangle){ botao_x, botao_y, largura_botao, 40 }, "Remover")) {
-        if (removerProduto(&menu.produto, menu.inputs[0].texto)) {
-            salvar_produtos(menu.produto, PRODUTOS_FILE);
-            adicionar_registro(menu.historico, "Produto removido.");
-            menu.tela = 0;
-            limpar_inputs(&menu);
+        if (strlen(menu.inputs[0].texto) > 0) {
+            if (removerProduto(&menu.produto, menu.inputs[0].texto)) {
+                salvar_produtos(menu.produto, PRODUTOS_FILE);
+                adicionar_registro(menu.historico, "Produto removido.");
+                resultado_visivel = true;
+                resultado_sucesso = true;
+                strncpy(resultado_msg, "Produto removido com sucesso!", sizeof(resultado_msg) - 1);
+                menu.tela = 0;
+                limpar_inputs(&menu);
+            } 
+            else{
+                resultado_visivel = true;
+                resultado_sucesso = false;
+                strncpy(resultado_msg, "Produto nao encontrado!", sizeof(resultado_msg) - 1);
+            }
+        } 
+        else{
+            resultado_visivel = true;
+            resultado_sucesso = false;
+            strncpy(resultado_msg, "Informe o codigo do produto.", sizeof(resultado_msg) - 1);
         }
+    }
+
+    if (resultado_visivel) {
+        Color cor = resultado_sucesso ? GREEN : VERMELHO;
+        DrawText(resultado_msg, center_text_x(resultado_msg, 18), 320, 18, cor);
     }
     
     if (GuiButton((Rectangle){ botao_x + largura_botao + espaco_botao, botao_y, largura_botao, 40 }, "Voltar")) {
