@@ -14,8 +14,9 @@ int edita_cliente_menu(NodeCliente* cliente, Historico* historico, char* nome, c
 void listar_clientes_menu(NodeCliente* cliente, Historico* historico);
 void deletar_clientes_menu(NodeCliente** cliente, Historico* historico, char* cpf);
 void cadastrar_produto_menu(Produto** produto, Historico* historico, char* senha, char* nome, float preco, int quantidade);
+void buscar_produto_menu(Produto* produto, Historico* historico, char* codigo);
 void listar_produtos_menu(Produto* produto, Historico* historico);
-void remover_produto_menu(Produto** produto, Historico* historico, char* senha);
 void editar_produto_menu(Produto* produto, Historico* historico, char* senha, char* nome);
+void remover_produto_menu(Produto** produto, Historico* historico, char* senha);
 int iniciar_compras_menu(NodeCliente* cliente, Historico* historico, Produto* produto, char* cpf, char* senha);
 #endif

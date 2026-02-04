@@ -37,12 +37,13 @@ void exibir_menu(){
     printf(VERDE "03 : Editar Dados do Cliente\n" RESET);
     printf(VERDE "04 : Listar Clientes\n" RESET);
     printf(VERDE "05 : Deletar Cliente\n" RESET);
-    printf(VERDE "06 : Cadastrar Novo Produto\n" RESET);
-    printf(VERDE "07 : Listar Produtos\n" RESET);
-    printf(VERDE "08 : Remover Produto\n" RESET);
+    printf(VERDE "06 : Cadastrar Produto\n" RESET);
+    printf(VERDE "07 : Buscar Produto\n" RESET);
+    printf(VERDE "08 : Listar Produtos\n" RESET);
     printf(VERDE "09 : Editar Produto\n" RESET);
-    printf(VERDE "10 : Comecar as Compras\n" RESET);
-    printf(VERDE "11 : Ver Historico de Operacoes\n" RESET);
+    printf(VERDE "10 : Deletar Produto\n" RESET);
+    printf(VERDE "11 : Comecar as Compras\n" RESET);
+    printf(VERDE "12 : Ver Historico de Operacoes\n" RESET);
     printf(VERDE "===================================\n" RESET);
     printf(VERDE "Escolha uma opcao: " RESET);
 
@@ -107,20 +108,23 @@ int menu(){
             cadastrar_produto_menu(&produto, historico, senha, nome, preco, quantidade);
             break;
         case 7:
-            listar_produtos_menu(produto,historico);
+            buscar_produto_menu(produto, historico, senha);
             break;
         case 8:
-            remover_produto_menu(&produto, historico, senha);
+            listar_produtos_menu(produto, historico);
             break;
         case 9:
             editar_produto_menu(produto, historico, senha, nome);
             break;
         case 10:
+            remover_produto_menu(&produto, historico, senha);
+            break;
+        case 11:
             if(iniciar_compras_menu(cliente, historico, produto, cpf, senha) == 1){
                 continue;
             }
             break;
-        case 11:
+        case 12:
             exibir_historico(historico);
             aguardar_enter_e_limpar();
             break;
@@ -311,6 +315,27 @@ void cadastrar_produto_menu(Produto** produto, Historico* historico, char* senha
 
     aguardar_enter_e_limpar();
     return;
+}
+
+void buscar_produto_menu(Produto* produto, Historico* historico, char* codigo){
+    printf(VERDE "Digite o Codigo do Produto:\n" RESET);
+    scanf("%s", codigo);
+    getchar();
+    
+    Produto* encontrado = buscarProduto(produto, codigo);
+    if(encontrado != NULL){
+        printf(VERDE "-------Produto Encontrado-------\n" RESET);
+        printf(VERDE "Codigo: %s\n" RESET, encontrado->codigo);
+        printf(VERDE "Nome: %s\n" RESET, encontrado->nome);
+        printf(VERDE "Preco: R$ %.2f\n" RESET, encontrado->preco);
+        printf(VERDE "Quantidade: %d\n" RESET, encontrado->quantidade);
+        printf(VERDE "--------------------------------\n" RESET);
+        adicionar_registro(historico, "Produto buscado.");
+    } else {
+        printf(VERDE "Produto nao encontrado!\n" RESET);
+    }
+    
+    aguardar_enter_e_limpar();
 }
 
 void listar_produtos_menu(Produto* produto, Historico* historico){
