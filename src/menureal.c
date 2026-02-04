@@ -82,6 +82,9 @@ int menu_real() {
     menu.produto = carregar_produtos(PRODUTOS_FILE);
     menu.historico = criar_historico();
     menu.input_cont = 0;
+    menu.aviso_visivel = false;
+    menu.aviso_tempo = 0;
+    memset(menu.aviso_mensagem, 0, 256);
     
     InitWindow(SCREEN_WIDTH, SCREEN_HEIGHT, "Sistema de Gestao - Interface Grafica");
     SetTargetFPS(60);
@@ -128,6 +131,9 @@ int menu_real() {
             default:
                 tela_menu_principal();
         }
+        
+        // Desenhar aviso se visivel
+        desenhar_aviso(&menu);
 
         EndDrawing();
     }
@@ -168,17 +174,23 @@ void tela_cadastro_cliente(){
     if(GuiButton((Rectangle){200,580,100,40}, "Salvar")){
 
         if(strlen(menu.inputs[0].texto)>0 && strlen(menu.inputs[1].texto)>0){
-            cadastrar_cliente(&menu.cliente,
-                menu.inputs[0].texto,
-                menu.inputs[1].texto,
-                menu.inputs[2].texto,
-                menu.inputs[3].texto,
-                menu.inputs[4].texto,
-                menu.inputs[5].texto);
-            salvar_clientes(menu.cliente, CLIENTES_FILE);
-            adicionar_registro(menu.historico, "Novo cliente cadastrado.");
-            menu.tela = 0;
-            limpar_inputs(&menu);
+            //AVISO PRA SE AJ TIVER UM CLIENTE CSDASTRADO
+            if(busca_cliente(menu.cliente, menu.inputs[1].texto) != NULL) {
+                mostrar_aviso(&menu, "CPF ja cadastrado! Tente novamente.");
+            } 
+            else{
+                cadastrar_cliente(&menu.cliente,
+                    menu.inputs[0].texto,
+                    menu.inputs[1].texto,
+                    menu.inputs[2].texto,
+                    menu.inputs[3].texto,
+                    menu.inputs[4].texto,
+                    menu.inputs[5].texto);
+                salvar_clientes(menu.cliente, CLIENTES_FILE);
+                adicionar_registro(menu.historico, "Novo cliente cadastrado.");
+                menu.tela = 0;
+                limpar_inputs(&menu);
+            }
         }
     }
     
@@ -363,19 +375,24 @@ void tela_cadastro_produto() {
     if(GuiButton((Rectangle){ 200, 380, 100, 40 }, "Salvar")){
 
         if (strlen(menu.inputs[0].texto) > 0) {
-            float preco = TextToFloat(menu.inputs[2].texto);
-            int quantidade = atoi(menu.inputs[3].texto);
-            menu.produto = cadastrarProduto(
-                menu.produto,
-                menu.inputs[0].texto,
-                menu.inputs[1].texto,
-                preco,
-                quantidade
-            );
-            salvar_produtos(menu.produto, PRODUTOS_FILE);
-            adicionar_registro(menu.historico, "Produto cadastrado.");
-            menu.tela = 0;
-            limpar_inputs(&menu);
+            // Verificar se o codigo ja existe
+            if(buscarProduto(menu.produto, menu.inputs[0].texto) != NULL) {
+                mostrar_aviso(&menu, "Codigo de produto ja cadastrado! Tente novamente.");
+            } else {
+                float preco = TextToFloat(menu.inputs[2].texto);
+                int quantidade = atoi(menu.inputs[3].texto);
+                menu.produto = cadastrarProduto(
+                    menu.produto,
+                    menu.inputs[0].texto,
+                    menu.inputs[1].texto,
+                    preco,
+                    quantidade
+                );
+                salvar_produtos(menu.produto, PRODUTOS_FILE);
+                adicionar_registro(menu.historico, "Produto cadastrado.");
+                menu.tela = 0;
+                limpar_inputs(&menu);
+            }
         }
 
     }

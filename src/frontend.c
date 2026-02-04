@@ -61,3 +61,33 @@ void limpar_inputs(Menu* e){
     }
     e->input_cont = 0;
 }
+
+void mostrar_aviso(Menu* menu, const char* mensagem) {
+    menu->aviso_visivel = true;
+    strncpy(menu->aviso_mensagem, mensagem, 199);
+    menu->aviso_mensagem[199] = '\0';
+    menu->aviso_tempo = 2.0f; //coloquei 2 segundos mas da pra mudar depois
+}
+
+void desenhar_aviso(Menu* menu) {
+    if (!menu->aviso_visivel) return;
+    
+    menu->aviso_tempo -= GetFrameTime();
+    
+    if (menu->aviso_tempo <= 0) {
+        menu->aviso_visivel = false;
+        menu->tela = 0;
+        limpar_inputs(menu);
+        return;
+    }
+    
+    DrawRectangle(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT, (Color){0, 0, 0, 150});
+    
+    Rectangle aviso_box = (Rectangle){200, 250, 600, 150};
+    DrawRectangleRec(aviso_box, WHITE);
+    DrawRectangleLinesEx(aviso_box, 3, VERMELHO);
+    
+    DrawText("AVISO!", 450, 280, 25, VERMELHO);
+    DrawText(menu->aviso_mensagem, 220, 330, 18, BLACK);
+    DrawText(TextFormat("Retornando em %.1f s", menu->aviso_tempo), 350, 370, 14, GRAY);
+}

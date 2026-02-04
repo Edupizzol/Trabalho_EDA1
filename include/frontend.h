@@ -36,9 +36,14 @@ typedef struct Menu{
     int input_cont;
     bool resultado_visivel;
     bool resultado_sucesso;
+    bool aviso_visivel;
+    char aviso_mensagem[200];
+    float aviso_tempo;
 }Menu;
 
 texto criar_input(Rectangle bounds);
 void desenhar_input_em_texto(texto* input, char* label);
 void limpar_inputs(Menu* e);
+void mostrar_aviso(Menu* menu, const char* mensagem);
+void desenhar_aviso(Menu* menu);
 
