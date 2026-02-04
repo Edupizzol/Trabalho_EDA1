@@ -12,8 +12,8 @@ void tela_listar_produtos();
 void tela_edita_produto();
 void tela_remove_produto();
 void tela_historico();
-void tela_login_compras();
-void tela_carrinho_compras();
+void tela_login();
+void tela_carrinho_menu();
 void tela_adicionar_produto_carrinho();
 void tela_procurar_produto_carrinho();
 void tela_remover_produto_carrinho();
@@ -24,60 +24,60 @@ void tela_menu_principal() {
     
     DrawText("========== MENU PRINCIPAL ==========", 200, 30, 25, VERDE);
     
-    int button_x = 150;
-    int button_y = 100;
-    int button_width = 300;
-    int button_height = 40;
-    int spacing = 50;
+    int botao_x = 150;
+    int botao_y = 100;
+    int largura = 300;
+    int altura = 40;
+    int espacamento = 50;
     
-    if (GuiButton((Rectangle){ button_x, button_y, button_width, button_height }, "01: Cadastrar Cliente")) {
+    if (GuiButton((Rectangle){ botao_x, botao_y, largura, altura }, "01: Cadastrar Cliente")) {
         menu.tela = 1;
         limpar_inputs(&menu);
     }
-    if (GuiButton((Rectangle){ button_x, button_y + spacing, button_width, button_height }, "02: Buscar Cliente")) {
+    if (GuiButton((Rectangle){ botao_x, botao_y + espacamento, largura, altura }, "02: Buscar Cliente")) {
         menu.tela = 2;
         limpar_inputs(&menu);
     }
-    if (GuiButton((Rectangle){ button_x, button_y + spacing * 2, button_width, button_height }, "03: Editar Cliente")) {
+    if (GuiButton((Rectangle){ botao_x, botao_y + espacamento * 2, largura, altura }, "03: Editar Cliente")) {
         menu.tela = 3;
         limpar_inputs(&menu);
     }
-    if (GuiButton((Rectangle){ button_x, button_y + spacing * 3, button_width, button_height }, "04: Listar Clientes")) {
+    if (GuiButton((Rectangle){ botao_x, botao_y + espacamento * 3, largura, altura }, "04: Listar Clientes")) {
         menu.tela = 4;
         limpar_inputs(&menu);
     }
-    if (GuiButton((Rectangle){ button_x, button_y + spacing * 4, button_width, button_height }, "05: Deletar Cliente")) {
+    if (GuiButton((Rectangle){ botao_x, botao_y + espacamento * 4, largura, altura }, "05: Deletar Cliente")) {
         menu.tela = 5;
         limpar_inputs(&menu);
     }
-    if (GuiButton((Rectangle){ button_x, button_y + spacing * 5, button_width, button_height }, "06: Cadastrar Produto")) {
+    if (GuiButton((Rectangle){ botao_x, botao_y + espacamento * 5, largura, altura }, "06: Cadastrar Produto")) {
         menu.tela = 6;
         limpar_inputs(&menu);
     }
     
-    if (GuiButton((Rectangle){ button_x + 350, button_y, button_width, button_height }, "07: Listar Produtos")) {
+    if (GuiButton((Rectangle){ botao_x + 350, botao_y, largura, altura }, "07: Listar Produtos")) {
         menu.tela = 7;
         limpar_inputs(&menu);
     }
-    if (GuiButton((Rectangle){ button_x + 350, button_y + spacing, button_width, button_height }, "08: Remover Produto")) {
+    if (GuiButton((Rectangle){ botao_x + 350, botao_y + espacamento, largura, altura }, "08: Remover Produto")) {
         menu.tela = 8;
         limpar_inputs(&menu);
     }
-    if (GuiButton((Rectangle){ button_x + 350, button_y + spacing * 2, button_width, button_height }, "09: Editar Produto")) {
+    if (GuiButton((Rectangle){ botao_x + 350, botao_y + espacamento * 2, largura, altura }, "09: Editar Produto")) {
         menu.tela = 9;
         limpar_inputs(&menu);
     }
 
 
-    if (GuiButton((Rectangle){ button_x, button_y + spacing * 6, 700, 80 }, "INICIAR COMPRAS")) {
+    if (GuiButton((Rectangle){ botao_x, botao_y + espacamento * 6, 700, 80 }, "INICIAR COMPRAS")) {
         menu.tela = 10;
         limpar_inputs(&menu);
     }
-    if (GuiButton((Rectangle){ button_x + 350, button_y + spacing * 4, button_width, button_height }, "11: Ver Histórico")) {
+    if (GuiButton((Rectangle){ botao_x + 350, botao_y + espacamento * 4, largura, altura }, "11: Ver Histórico")) {
         menu.tela = 11;
         limpar_inputs(&menu);
     }
-    if (GuiButton((Rectangle){ button_x + 350, button_y + spacing * 5, button_width, button_height }, "00: Sair")) {
+    if (GuiButton((Rectangle){ botao_x + 350, botao_y + espacamento * 5, largura, altura }, "00: Sair")) {
         menu.tela = -1;
     }
     
@@ -132,8 +132,23 @@ int menu_real() {
             case 9:
                 tela_edita_produto();
                 break;
+            case 10:
+                tela_login();
+                break;
             case 11:
                 tela_historico();
+                break;
+            case 12:
+                tela_carrinho_menu();
+                break;
+            case 13:
+                tela_adicionar_produto_carrinho();
+                break;
+            case 14:
+                tela_procurar_produto_carrinho();
+                break;
+            case 15:
+                tela_remover_produto_carrinho();
                 break;
             default:
                 tela_menu_principal();
@@ -528,14 +543,14 @@ void tela_login(){
 
     if(menu.input_cont==0){
         menu.inputs[0]=criar_input((Rectangle){200,150,300,35});
-        menu.inputs[1]=criar_input((Rectangle){200,150,300,35});
+        menu.inputs[1]=criar_input((Rectangle){200,250,300,35});
         menu.input_cont=2;
     }
 
-    DrawText("LOGIN", 150, 20, 25, VERDE);
+    DrawText("LOGIN - COMPRAS", 150, 20, 25, VERDE);
 
-    desenhar_input_em_texto(&menu.inputs[0], "CPF");
-    desenhar_input_em_texto(&menu.inputs[1], "SENHA");
+    desenhar_input_em_texto(&menu.inputs[0], "CPF:");
+    desenhar_input_em_texto(&menu.inputs[1], "Senha:");
 
     if(GuiButton((Rectangle){ 200, 350, 100, 40 }, "Entrar")){
         if(strlen(menu.inputs[0].texto)>0 && strlen(menu.inputs[1].texto)>0){
@@ -548,7 +563,7 @@ void tela_login(){
                     menu.carrinho = criar_carrinho();
                     adicionar_dono_do_carrinho(menu.carrinho, &cliente_encontrado->dados);
                     adicionar_registro(menu.historico, "Usuario fez login no modo compra.");
-                    menu.tela = 21;
+                    menu.tela = 12;
                     limpar_inputs(&menu);
 
                 }
@@ -561,7 +576,46 @@ void tela_login(){
             }
         }
     }
+    
+    if(GuiButton((Rectangle){ 350, 350, 100, 40 }, "Voltar")) {
+        menu.tela = 0;
+        limpar_inputs(&menu);
+    }
 
+}
+
+void tela_carrinho_menu(){
+    DrawText("CARRINHO DE COMPRAS", 150, 20, 25, VERDE);
+    
+    int botao_x = 150;
+    int botao_y = 100;
+    int largura = 300;
+    int altura = 60;
+    int espacamento = 80;
+    
+    if(GuiButton((Rectangle){ botao_x, botao_y, largura, altura }, "Colocar no Carrinho")) {
+        menu.tela = 13;
+        limpar_inputs(&menu);
+    }
+    
+    if(GuiButton((Rectangle){ botao_x, botao_y + espacamento, largura, altura }, "Buscar no Carrinho")) {
+        menu.tela = 14;
+        limpar_inputs(&menu);
+    }
+    
+    if(GuiButton((Rectangle){ botao_x, botao_y + espacamento*2, largura, altura }, "Remover do Carrinho")) {
+        menu.tela = 15;
+        limpar_inputs(&menu);
+    }
+    
+    if(GuiButton((Rectangle){ botao_x, botao_y + espacamento*3, largura, altura }, "Voltar")) {
+        if(menu.carrinho != NULL) {
+            liberar_carrinho(&menu.carrinho);
+        }
+        menu.cliente_logado = NULL;
+        menu.tela = 0;
+        limpar_inputs(&menu);
+    }
 }
 
 void tela_adicionar_produto_no_carrinho(){
@@ -592,7 +646,84 @@ void tela_adicionar_produto_no_carrinho(){
     }
     
     if(GuiButton((Rectangle){ 350, 250, 100, 40 }, "Voltar")) {
-        menu.tela = 11;
+        menu.tela = 12;
+        limpar_inputs(&menu);
+    }
+
+}
+
+void tela_adicionar_produto_carrinho(){
+
+    if(menu.input_cont==0){
+        menu.inputs[0]=criar_input((Rectangle){ 200, 150, 300, 35 });
+        menu.inputs[1]=criar_input((Rectangle){ 200, 220, 300, 35 });
+        menu.input_cont=2;
+    }
+    
+    DrawText("ADICIONAR PRODUTO", 150, 20, 25, VERDE);
+    
+    desenhar_input_em_texto(&menu.inputs[0], "Codigo do Produto:");
+    desenhar_input_em_texto(&menu.inputs[1], "Quantidade:");
+    
+    if(GuiButton((Rectangle){ 200, 320, 100, 40 }, "Adicionar")) {
+        if(strlen(menu.inputs[0].texto)>0 && strlen(menu.inputs[1].texto)>0){
+
+            Produto* produto_db = buscarProduto(menu.produto, menu.inputs[0].texto);
+            if(produto_db != NULL) {
+
+                int quantidade = atoi(menu.inputs[1].texto);
+                if(quantidade > 0 && quantidade <= produto_db->quantidade) {
+                    adicionar_produto_ao_carrinho(menu.carrinho, produto_db, quantidade);
+                    adicionar_registro(menu.historico, "Produto adicionado ao carrinho.");
+                    salvar_produtos(menu.produto, PRODUTOS_FILE);
+                    menu.tela = 12;
+                    limpar_inputs(&menu);
+                }
+                else {
+                    mostrar_aviso(&menu, "Quantidade invalida!");
+                }
+
+            } 
+            else{
+                mostrar_aviso(&menu, "Produto nao encontrado!");
+            }
+        }
+    }
+    
+    if(GuiButton((Rectangle){ 350, 320, 100, 40 }, "Voltar")) {
+        menu.tela = 12;
+        limpar_inputs(&menu);
+    }
+
+}
+
+void tela_procurar_produto_carrinho(){
+
+    if(menu.input_cont==0){
+        menu.inputs[0]=criar_input((Rectangle){ 200, 150, 300, 35 });
+        menu.input_cont=1;
+    }
+    
+    DrawText("PROCURAR PRODUTO NO CARRINHO", 100, 20, 25, VERDE);
+    
+    desenhar_input_em_texto(&menu.inputs[0], "Codigo do Produto:");
+    
+    if(GuiButton((Rectangle){ 200, 250, 100, 40 }, "Procurar")) {
+        if(strlen(menu.inputs[0].texto)>0){
+
+            Produto* produto_carrinho = procura_produto_no_carrinho(menu.carrinho, menu.inputs[0].texto);
+            if(produto_carrinho != NULL) {
+                DrawText("Produto encontrado no carrinho!", 200, 320, 16, VERDE);
+                DrawText(TextFormat("Quantidade: %d", produto_carrinho->quantidade), 200, 350, 16, VERDE);
+            } 
+            else{
+                DrawText("Produto nao encontrado no carrinho!", 200, 320, 16, VERMELHO);
+            }
+        }
+    }
+    
+    if(GuiButton((Rectangle){ 350, 250, 100, 40 }, "Voltar")) {
+        menu.tela = 12;
         limpar_inputs(&menu);
     }
 
@@ -623,7 +754,7 @@ void tela_remover_produto_carrinho(){
                 if(remove_produto_do_carrinho(menu.carrinho, produto_db, qtd_remover) != NULL){
                     adicionar_registro(menu.historico, "Produto removido do carrinho.");
                     salvar_produtos(menu.produto, PRODUTOS_FILE);
-                    menu.tela = 21;
+                    menu.tela = 12;
                     limpar_inputs(&menu);
                 }
 
@@ -635,7 +766,7 @@ void tela_remover_produto_carrinho(){
     }
     
     if(GuiButton((Rectangle){ 350, 320, 100, 40 }, "Voltar")) {
-        menu.tela = 21;
+        menu.tela = 12;
         limpar_inputs(&menu);
     }
 }
