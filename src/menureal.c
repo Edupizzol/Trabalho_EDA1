@@ -15,6 +15,7 @@ void tela_buscar_produto();
 void tela_historico();
 void tela_login();
 void tela_carrinho_menu();
+void tela_resumo_compras();
 void tela_adicionar_produto_carrinho();
 void tela_procurar_produto_carrinho();
 void tela_remover_produto_carrinho();
@@ -157,6 +158,9 @@ int menu_real() {
                 break;
             case 16:
                 tela_buscar_produto();
+                break;
+            case 17:
+                tela_resumo_compras();
                 break;
             default:
                 tela_menu_principal();
@@ -658,6 +662,41 @@ void tela_carrinho_menu(){
     }
     
     if(GuiButton((Rectangle){ botao_x, botao_y + espacamento*3, largura, altura }, "Voltar")) {
+        menu.tela = 17;
+        limpar_inputs(&menu);
+    }
+}
+
+void tela_resumo_compras(){
+    DrawText("RESUMO DAS COMPRAS", 150, 20, 25, VERDE);
+
+    int y = 80;
+    float total = 0.0f;
+
+    DrawText("Produto", 150, y, 16, DARKGRAY);
+    DrawText("Qtd", 520, y, 16, DARKGRAY);
+    DrawText("Preco", 600, y, 16, DARKGRAY);
+    y += 25;
+
+    if(menu.carrinho == NULL || menu.carrinho->produto == NULL){
+        DrawText("Carrinho vazio.", 150, y, 16, VERMELHO);
+        y += 25;
+    }
+    else{
+        Produto* atual = menu.carrinho->produto;
+        while(atual != NULL) {
+            DrawText(TextFormat("%s", atual->nome), 150, y, 16, BLACK);
+            DrawText(TextFormat("%d", atual->quantidade), 520, y, 16, BLACK);
+            DrawText(TextFormat("R$ %.2f", atual->preco), 600, y, 16, BLACK);
+            total += atual->preco * atual->quantidade;
+            y += 25;
+            atual = atual->next;
+        }
+    }
+
+    DrawText(TextFormat("Total: R$ %.2f", total), 150, y + 20, 18, VERDE);
+
+    if(GuiButton((Rectangle){ 150, y + 60, 200, 40 }, "Voltar ao Menu")) {
         if(menu.carrinho != NULL) {
             liberar_carrinho(&menu.carrinho);
         }
