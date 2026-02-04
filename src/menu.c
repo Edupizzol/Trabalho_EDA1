@@ -1,6 +1,9 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include "../include/menu.h"
+#include "raylib.h"
+#define RAYGUI_IMPLEMENTATION
+#include "raygui.h"
 
 static const char* CLIENTES_FILE = "clientes.csv";
 static const char* PRODUTOS_FILE = "produtos.csv";
