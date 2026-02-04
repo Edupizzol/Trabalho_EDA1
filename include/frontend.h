@@ -25,16 +25,16 @@ typedef struct texto{
     Rectangle limites;
 }texto;
 
-typedef struct estado{
+typedef struct Menu{
     int tela;
     NodeCliente* cliente;
     Produto* produto;
     Historico* historico;
     texto inputs[10];
     int input_cont;
-}estado;
+}Menu;
 
 texto criar_input(Rectangle bounds);
 void desenhar_input_em_texto(texto* input, char* label);
-void limpar_inputs(estado* e);
+void limpar_inputs(Menu* e);
 

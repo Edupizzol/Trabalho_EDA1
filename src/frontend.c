@@ -54,7 +54,7 @@ void desenhar_input_em_texto(texto* input, char* label){
 
 }
 
-void limpar_inputs(estado* e){
+void limpar_inputs(Menu* e){
     for (int i = 0; i < e->input_cont; i++) {
         memset(e->inputs[i].texto, 0, 300); 
         e->inputs[i].ativo = false;

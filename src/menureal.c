@@ -1,49 +1,113 @@
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-#include "raylib.h"
-#ifndef TextToFloat
-    #define TextToFloat atof
-#endif
-#define RAYGUI_IMPLEMENTATION
-#include "raygui.h"
-#include "../include/menu.h"
+#include "frontend.h"
 
-static const char* CLIENTES_FILE = "clientes.csv";
-static const char* PRODUTOS_FILE = "produtos.csv";
+Menu menu;
 
-#define SCREEN_WIDTH 1000
-#define SCREEN_HEIGHT 700
-#define VERDE (Color){0, 200, 0, 255}
-#define ROXO (Color){128, 0, 128, 255}
-#define AMARELO (Color){255, 255, 0, 255}
-#define VERMELHO (Color){255, 0, 0, 255}
-
-typedef struct texto{
-    char texto[300];
-    bool ativo;
-    Rectangle limites;
-}texto;
-
-typedef struct estado{
-    int tela;
-    NodeCliente* cliente;
-    Produto* produto;
-    Historico* historico;
-    texto inputs[10];
-    int input_cont;
-}estado;
-
-texto criar_input(Rectangle bounds){
-    texto input = {0};
-    input.limites = bounds;
-    input.ativo = false;
-    memset(input.texto, 0, 256);
-    //só pra limpar se tiver problema de alguma coisa q ficou perdida ai ou seila
-    return input;
+void tela_menu_principal() {
+    
+    Drawtexto("========== MENU PRINCIPAL ==========", 200, 30, 25, VERDE);
+    
+    int button_x = 150;
+    int button_y = 100;
+    int button_width = 300;
+    int button_height = 40;
+    int spacing = 50;
+    
+    if (GuiButton((Rectangle){ button_x, button_y, button_width, button_height }, "01: Cadastrar Cliente")) {
+        menu.tela = 1;
+        limpar_inputs(&menu);
+    }
+    if (GuiButton((Rectangle){ button_x, button_y + spacing, button_width, button_height }, "02: Buscar Cliente")) {
+        menu.tela = 2;
+        limpar_inputs(&menu);
+    }
+    if (GuiButton((Rectangle){ button_x, button_y + spacing * 2, button_width, button_height }, "03: Editar Cliente")) {
+        menu.tela = 3;
+        limpar_inputs(&menu);
+    }
+    if (GuiButton((Rectangle){ button_x, button_y + spacing * 3, button_width, button_height }, "04: Listar Clientes")) {
+        menu.tela = 4;
+        limpar_inputs(&menu);
+    }
+    if (GuiButton((Rectangle){ button_x, button_y + spacing * 4, button_width, button_height }, "05: Deletar Cliente")) {
+        menu.tela = 5;
+        limpar_inputs(&menu);
+    }
+    if (GuiButton((Rectangle){ button_x, button_y + spacing * 5, button_width, button_height }, "06: Cadastrar Produto")) {
+        menu.tela = 6;
+        limpar_inputs(&menu);
+    }
+    
+    if (GuiButton((Rectangle){ button_x + 350, button_y, button_width, button_height }, "07: Listar Produtos")) {
+        menu.tela = 7;
+        limpar_inputs(&menu);
+    }
+    if (GuiButton((Rectangle){ button_x + 350, button_y + spacing, button_width, button_height }, "08: Remover Produto")) {
+        menu.tela = 8;
+        limpar_inputs(&menu);
+    }
+    if (GuiButton((Rectangle){ button_x + 350, button_y + spacing * 2, button_width, button_height }, "09: Editar Produto")) {
+        menu.tela = 9;
+        limpar_inputs(&menu);
+    }
+    if (GuiButton((Rectangle){ button_x + 350, button_y + spacing * 3, button_width, button_height }, "10: Começar Compras")) {
+        menu.tela = 10;
+        limpar_inputs(&menu);
+    }
+    if (GuiButton((Rectangle){ button_x + 350, button_y + spacing * 4, button_width, button_height }, "11: Ver Histórico")) {
+        menu.tela = 11;
+        limpar_inputs(&menu);
+    }
+    if (GuiButton((Rectangle){ button_x + 350, button_y + spacing * 5, button_width, button_height }, "00: Sair")) {
+        menu.tela = -1;
+    }
+    
 }
 
+void tela_cadastro_cliente(){
+    //preparando as caixinhas 
+    if(menu.input_cont==0){
+        menu.inputs[0] = criar_input((Rectangle){ 200, 100, 300, 35 });
+        menu.inputs[1] = criar_input((Rectangle){ 200, 170, 300, 35 });
+        menu.inputs[2] = criar_input((Rectangle){ 200, 240, 300, 35 });
+        menu.inputs[3] = criar_input((Rectangle){ 200, 310, 300, 35 });
+        menu.inputs[4] = criar_input((Rectangle){ 200, 380, 300, 35 });
+        menu.inputs[5] = criar_input((Rectangle){ 200, 450, 300, 35 });
+        menu.input_cont = 6;
+    }
 
+    DrawText("CADASTRO DE CLIENTE", 150, 20, 25, AMARELO);
+    
+    //lembrando que o q ta em aspas e o label/titulo do bottao
+    desenhar_input_em_texto(&menu.inputs[0], "Nome:");
+    desenhar_input_em_texto(&menu.inputs[1], "CPF (11 digitos):");
+    desenhar_input_em_texto(&menu.inputs[2], "Telefone:");
+    desenhar_input_em_texto(&menu.inputs[3], "Senha:");
+    desenhar_input_em_texto(&menu.inputs[4], "Data Nascimento (DD/MM/AAAA):");
+    desenhar_input_em_texto(&menu.inputs[5], "Email:");
+
+    if(GuiButton((Rectangle){200,580,100,40}, "Salvar")){
+
+        if(strlen(menu.inputs[0].texto)>0 && strlen(menu.inputs[1].texto)>0){
+            cadastrar_cliente(&menu.cliente,
+                menu.inputs[0].texto,
+                menu.inputs[1].texto,
+                menu.inputs[2].texto,
+                menu.inputs[3].texto,
+                menu.inputs[4].texto,
+                menu.inputs[5].texto);
+            salvar_clientes(menu.cliente, CLIENTES_FILE);
+            adicionar_registro(menu.historico, "Novo cliente cadastrado.");
+            menu.tela = 0;
+            limpar_inputs(&menu);
+        }
+    }
+    
+    if (GuiButton((Rectangle){ 350, 580, 100, 40 }, "Voltar")) {
+        menu.tela = 0;
+        limpar_inputs(&menu);
+    }
+    
+}
 
 
 
