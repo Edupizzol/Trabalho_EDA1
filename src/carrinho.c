@@ -100,9 +100,9 @@ void ver_produtos_no_carrinho(Carrinho* carrinho){
         return;
     }
 
-    printf(ROXO "\n========== SEU CARRINHO ==========\n" RESET);
+    printf(ROXO "\n============================== SEU CARRINHO ==============================\n" RESET);
     printf(ROXO "Cliente: %s\n" RESET, carrinho->cliente->nome);
-    printf(ROXO "----------------------------------\n" RESET);
+    printf(ROXO "---------------------------------------------------------------------------\n" RESET);
 
     float total = 0;
     Produto* atual = carrinho->produto;
@@ -114,9 +114,9 @@ void ver_produtos_no_carrinho(Carrinho* carrinho){
         atual = atual->next;  
     }
 
-    printf(ROXO "----------------------------------\n" RESET);
-    printf(ROXO "VALOR TOTAL:             R$ %7.2f\n" RESET, total);
-    printf(ROXO "==================================\n\n" RESET);
+    printf(ROXO "---------------------------------------------------------------------------\n" RESET);
+    printf(ROXO "VALOR TOTAL:                      R$ %7.2f\n" RESET, total);
+    printf(ROXO "===========================================================================\n\n" RESET);
 }
 
 Produto* procura_produto_no_carrinho(Carrinho* carrinho, char* codigo){

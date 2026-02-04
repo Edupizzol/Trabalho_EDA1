@@ -510,9 +510,9 @@ int iniciar_compras_menu(NodeCliente* cliente, Historico* historico, Produto* pr
         }
     }
 
-    printf(VERDE "\n============= RESUMO DO CARRINHO =============\n" RESET);
+    printf(VERDE "\n============================ RESUMO DO CARRINHO ============================\n" RESET);
     ver_produtos_no_carrinho(carrinho);
-    printf(VERDE "===============================================\n" RESET);
+    printf(VERDE "=============================================================================\n" RESET);
     liberar_carrinho(&carrinho);
     aguardar_enter_e_limpar();
 
