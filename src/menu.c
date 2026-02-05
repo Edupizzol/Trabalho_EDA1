@@ -471,7 +471,7 @@ int iniciar_compras_menu(NodeCliente* cliente, Historico* historico, Produto* pr
 
         printf(VERDE "\n========== CARRINHO DE COMPRAS ==========\n" RESET);
         printf(VERDE "1 : Adicionar Produtos\n" RESET);
-        printf(VERDE "2 : Procurar Produto\n" RESET);
+        printf(VERDE "2 : Ver Todos os Produtos\n" RESET);
         printf(VERDE "3 : Remover Produtos\n" RESET);
         printf(VERDE "0 : Finalizar Compras\n" RESET);
         printf(VERDE "========================================\n" RESET);
@@ -529,20 +529,9 @@ int iniciar_compras_menu(NodeCliente* cliente, Historico* historico, Produto* pr
         }
         else if(escolha==2){
 
-            printf(VERDE "\n--- Procurar Produto no Carrinho ---\n" RESET);
-            printf(VERDE "Digite o Codigo do Produto: " RESET);
-            scanf("%s", senha);
-            getchar();
-
-            Produto* encontrado = procura_produto_no_carrinho(carrinho,senha);
-            if(encontrado != NULL){
-                printf(VERDE "Produto encontrado!\n" RESET);
-                printf(VERDE "Codigo: %s\nNome: %s\nPreco: %.2f\nQuantidade: %d\n" RESET, 
-                       encontrado->codigo, encontrado->nome, encontrado->preco, encontrado->quantidade);
-                adicionar_registro(historico, "Produto buscado no carrinho.");
-            } else {
-                printf(VERDE "Produto nao encontrado no carrinho!\n" RESET);
-            }
+            printf(VERDE "\n--- Produtos no Carrinho ---\n" RESET);
+            ver_produtos_no_carrinho(carrinho);
+            adicionar_registro(historico, "Visualizou todos os produtos no carrinho.");
             
             aguardar_enter_e_limpar();
         }
