@@ -20,5 +20,6 @@ Historico* criar_historico();
 void adicionar_registro(Historico* hist, const char* operacao);
 void exibir_historico(Historico* hist);
 void limpar_historico(Historico* hist);
+NoHistorico* obter_ultimos_n_registros(Historico* hist, int n);
 
 #endif

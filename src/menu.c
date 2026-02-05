@@ -682,6 +682,8 @@ void tela_buscar_produto() {
 void tela_historico() {
     int largura_lista = 900;
     int lista_x = center_x(largura_lista);
+    int max_visible = 5;
+    int linha_altura = 30;
 
     DrawText("HISTORICO DE OPERACOES", center_text_x("HISTORICO DE OPERACOES", 25), 20, 25, GREEN);
     {
@@ -689,24 +691,52 @@ void tela_historico() {
         DrawText(total_text, center_text_x(total_text, 15), 50, 15, GRAY);
     }
 
-    int y = 100;
-    int max_visible = 12;
-    int contador = 0;
-    
-    NoHistorico* atual = menu.historico->inicio;
-    while(atual != NULL && contador < max_visible) {
-        DrawText(TextFormat("[%s] %s", atual->dados.timestamp, atual->dados.operacao), lista_x, y, 14, BLACK);
-        y += 30;
-        atual = atual->proximo;
-        contador++;
-    }
-    
-    if (menu.historico->total == 0) {
+    // Validar scroll position
+    if(menu.historico->total == 0) {
         DrawText("Historico vazio", center_text_x("Historico vazio", 14), 100, 14, GRAY);
+    } else {
+        int max_scroll = (menu.historico->total > max_visible) ? (menu.historico->total - max_visible) : 0;
+        if(menu.historico_scroll > max_scroll) {
+            menu.historico_scroll = max_scroll;
+        }
+        if(menu.historico_scroll < 0) {
+            menu.historico_scroll = 0;
+        }
+
+        // Handle scroll wheel input
+        float wheel = GetMouseWheelMoveV().y;
+        if(wheel != 0.0f && CheckCollisionPointRec(GetMousePosition(), (Rectangle){lista_x - 50, 100, largura_lista + 100, max_visible * linha_altura})) {
+            menu.historico_scroll -= (int)wheel;
+            if(menu.historico_scroll < 0) menu.historico_scroll = 0;
+            if(menu.historico_scroll > max_scroll) menu.historico_scroll = max_scroll;
+        }
+
+        // Get the starting point in the list
+        NoHistorico* atual = menu.historico->inicio;
+        for(int i = 0; i < menu.historico_scroll && atual != NULL; i++) {
+            atual = atual->proximo;
+        }
+
+        // Draw the last 5 entries
+        int y = 100;
+        int contador = 0;
+        while(atual != NULL && contador < max_visible) {
+            DrawText(TextFormat("[%s] %s", atual->dados.timestamp, atual->dados.operacao), lista_x, y, 14, BLACK);
+            y += linha_altura;
+            atual = atual->proximo;
+            contador++;
+        }
+
+        // Draw scroll info
+        if(menu.historico->total > max_visible) {
+            const char* scroll_info = TextFormat("Use scroll ou setas para navegar (%d/%d)", menu.historico_scroll + 1, menu.historico->total - max_visible + 1);
+            DrawText(scroll_info, center_text_x(scroll_info, 12), 250, 12, DARKGRAY);
+        }
     }
     
     if (GuiButton((Rectangle){ center_x(100), 650, 100, 40 }, "Voltar")) {
         menu.tela = 0;
+        menu.historico_scroll = 0;
     }
     
 }

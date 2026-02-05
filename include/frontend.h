@@ -42,6 +42,7 @@ typedef struct Menu{
     bool aviso_visivel;
     char aviso_mensagem[256];
     float aviso_tempo;
+    int historico_scroll;
 }Menu;
 
 texto criar_botao(Rectangle bounds);
