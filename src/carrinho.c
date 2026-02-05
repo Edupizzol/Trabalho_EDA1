@@ -61,7 +61,6 @@ int adicionar_produto_ao_carrinho(Carrinho* carrinho, Produto* produto, int quan
         return 1;
     }
 
-    // Check if stock decrement is possible before allocating memory
     if(!decrementarEstoque(produto, quantidade)){
         return 0;
     }
