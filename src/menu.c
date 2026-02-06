@@ -8,7 +8,7 @@ static const char* PRODUTOS_FILE = "produtos.csv";
 #define VERDE "\x1b[32m"
 #define RESET "\x1b[0m"
 
-// printf("\033[H\033[2J");
+
 void limpar_tela() {
     fflush(stdout);
     #ifdef _WIN32
